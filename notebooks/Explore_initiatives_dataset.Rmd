@@ -1,0 +1,51 @@
+---
+title: "Exploration of the initiatives dataset"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup}
+# Libraries:
+
+library(knitr)
+library(tidyverse)
+library(readxl)
+
+
+# Constants:
+
+ROOT_DIR <- ".."
+DATA_DIR <- "dat"
+DATASET_FILENAME <- file.path(DATA_DIR, "synchros-initiatives-20211112.xlsx")
+
+opts_knit$set(root.dir = ROOT_DIR)
+
+```
+
+
+```{r load-data}
+iipc_data <- read_excel(DATASET_FILENAME, na = c("NA", "na"))
+
+iipc_data <- iipc_data |> select(
+  -harmonizedDatasets # All values are 0
+)
+
+iipc_data |> select(
+  acronym,
+  name,
+  region,
+  countries,
+  description,
+  methodology.nbCohorts.total,
+  methodology.nbCohorts.harmonized,
+  methodology.moreCohortsToBeHarmonized,
+  nbParticipants.total,
+  nbParticipants.harmonized,
+  age.min,
+  age.max,
+  methodology.nbHarmonizedVariables,
+  cohortCriteria
+)
+```
+
