@@ -44,3 +44,7 @@ vignettes/*.pdf
 *.html
 *.png
 output/*_files/
+
+# Excluded subdirectories
+doc/
+dat/
