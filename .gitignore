@@ -37,3 +37,10 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+
+# Rmarkdown output files
+*.docx
+*.html
+*.png
+output/*_files/
