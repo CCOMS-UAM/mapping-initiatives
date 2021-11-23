@@ -13,6 +13,7 @@ editor_options:
 library(knitr)
 library(tidyverse)
 library(readxl)
+library(micar)
 library(stringr)
 library(rlang)
 library(glue)
@@ -20,12 +21,14 @@ library(glue)
 
 # Constants:
 
-MICA_SHEET    <- "synchros-initiatives-20211112"
-TABLE_1_SHEET <- "Table 1"
+INITIATIVES_FILENAME <- "synchros-initiatives.xlsx"
+TABLE_1_SHEET        <- "Table 1"
+
+SYNCHROS_URL <- "https://repository.synchros.eu"
 
 ROOT_DIR <- ".."
 DATA_DIR <- "dat"
-DATASET_FILENAME <- file.path(DATA_DIR, paste0(MICA_SHEET, ".xlsx"))
+DATASET_FILENAME <- file.path(DATA_DIR, INITIATIVES_FILENAME)
 
 AUTO_VARNAME_PREFIX_REGEXP <- r"(^\.\.\.)"
 EMPTY_STRING               <- ''
@@ -41,30 +44,31 @@ opts_chunk$set(message = FALSE)
 
 # Loading datasets
 
-The file `r DATASET_FILENAME` has the
-list of initiatives exported from the Mica repository and sent by Yannick
-on 12/11/2021, 14:26 
-(email subject:
-"Re: Synchros - Publications Mapping of initiatives that integrate European ...
-(UAM: Daniel)").
-In order to better explore Table 1 from Laura's draft,
 I copy and paste it to Excel,
-putting it in a new sheet titled `r TABLE_1_SHEET` in that same file.
-Then I read both datasets.
+the list of initiatives in Table 1 from Laura's draft
+to the file *`r DATASET_FILENAME`*,
+putting it in the sheet *`r TABLE_1_SHEET`*.
+Then I read the dataset.
 
-```{r load-data}
-mica_data <- read_excel(
-  DATASET_FILENAME,
-  sheet = MICA_SHEET,
-  na    = c("NA", "na")
-)
-
+```{r load-table-1-data}
 tab1_data <- read_excel(
   DATASET_FILENAME,
   sheet = TABLE_1_SHEET,
   na    = c("NA", "na"),
   skip  = 1
 )
+```
+
+
+The initiatives from the Mica repository are are accessed using
+the API provided by Yannick.
+
+```{r get-mica-data}
+repo_connection <- mica.login(url = SYNCHROS_URL)
+
+mica_data <- mica.networks(repo_connection, limit = 100) |> as_tibble()
+
+mica.logout(repo_connection)
 ```
 
 
