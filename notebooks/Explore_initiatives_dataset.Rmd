@@ -3,6 +3,7 @@ title: "Exploration of the 'initiatives of population cohorts' dataset"
 output:
   html_document:
     df_print: paged
+    code_folding: show
 editor_options:
   chunk_output_type: console
 ---
@@ -34,6 +35,16 @@ AUTO_VARNAME_PREFIX_REGEXP <- r"(^\.\.\.)"
 EMPTY_STRING               <- ''
 SPACE                      <- ' '
 
+PATIENT_COHORTS_AND_CCTT <- c(
+  "ART-CC",
+  "B-CAST",
+  "CNODES",
+  "COSMIC",
+  "High-Risk Myocardial Infarction Database Initiative", 
+  "Lifebrain",
+  "Sentinel Initiative",
+  "STROKOG"
+)
 
 # Output configuraction:
 
@@ -216,14 +227,13 @@ or fill them in with the name of the initiative
 ```{r tab1-mica-matching}
 tab1_data <- tab1_data |>
   mutate(
-    INITIATIVE,
     acronym = INITIATIVE |>
       str_extract("(?<=\\()[^\\s]+(?=\\))") |>
       coalesce(INITIATIVE |> str_extract("^[^\\s:]+")) |>
       recode( # Values to recode manually to match the MICA dataset acronyms
         EUCAN              = "EUCAN-Connect",
         `BBMRI-NL-Biobank` = "BBMRI-NL",
-        interconnect       = "Interconnect"
+        Interconnect       = "interconnect"
       ) |>
       na_if("The")    |> # Values matched by regexp that are not real acronyms
       na_if("Genome") |>
@@ -245,7 +255,44 @@ tab1_mica_matched <- full_join(
 ```
 
 
+After checking [Angel's paper](https://doi.org/10.3389/fpubh.2021.666844),
+I identify a few patient and clinical trial initiatives from the repository
+that should be filtered out.
+Desiree identifies a few more in an email
+(**Topic:** RE: Synchros -
+Publications Mapping of initiatives that integrate European ... (UAM: Daniel),
+on 23/11/2021 14:15),
+that were mismatched, were also patient cohorts, or had a different acronym.
+According to this information I updated the matches
+and filter out the initiatives that do not correspond
+(i.e. initiatives that include patient cohorts and/or clinical trials)
+
+```{r update-matches}
+tab1_data <- tab1_data |>
+  mutate(
+    acronym = acronym |>
+      recode( # Values to recode manually to match the MICA dataset acronyms
+        `CPTP-HP`          = "CanPath",
+        g2aging            = "Gateway"
+      )
+  )
+
+tab1_data_join <- tab1_data |> select(acronym, row_tab1 = row)
+
+mica_data_tab1_join <- mica_data_tab1 |>
+  rownames_to_column("row") |>
+  select(row_mica = row, acronym) |>
+  filter(!acronym %in% PATIENT_COHORTS_AND_CCTT)
+
+tab1_mica_matched <- full_join(
+  tab1_data_join, mica_data_tab1_join,
+  by = "acronym"
+)
+```
+
+
+The resulting matches are all in Laura's Table 1.
+
 ```{r tab1-mica-matching-output}
 tab1_mica_matched
 ```
-
