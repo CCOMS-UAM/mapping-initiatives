@@ -1,0 +1,356 @@
+---
+title: "Update of the 'initiatives of population cohorts' dataset"
+date:  "10/12/2021"
+output:
+  html_document:
+    df_print: paged
+    code_folding: show
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, message=FALSE}
+# Libraries:
+
+library(knitr)
+library(tidyverse)
+library(readxl)
+library(micar)
+library(stringr)
+library(rlang)
+library(glue)
+
+
+# Constants:
+
+INITIATIVES_FILENAME <- "synchros-initiatives.xlsx"
+TABLE_1_SHEET        <- "Table 1"
+MICA_DATA_FILENAME   <- "mica-export.csv"
+
+SYNCHROS_URL <- "https://repository.synchros.eu"
+
+ROOT_DIR <- ".."
+DATA_DIR <- "dat"
+INITIATIVES_FILEPATH <- file.path(DATA_DIR, INITIATIVES_FILENAME)
+MICA_DATA_FILEPATH   <- file.path(DATA_DIR, MICA_DATA_FILENAME)
+
+AUTO_VARNAME_PREFIX_REGEXP <- r"(^\.\.\.)"
+EMPTY_STRING               <- ''
+SPACE                      <- ' '
+
+PATIENT_COHORTS_AND_CCTT <- c(
+  "ART-CC",
+  "B-CAST",
+  "CNODES",
+  "COSMIC",
+  "High-Risk Myocardial Infarction Database Initiative", 
+  "Lifebrain",
+  "Sentinel Initiative",
+  "STROKOG"
+)
+
+# Output configuraction:
+
+opts_knit$set(root.dir = ROOT_DIR)
+opts_chunk$set(message = FALSE)
+```
+
+
+# Introduction
+
+This dataset is intended to update the list of initiatives that resulted from
+the mapping reported in Syncrhos deliverable 1.3 with the latest information
+included in the Syncrhos repository.
+The aim is to include all the updated information in the initiatives in the list
+in the manuscript about the mapping of initiatives
+integrating population cohorts.
+
+
+# Loading datasets
+
+The list of initiatives in Table 1 in Laura's draft are copied and pasted
+to the file *`r INITIATIVES_FILEPATH`* in Excel format,
+putting it in the sheet *`r TABLE_1_SHEET`*.
+Then I read the dataset.
+
+```{r load-table-1-data}
+tab1_data <- read_excel(
+  INITIATIVES_FILEPATH,
+  sheet = TABLE_1_SHEET,
+  na    = c("NA", "na"),
+  skip  = 1
+)
+```
+
+
+The initiatives from the Mica repository are are accessed using
+the API provided by Yannick.
+
+**A warning for reproducibility**:
+The `mica` R package does not allow to access a "screenshot version" of the
+repository, i.e., to use a date parameter to indicate the repository the state
+in which we would like to query the repository.
+Therefore, if the repository changes because new information is added to the
+initiatives, or new initiatives are published, this notebook will not be
+reproducible.
+Hence, the next chunk is set to `eval=FALSE`,
+because it is not intended to be run for reproducing the results.
+
+```{r get-mica-data, eval=FALSE}
+# Date of query is 10/12/2021
+repo_connection <- mica.login(url = SYNCHROS_URL)
+
+mica_data <- mica.networks(repo_connection, limit = 100) |> as_tibble()
+
+mica.logout(repo_connection)
+
+mica_data |> write_csv(file = MICA_DATA_FILEPATH)
+```
+
+
+Instead of running the previous chunk, use the file `r MICA_DATA_FILEPATH`,
+which has the results of the repository query saved as a `.csv` file
+and is read in the next chunk.
+Note that the column types are set to the same types as in the original
+export from the repository (with the only exception of `dataEntryDate`,
+which is directly transformed into a date vector).
+
+```{r load-mica-data}
+mica_data <- read_csv(
+  MICA_DATA_FILEPATH,
+  col_types = cols(
+    .default                              = col_character(),
+    studies                               = col_integer(),
+    variables                             = col_integer(),
+    collectedDatasets                     = col_integer(),
+    collectedVariables                    = col_integer(),
+    harmonizedDatasets                    = col_integer(),
+    dataschemaVariables                   = col_integer(),
+    yearCreated                           = col_integer(),
+    nbParticipants.total                  = col_integer(),
+    nbParticipants.harmonized             = col_integer(),
+    dataEntryDate                         = col_date(format = ""),
+    age.min                               = col_integer(),
+    age.max                               = col_integer(),
+    methodology.moreCohortsToBeHarmonized = col_logical(),
+    methodology.nbHarmonizedVariables     = col_integer(),
+    methodology.nbCohorts.total           = col_integer(),
+    methodology.nbCohorts.harmonized      = col_integer()
+  )
+)
+```
+
+
+# Data wrangling of Table 1 from Laura's draft
+
+Table 1 has a complex header, as well as several collapsed cells,
+which makes it difficult to transform into a rectangular format.
+I change the headers in the first place.
+
+```{r table1-col-names}
+# Get the names from the first two rows of the file, and create names and labels
+tab1_data_header <- read_excel(
+  INITIATIVES_FILEPATH,
+  sheet = TABLE_1_SHEET,
+  n_max = 1
+) |>
+  pivot_longer(everything()) |>
+  mutate(
+    name = name |>
+      str_detect(AUTO_VARNAME_PREFIX_REGEXP) |>
+      if_else(name |> dplyr::lag(1), name)
+  ) |>
+  unite("label", name, value, sep = ": ", na.rm = TRUE) |>
+  mutate(name = label |> vctrs::vec_as_names(repair = "universal"))
+
+# Rename the table with the new names
+rename_vector <- tab1_data |>
+  colnames() |>
+  set_names(tab1_data_header |> pull(name))
+
+# Assign meaningful labels
+tab1_data <- tab1_data |>
+  rename(!!!rename_vector) |>
+  map2_dfc(
+    tab1_data_header |> pull(label), # Labels to assign to the columns
+    \(column, label) { column %@% "label" <- label; column }
+  )
+```
+
+
+Then I drop the empty rows and collapse cells that represent
+a single initiative.
+By visual inspection, it seems that each initiative has
+a first, "main" row without any missing value,
+while all the remaining rows have eight or more missing values.
+(There is one exception: One initiative has a single missing value in
+the column `Briefly.describe.the.initiative.s.population`,
+because the population description starts in the second row; therefore,
+I consider that main rows are the ones having either 0 or 1 missing value.)
+I use those rows as a guide to extract the information from the rest of the rows
+and create a single row per initiative.
+
+```{r table1-collapse-rows}
+n_cols <- tab1_data |> ncol()
+
+# Compute the nº of missing values per row and identify the main rows
+tab1_data <- tab1_data |>
+  rowwise() |>
+  mutate(
+    n_missing = sum(is.na(c_across())),
+    main_row  = n_missing %in% 0:1
+  )
+
+# Drop completely empty rows
+tab1_data <- tab1_data |>
+  ungroup() |>
+  filter(n_missing < n_cols)
+
+# Create a grouping variable using `main_row`
+tab1_data <- tab1_data |>
+  ungroup() |>
+  mutate(row = main_row |> cumsum())
+
+# Group rows by initiative, then collapse all non-missing rows
+#   in each initiative into a single row
+tab1_data <- tab1_data |>
+  ungroup() |>
+  mutate(across(where(is.character), replace_na, replace = EMPTY_STRING)) |>
+  group_by(row) |>
+  summarize(across(where(is.character), glue_collapse, sep = SPACE))
+```
+
+
+# Column selection from the MICA dataset
+
+After visual exploration,
+I try to select from the MICA dataset what appear to be the columns in Table 1.
+
+```{r select-mica-columns}
+mica_data <- mica_data |>
+  select(-harmonizedDatasets) # All values are 0
+
+mica_data_tab1 <- mica_data |> select(
+  acronym,
+  name,
+  region,
+  countries,
+  description,
+  methodology.nbCohorts.total,
+  methodology.nbCohorts.harmonized,
+  methodology.moreCohortsToBeHarmonized,
+  nbParticipants.total,
+  nbParticipants.harmonized,
+  age.min,
+  age.max,
+  methodology.nbHarmonizedVariables,
+  cohortCriteria
+)
+```
+
+
+# Comparison of both datasets
+
+The first thing that calls one's attention is the difference in the number
+of initiatives in each datsaet.
+
+```{r n-rows}
+n_tab1 <- tab1_data |> nrow()
+n_mica <- mica_data_tab1 |> nrow()
+```
+
+
+While Table 1 in Laura's draft has `r n_tab1` initiatives,
+the table exported from the MICA repository has `r n_mica`.
+
+These results are inconsistent with what is stated in the section "Results"
+of the draft.
+The second paragraph states there are 59 initiatives,
+close to the number in Table 1 but not the same.
+Figure 1 also says there are 59 initiatives.
+
+In order to find out which initiatives match in both tables,
+I first extract the initiative acronym from Table 1.
+Some initiatives have the acronym in parentheses
+(and they are different from other phrases in parentheses in that there are
+no whitespaces), so I use that criterion first;
+when it does not find the acronym,
+I cut the string at the first whitespace in column `INITIATIVE`
+(I also include colon `:`, as some initiatives have it right after the acronym),
+and finally a few acronyms are manually edited to correct them and either
+make them match the value in the MICA dataset,
+or fill them in with the name of the initiative
+(when there is no acronym available).
+
+```{r tab1-mica-matching}
+tab1_data <- tab1_data |>
+  mutate(
+    acronym = INITIATIVE |>
+      str_extract("(?<=\\()[^\\s]+(?=\\))") |>
+      coalesce(INITIATIVE |> str_extract("^[^\\s:]+")) |>
+      recode( # Values to recode manually to match the MICA dataset acronyms
+        EUCAN              = "EUCAN-Connect",
+        `BBMRI-NL-Biobank` = "BBMRI-NL",
+        Interconnect       = "interconnect"
+      ) |>
+      na_if("The")    |> # Values matched by regexp that are not real acronyms
+      na_if("Genome") |>
+      na_if("Tohoku") |>
+      na_if("EU")     |>
+      coalesce(INITIATIVE) # Fill in the previous ones with initiative name
+  )
+
+tab1_data_join <- tab1_data |> select(acronym, row_tab1 = row)
+
+mica_data_tab1_join <- mica_data_tab1 |>
+  rownames_to_column("row") |>
+  select(row_mica = row, acronym)
+
+tab1_mica_matched <- full_join(
+  tab1_data_join, mica_data_tab1_join,
+  by = "acronym"
+)
+```
+
+
+After checking [Angel's paper](https://doi.org/10.3389/fpubh.2021.666844),
+I identify a few patient and clinical trial initiatives from the repository
+that should be filtered out.
+Desiree identifies a few more in an email
+(**Topic:** RE: Synchros -
+Publications Mapping of initiatives that integrate European ... (UAM: Daniel),
+on 23/11/2021 14:15),
+that were mismatched, were also patient cohorts, or had a different acronym.
+According to this information I updated the matches
+and filter out the initiatives that do not correspond
+(i.e. initiatives that include patient cohorts and/or clinical trials)
+
+```{r update-matches}
+tab1_data <- tab1_data |>
+  mutate(
+    acronym = acronym |>
+      recode( # Values to recode manually to match the MICA dataset acronyms
+        `CPTP-HP`          = "CanPath",
+        g2aging            = "Gateway"
+      )
+  )
+
+tab1_data_join <- tab1_data |> select(acronym, row_tab1 = row)
+
+mica_data_tab1_join <- mica_data_tab1 |>
+  rownames_to_column("row") |>
+  select(row_mica = row, acronym) |>
+  filter(!acronym %in% PATIENT_COHORTS_AND_CCTT)
+
+tab1_mica_matched <- full_join(
+  tab1_data_join, mica_data_tab1_join,
+  by = "acronym"
+)
+```
+
+
+The resulting matches are all in Laura's Table 1.
+
+```{r tab1-mica-matching-output}
+tab1_mica_matched
+```
