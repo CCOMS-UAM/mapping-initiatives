@@ -19,6 +19,8 @@ library(micar)
 library(stringr)
 library(rlang)
 library(glue)
+library(countrycode)
+library(magrittr)
 
 
 # Constants:
@@ -35,21 +37,17 @@ INITIATIVES_FILEPATH <- file.path(DATA_DIR, INITIATIVES_FILENAME)
 MICA_DATA_FILEPATH   <- file.path(DATA_DIR, MICA_DATA_FILENAME)
 
 AUTO_VARNAME_PREFIX_REGEXP <- r"(^\.\.\.)"
-EMPTY_STRING               <- ''
+NO_INFO_REGEXP             <- "No information obtained(\\s*)" # Any whitespace
+EMPTY_STRING               <- ''                              #   in the end
 SPACE                      <- ' '
+COMMA                      <- ', '
+BULLET_PREFIX              <- '    -'
+LINE_FEED                  <- r"(\n)"
+SEMICOLON                  <- '; '
+AND_CONJUNCTION            <- " and "
+REPLACE_SEPS_REGEXP        <- glue("({SEMICOLON}|{AND_CONJUNCTION})")
 
-PATIENT_COHORTS_AND_CCTT <- c(
-  "ART-CC",
-  "B-CAST",
-  "CNODES",
-  "COSMIC",
-  "High-Risk Myocardial Infarction Database Initiative", 
-  "Lifebrain",
-  "Sentinel Initiative",
-  "STROKOG"
-)
-
-# Output configuraction:
+# Output configuration:
 
 opts_knit$set(root.dir = ROOT_DIR)
 opts_chunk$set(message = FALSE)
@@ -66,17 +64,32 @@ in the manuscript about the mapping of initiatives
 integrating population cohorts.
 
 
-# Loading datasets
+# Loading and formatting datasets
 
 The list of initiatives in Table 1 in Laura's draft are copied and pasted
 to the file *`r INITIATIVES_FILEPATH`* in Excel format,
 putting it in the sheet *`r TABLE_1_SHEET`*.
-Then I read the dataset.
+Before copying it, it is necessary to do the following two procedures manually:
 
-```{r load-table-1-data}
+- Change the Windows local configuration so that the "comma" is considered as
+  the thousands separator and the "stop" as the decimal separator
+  (Control panel -> Region -> Additional configuration,
+  then type `.` in "Decimal symbol", and `,` in "Thousands separation symbol",
+  then click on "Apply").
+  
+- Change all the thousand separation symbols by "commas" manually in the Word
+  document, then copy the table and paste it in Excel.
+
+Without these two operations, it is possible that numbers are missinterpreted
+in Excel and there are errors parsing them as numbers.
+
+After manually performing these operations, I read the dataset.
+
+```{r load-table-1-data, message=FALSE}
 tab1_data <- read_excel(
   INITIATIVES_FILEPATH,
   sheet = TABLE_1_SHEET,
+  col_types = "text",
   na    = c("NA", "na"),
   skip  = 1
 )
@@ -141,40 +154,35 @@ mica_data <- read_csv(
 ```
 
 
-# Data wrangling of Table 1 from Laura's draft
+## Data wrangling of Table 1 from Laura's draft
 
 Table 1 has a complex header, as well as several collapsed cells,
 which makes it difficult to transform into a rectangular format.
 I change the headers in the first place.
 
-```{r table1-col-names}
+```{r table1-col-names, message=FALSE}
 # Get the names from the first two rows of the file, and create names and labels
 tab1_data_header <- read_excel(
   INITIATIVES_FILEPATH,
   sheet = TABLE_1_SHEET,
   n_max = 1
-) |>
-  pivot_longer(everything()) |>
+)                                                       |>
+  pivot_longer(everything())                            |>
   mutate(
-    name = name |>
+    name = name                              |>
       str_detect(AUTO_VARNAME_PREFIX_REGEXP) |>
       if_else(name |> dplyr::lag(1), name)
-  ) |>
+  )                                                     |>
   unite("label", name, value, sep = ": ", na.rm = TRUE) |>
   mutate(name = label |> vctrs::vec_as_names(repair = "universal"))
 
 # Rename the table with the new names
+
 rename_vector <- tab1_data |>
-  colnames() |>
+  colnames()               |>
   set_names(tab1_data_header |> pull(name))
 
-# Assign meaningful labels
-tab1_data <- tab1_data |>
-  rename(!!!rename_vector) |>
-  map2_dfc(
-    tab1_data_header |> pull(label), # Labels to assign to the columns
-    \(column, label) { column %@% "label" <- label; column }
-  )
+tab1_data <- tab1_data |> rename(!!!rename_vector)
 ```
 
 
@@ -195,7 +203,7 @@ n_cols <- tab1_data |> ncol()
 
 # Compute the nº of missing values per row and identify the main rows
 tab1_data <- tab1_data |>
-  rowwise() |>
+  rowwise()            |>
   mutate(
     n_missing = sum(is.na(c_across())),
     main_row  = n_missing %in% 0:1
@@ -203,25 +211,32 @@ tab1_data <- tab1_data |>
 
 # Drop completely empty rows
 tab1_data <- tab1_data |>
-  ungroup() |>
+  ungroup()            |>
   filter(n_missing < n_cols)
 
 # Create a grouping variable using `main_row`
 tab1_data <- tab1_data |>
-  ungroup() |>
+  ungroup()            |>
   mutate(row = main_row |> cumsum())
 
 # Group rows by initiative, then collapse all non-missing rows
 #   in each initiative into a single row
-tab1_data <- tab1_data |>
-  ungroup() |>
+tab1_data <- tab1_data                                                    |>
+  ungroup()                                                               |>
   mutate(across(where(is.character), replace_na, replace = EMPTY_STRING)) |>
-  group_by(row) |>
-  summarize(across(where(is.character), glue_collapse, sep = SPACE))
+  group_by(row)                                                           |>
+  summarize(across(where(is.character), glue_collapse, sep = SPACE))      |>
+  select(-row)
+
+# Assign meaningful labels (after summarizing to avoid losing them)
+tab1_data <- tab1_data |> map2_dfc(
+  tab1_data_header |> pull(label), # Labels to assign to the columns
+  \(column, label) { column %@% "label" <- label; column }
+)
 ```
 
 
-# Column selection from the MICA dataset
+## Column selection from the MICA dataset
 
 After visual exploration,
 I try to select from the MICA dataset what appear to be the columns in Table 1.
@@ -243,33 +258,15 @@ mica_data_tab1 <- mica_data |> select(
   nbParticipants.harmonized,
   age.min,
   age.max,
+  
   methodology.nbHarmonizedVariables,
   cohortCriteria
 )
 ```
 
 
-# Comparison of both datasets
+# Acronym match of the two datasets
 
-The first thing that calls one's attention is the difference in the number
-of initiatives in each datsaet.
-
-```{r n-rows}
-n_tab1 <- tab1_data |> nrow()
-n_mica <- mica_data_tab1 |> nrow()
-```
-
-
-While Table 1 in Laura's draft has `r n_tab1` initiatives,
-the table exported from the MICA repository has `r n_mica`.
-
-These results are inconsistent with what is stated in the section "Results"
-of the draft.
-The second paragraph states there are 59 initiatives,
-close to the number in Table 1 but not the same.
-Figure 1 also says there are 59 initiatives.
-
-In order to find out which initiatives match in both tables,
 I first extract the initiative acronym from Table 1.
 Some initiatives have the acronym in parentheses
 (and they are different from other phrases in parentheses in that there are
@@ -278,40 +275,7 @@ when it does not find the acronym,
 I cut the string at the first whitespace in column `INITIATIVE`
 (I also include colon `:`, as some initiatives have it right after the acronym),
 and finally a few acronyms are manually edited to correct them and either
-make them match the value in the MICA dataset,
-or fill them in with the name of the initiative
-(when there is no acronym available).
-
-```{r tab1-mica-matching}
-tab1_data <- tab1_data |>
-  mutate(
-    acronym = INITIATIVE |>
-      str_extract("(?<=\\()[^\\s]+(?=\\))") |>
-      coalesce(INITIATIVE |> str_extract("^[^\\s:]+")) |>
-      recode( # Values to recode manually to match the MICA dataset acronyms
-        EUCAN              = "EUCAN-Connect",
-        `BBMRI-NL-Biobank` = "BBMRI-NL",
-        Interconnect       = "interconnect"
-      ) |>
-      na_if("The")    |> # Values matched by regexp that are not real acronyms
-      na_if("Genome") |>
-      na_if("Tohoku") |>
-      na_if("EU")     |>
-      coalesce(INITIATIVE) # Fill in the previous ones with initiative name
-  )
-
-tab1_data_join <- tab1_data |> select(acronym, row_tab1 = row)
-
-mica_data_tab1_join <- mica_data_tab1 |>
-  rownames_to_column("row") |>
-  select(row_mica = row, acronym)
-
-tab1_mica_matched <- full_join(
-  tab1_data_join, mica_data_tab1_join,
-  by = "acronym"
-)
-```
-
+make them match the value in the MICA dataset.
 
 After checking [Angel's paper](https://doi.org/10.3389/fpubh.2021.666844),
 I identify a few patient and clinical trial initiatives from the repository
@@ -321,36 +285,201 @@ Desiree identifies a few more in an email
 Publications Mapping of initiatives that integrate European ... (UAM: Daniel),
 on 23/11/2021 14:15),
 that were mismatched, were also patient cohorts, or had a different acronym.
-According to this information I updated the matches
-and filter out the initiatives that do not correspond
-(i.e. initiatives that include patient cohorts and/or clinical trials)
+According to this information, only the initiatives already in Table 1 need to
+be matched with the corresponding entries from the repository.
 
-```{r update-matches}
+```{r tab1-mica-matching}
 tab1_data <- tab1_data |>
   mutate(
-    acronym = acronym |>
+    acronym = INITIATIVE                               |>
+      str_extract("(?<=\\()[^\\s]+(?=\\))")            |>
+      coalesce(INITIATIVE |> str_extract("^[^\\s:]+")) |>
+      na_if("The")                                     |> # Values matched by
+      na_if("Genome")                                  |> #   regexp that are
+      na_if("Tohoku")                                  |> #   not actual
+      na_if("EU")                                      |> #   acronyms
       recode( # Values to recode manually to match the MICA dataset acronyms
+        EUCAN              = "EUCAN-Connect",
+        `BBMRI-NL-Biobank` = "BBMRI-NL",
+        Interconnect       = "interconnect",
         `CPTP-HP`          = "CanPath",
         g2aging            = "Gateway"
-      )
-  )
+      ),
+    id = acronym |> coalesce(INITIATIVE) # Fill in missing values with name
+  )                    |>
+  select(id, acronym, everything())
+```
 
-tab1_data_join <- tab1_data |> select(acronym, row_tab1 = row)
+The `id` is created as an ancillary variable that contains the acronym,
+except that when it is missing, it is filled in with the initiative name.
 
-mica_data_tab1_join <- mica_data_tab1 |>
-  rownames_to_column("row") |>
-  select(row_mica = row, acronym) |>
-  filter(!acronym %in% PATIENT_COHORTS_AND_CCTT)
+The repository entries then are filtered using the entries in the original
+Table 1.
 
-tab1_mica_matched <- full_join(
-  tab1_data_join, mica_data_tab1_join,
-  by = "acronym"
+```{r update-matches}
+mica_data_tab1 <- mica_data_tab1 |>
+  mutate(id = acronym)           |> # Used to match with Table 1 later on
+  select(id, everything())       |>
+  semi_join(tab1_data,  by = "id")
+```
+
+
+# Construction of the updated dataset
+
+The repository columns have different names from the ones in Table 1,
+so the columns need to be match correspondingly between both datasets first.
+I first explore the column names to see if they match each other
+
+```{r column-names}
+mica_data_tab1 |> colnames()
+tab1_data      |> colnames()
+```
+
+
+## Formatting missing values
+
+In the original Table 1, values "No information obtained" are recasted into
+missing values
+
+```{r recode-missing}
+tab1_data <- tab1_data |> mutate(
+  across(everything(), str_remove, pattern = NO_INFO_REGEXP),
+  across(everything(), na_if,      y       = EMPTY_STRING)
 )
 ```
 
 
-The resulting matches are all in Laura's Table 1.
+## Regions and countries
 
-```{r tab1-mica-matching-output}
-tab1_mica_matched
+The repository has one more column, because in Table 1 there is one single
+column for "Region" and "Countries", which is in two different columns in the
+repository.
+
+```{r explore-regions-countries}
+tab1_countries_regions  <- tab1_data |> select(id, acronym, Region..Country)
+mica_countries_regions  <- mica_data_tab1 |>
+  rowid_to_column(var = "row")            |> # Rows in the repository
+  select(acronym, region, countries, row)
+
+full_join(tab1_countries_regions, mica_countries_regions, by = "acronym")
 ```
+
+
+The comparison among these columns show that the two share approximately the
+same information, although the one in the repository is considered more up
+to date.
+
+```{r region-initiatives}
+REGION_INITIATIVES <- c(
+  "ICC-dementia",
+  "interconnect",
+  "InterLACE",
+  "OMEGA-NET",
+  "RAND",
+  "Genome Asia 100K",
+  "DEMETRIQ",
+  "EU Child Cohort Network",
+  "RECAP",
+  "MORGAM",
+  "NCI", # Should be dropped??
+  "CHARGE"
+)
+
+region_initiatives_out <- paste(
+  BULLET_PREFIX,
+  REGION_INITIATIVES,
+  collapse = LINE_FEED
+)
+```
+
+
+The information in the repository is not 100% complete though,
+so it is completed with the information already present in Table 1;
+this mainly refers to the countries the cohort populations are taken from,
+with the following exceptions:
+
+`r region_initiatives_out`
+
+Therefore, we fill in the `region` and `countries` columns from
+the repository table with the appropriate values taken from the original
+Table 1.
+Before doing this, we must format the `countries` column
+from the repository to transform the ISO codes into country names in English.
+The content of `countries` and `region` is also standardized
+by changing semicolons (`;`) and "and" conjunctions by commas.
+
+```{r complete-regions-countries}
+# Turn ISO3 codes into country names and collapse them
+mica_data_tab1 <- mica_data_tab1 |>
+  separate_rows(countries)       |>
+  mutate(
+    countries = countries |>
+      countrycode(origin = 'iso3c', destination = 'country.name')
+  )                              |>
+  group_by(across(-countries))   |>
+  summarize(
+    countries  = countries |> glue_collapse(sep = COMMA),
+    .groups    = "drop"
+  )
+
+# Standardize separating countries and regions by commas
+tab1_countries_regions <- tab1_countries_regions |>
+  mutate(
+    across(
+      Region..Country,
+      str_replace,
+      pattern     = REPLACE_SEPS_REGEXP,
+      replacement = COMMA
+    )
+  )
+
+# Complete missing rows in the repository table
+mica_data_complete <- mica_data_tab1 |>
+  right_join(tab1_countries_regions, by = c("id", "acronym"))
+
+# Fill in countries and regions with values in Table 1
+mica_data_complete <- mica_data_complete |>
+  mutate(
+    countries = if_else(
+      is.na(countries) & !(id %in% REGION_INITIATIVES),
+      Region..Country,
+      as.character(countries)
+    ),
+    region = if_else(
+      is.na(region) & (id %in% REGION_INITIATIVES),
+      Region..Country,
+      region
+    )
+  ) |>
+  select(-Region..Country)
+```
+
+
+## Other variables
+
+The remaining columns are check side by side for correspondence.
+
+```{r variable-correspondence}
+names_correspondence <- tibble(
+  repository = mica_data_tab1 |> select(-region, -countries) |> colnames(),
+  table1     = tab1_data      |> select(-Region..Country)    |> colnames()
+)
+
+tab1_filtered <- tab1_data |> semi_join(mica_data_tab1, by = c("id", "acronym"))
+
+names_correspondence |>
+  slice(-(1:2))      %$%
+  map2(
+    repository, table1,
+    ~{
+      full_join(
+        mica_data_tab1 |> select(id, .data[[.x]]),
+        tab1_filtered  |> select(id, .data[[.y]]),
+        by = "id"
+      )
+    }
+  )
+```
+
+
+The results are not explicitly shown, but we can see that 
