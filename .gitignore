@@ -45,6 +45,9 @@ vignettes/*.pdf
 *.png
 output/*_files/
 
+# Linked external directories
+*.lnk
+
 # Excluded subdirectories
 doc/
 dat/
