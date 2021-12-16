@@ -654,13 +654,16 @@ mica_data_complete <- mica_data_complete |>
 The throughput dataset resulting from this data wrangling process is saved
 in Excel format in order to share it and use it in the next steps.
 
-```{r save-dataset, eval=FALSE}
+```{r save-dataset}
 # Set to `eval=FALSE` to avoid overwriting the result when executing
 #   automatically (change if necesssary)
-mica_data_complete |> write.xlsx(
-  INITIATIVES_FILEPATH,
-  sheet  = UPDATED_TABLE_SHEET,
-  showNA = FALSE,
-  append = TRUE
-)
+mica_data_complete |>
+  as.data.frame()  |> # Necessary to avoid an error when writting a tibble
+  write.xlsx(
+    INITIATIVES_FILEPATH,
+    sheet     = UPDATED_TABLE_SHEET,
+    row.names = FALSE,
+    showNA    = FALSE,
+    append    = TRUE
+  )
 ```
