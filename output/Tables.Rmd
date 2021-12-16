@@ -1,0 +1,100 @@
+---
+title: "Tables"
+output:
+  officedown::rdocx_document:
+    base_format:     bookdown::word_document2
+    reference_docx:  ../www/APA_6th_edition_template.docx
+    fig_width:       6.73
+    fig_asp:          .75
+    number_sections: no
+    tables:
+      layout:        autofit
+      caption:
+        sep: '. '
+    keep_md:         no
+bibliography:        ../www/Mapping_initiatives.bib
+csl:                 ../www/apa-old-doi-prefix.csl
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+# Environment setup:
+
+gc()
+
+# Libraries:
+library(knitr)
+library(gtsummary)
+library(flextable)
+# library(glue)
+# library(extrafont)
+# library(magrittr)
+
+
+# Constants:
+
+DOC_DIR      <- getwd()
+ROOT_DIR     <- ".."
+SRC_DIR      <- "src"
+SRC_FILEPATH <- file.path(SRC_DIR, "<TODO: Complete when necessary>.R")
+
+
+# Knitr configuracion:
+
+opts_knit$set(root.dir = ROOT_DIR) # Interferes with officedown!
+opts_chunk$set(
+  echo       = FALSE,
+  results    = 'hide',
+  message    = FALSE,
+  warning    = FALSE,
+  cache      = TRUE,
+  autodep    = TRUE,
+  dpi        = 300,
+  fig.retina = 1,
+  tab.topcaption = TRUE,
+  dev.args   = list(png = list(type = "cairo"))
+)
+
+
+# Output formatting options:
+
+theme_gtsummary_compact()
+# theme_gtsummary_printer(print_engine = "flextable")
+
+set_flextable_defaults(font.family = "Times New Roman")
+```
+
+```{r load-chunks-CR-model, cache=FALSE, eval=FALSE}
+## TODO: Evaluate if necessary
+SRC_FILEPATH %>% read_chunk()
+```
+
+```{r set-flextable-wd, cache=FALSE}
+# Necessary for flextable to find the csl file:
+opts_knit$set(root.dir = DOC_DIR)
+```
+
+# References
+
+::: {#refs}
+:::
+
+\newpage
+
+```{r initiatives, tab.id="initiatives", tab.cap="Descriptive information of the initiatives included in the mapping.", results='asis', cache=FALSE, eval=FALSE}
+initiatives_table_output
+```
+
+\newpage
+
+```{r descriptives, tab.id="descriptives", tab.cap="Descriptive statistics of the initiatives mapped.", results='asis', cache=FALSE, eval=FALSE}
+descriptives_table_output
+```
+
+\newpage
+
+```{r reset-root-dir, cache=FALSE}
+# Necessary for officedown to find the template file:
+opts_knit$set(root.dir = ROOT_DIR)
+```
