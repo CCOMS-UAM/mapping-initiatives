@@ -27,20 +27,15 @@ gc()
 library(knitr)
 library(gtsummary)
 library(flextable)
-# library(glue)
-# library(extrafont)
-# library(magrittr)
-
+library(readxl)
 
 # Constants:
-
 DOC_DIR      <- getwd()
 ROOT_DIR     <- ".."
 SRC_DIR      <- "src"
 SRC_FILEPATH <- file.path(SRC_DIR, "<TODO: Complete when necessary>.R")
 
-
-# Knitr configuracion:
+# Knitr configuration:
 
 opts_knit$set(root.dir = ROOT_DIR) # Interferes with officedown!
 opts_chunk$set(
@@ -65,15 +60,32 @@ theme_gtsummary_compact()
 set_flextable_defaults(font.family = "Times New Roman")
 ```
 
-```{r load-chunks-CR-model, cache=FALSE, eval=FALSE}
+```{r load-chunks, cache=FALSE}
 ## TODO: Evaluate if necessary
-SRC_FILEPATH %>% read_chunk()
+# SRC_FILEPATH %>% read_chunk()
 ```
 
-```{r set-flextable-wd, cache=FALSE}
-# Necessary for flextable to find the csl file:
-opts_knit$set(root.dir = DOC_DIR)
+```{r load-data}
+tab1_new <- read_excel(
+  INITIATIVES_FILEPATH,
+  sheet = UPDATED_TABLE_SHEET
+  # col_types = "text",
+  # na    = c("NA", "na"),
+  # skip  = 1
+)
+
+## TODO: Check correspondence: Execute Update_initiatives.Rmd, then this, then:
+non_matching <- !map2_lgl(
+  tab1_new,
+  mica_data_complete,
+  ~all.equal(.x, .y) |> is_true()
+)
+non_matching <- names(non_matching)[non_matching]
+
+tab1_new |> select(all_of(non_matching))
+mica_data_complete |> select(all_of(non_matching))
 ```
+
 
 # References
 
@@ -81,6 +93,11 @@ opts_knit$set(root.dir = DOC_DIR)
 :::
 
 \newpage
+
+```{r set-flextable-wd, cache=FALSE}
+# Necessary for flextable to find the csl file:
+opts_knit$set(root.dir = DOC_DIR)
+```
 
 ```{r initiatives, tab.id="initiatives", tab.cap="Descriptive information of the initiatives included in the mapping.", results='asis', cache=FALSE, eval=FALSE}
 initiatives_table_output
@@ -91,8 +108,6 @@ initiatives_table_output
 ```{r descriptives, tab.id="descriptives", tab.cap="Descriptive statistics of the initiatives mapped.", results='asis', cache=FALSE, eval=FALSE}
 descriptives_table_output
 ```
-
-\newpage
 
 ```{r reset-root-dir, cache=FALSE}
 # Necessary for officedown to find the template file:
