@@ -25,9 +25,11 @@ gc()
 
 # Libraries:
 library(knitr)
+library(tidyverse)
+library(readxl)
+library(vctrs)
 library(gtsummary)
 library(flextable)
-library(readxl)
 
 # Constants:
 DOC_DIR      <- getwd()
@@ -60,12 +62,22 @@ theme_gtsummary_compact()
 set_flextable_defaults(font.family = "Times New Roman")
 ```
 
+```{r includes}
+source("R/Constants.R", encoding = 'UTF-8')
+```
+
 ```{r load-chunks, cache=FALSE}
 ## TODO: Evaluate if necessary
 # SRC_FILEPATH %>% read_chunk()
 ```
 
 ```{r load-data}
+# N.B.: Correspondence with the generating dataset
+#   (see `notebook/Update_initiatives.Rmd`, result is stored in object
+#   `mica_data_complete`) has been checked. The differences are due to trailing
+#   whitespaces and end of line (\n) characters, which are trimmed off when
+#   reading with `readxl::read_excel()`.
+
 tab1_new <- read_excel(
   INITIATIVES_FILEPATH,
   sheet = UPDATED_TABLE_SHEET
@@ -74,16 +86,85 @@ tab1_new <- read_excel(
   # skip  = 1
 )
 
-## TODO: Check correspondence: Execute Update_initiatives.Rmd, then this, then:
-non_matching <- !map2_lgl(
-  tab1_new,
-  mica_data_complete,
-  ~all.equal(.x, .y) |> is_true()
+# Cast to proper vector types (easier than specifying all column types above):
+tab1_new <- tab1_new |> mutate(
+  across(methodology.moreCohortsToBeHarmonized, parse_logical)
 )
-non_matching <- names(non_matching)[non_matching]
 
-tab1_new |> select(all_of(non_matching))
-mica_data_complete |> select(all_of(non_matching))
+# Simplify variable names
+tab1_new <- tab1_new |>
+  rename_with(str_remove, pattern = "methodology.") |>
+  rename_with(str_remove, pattern = "nb")           |>
+  rename_with(tolower)
+
+# Reorder variables
+tab1_new <- tab1_new |> select(
+  id:region,
+  countries,
+  n_countries,
+  description:participants.harmonized,
+  age_range,
+  everything()
+)
+```
+
+```{r assign-headers}
+# Get the names from the first two rows of the file, and create names and labels
+tab1_data_header <- read_excel(
+  INITIATIVES_FILEPATH,
+  sheet = TABLE_1_SHEET,
+  n_max = 1
+)                                                                             |>
+  pivot_longer(everything(), names_to = "header", values_to = "subheader")    |>
+  mutate(
+    header = header                          |>
+      str_detect(AUTO_VARNAME_PREFIX_REGEXP) |>
+      if_else(header |> dplyr::lag(1), header)
+  )                                                                           |>
+  # Add additional rows not present in the original Table 1
+  add_row(header = "Initiative", subheader = "Acronym", .before = 1)          |>
+  add_row(
+    header    = "Age range" |> rep(2),
+    subheader = c("Minimum", "Maximum"),
+    .after    = 10
+  )                                                                           |>
+  add_row(header = c("Countries", "Nº of countries"), .after = 3)             |>
+  # Edit headers to correspond to the new structure
+  mutate(
+    subheader = if_else(header == "INITIATIVE", "Name", subheader),
+    header    = if_else(header == "INITIATIVE", "Initiative", header),
+    header    = if_else(header == "Region, Country", "Region", header),
+    header    = if_else(header == "Main objective", "Description", header),
+    header    = if_else(
+      header |> str_detect("^Briefly"),
+      "Cohort criteria",
+      header
+    ),
+  )                                                                           |>
+  unite("label", header, subheader, sep = ": ", na.rm = TRUE, remove = FALSE) |>
+  # Reorder according to new structure
+  slice(-15)# |>
+  # mutate( # TODO: Decide if is necessary
+  #   subheader = subheader |> coalesce(header),
+  # )
+
+# Make correspondences between the headers read and the existing variables:
+tab1_data_header <- tab1_data_header |>
+  add_column(var_name = colnames(tab1_new)[-1])
+
+tab1_data_header |> pwalk(
+  \(label, header, subheader, var_name) {
+    
+    attr(tab1_new[[var_name]], "label")     <<- label
+    attr(tab1_new[[var_name]], "header")    <<- header
+    attr(tab1_new[[var_name]], "subheader") <<- subheader
+  }
+)
+```
+
+```{r descriptive-table}
+## TODO: Continue here
+tab1_new |> select(where(is.numeric), where(is.logical)) |> tbl_summary()
 ```
 
 
