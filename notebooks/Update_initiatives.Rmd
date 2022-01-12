@@ -442,6 +442,30 @@ mica_data_complete <- mica_data_complete |>
 ```
 
 
+## Initiative names
+
+Some of the values in the `INITIATIVE` field include the acronym and the
+initiative name in different formats.
+We try to identify these and extract the name without the acronym.
+The formats identified are:
+
+- Initiative name with the acronym in parentheses at the end or in the middle.
+- Acronym followed by initiative name in parentheses.
+- Acronym followed by volon and initiative name.
+
+```{r}
+mica_data_complete |>
+  transmute(
+    name = name                               |>
+      str_remove(glue("\\s?\\({acronym}\\)")) |>
+      str_remove(glue("{acronym}: "))         |>
+      str_remove(glue("{acronym}\\s?\\("))    |>
+      str_remove("\\)")
+  ) |> View()
+
+```
+
+
 ## Other variables
 
 The remaining columns are check side by side for correspondence.
