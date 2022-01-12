@@ -442,6 +442,30 @@ mica_data_complete <- mica_data_complete |>
 ```
 
 
+## Initiative names
+
+Some of the values in the `INITIATIVE` field include the acronym and the
+initiative name in different formats.
+We try to identify these and extract the name without the acronym.
+The formats identified are:
+
+- Initiative name with the acronym in parentheses at the end or in the middle.
+- Acronym followed by initiative name in parentheses.
+- Acronym followed by volon and initiative name.
+
+```{r}
+mica_data_complete |>
+  transmute(
+    name = name                               |>
+      str_remove(glue("\\s?\\({acronym}\\)")) |>
+      str_remove(glue("{acronym}: "))         |>
+      str_remove(glue("{acronym}\\s?\\("))    |>
+      str_remove("\\)")
+  ) |> View()
+
+```
+
+
 ## Other variables
 
 The remaining columns are check side by side for correspondence.
@@ -609,7 +633,7 @@ nci_age_range <- tab1_data                 |>
 According to the manuscript, only initiatives that integrate population cohorts
 are considered, as the initiatives that integrate population cohorts and
 patient cohorts / clinical trials are reported in Angel's paper.
-Initiative `r NONPOP_COHORTS_INITIATIVES`,
+Initiative `r NONPOP_COHORTS_INITIATIVES`
 reports considering patient and clinical trial cohorts,
 according to field "Age range of the sample":
 
