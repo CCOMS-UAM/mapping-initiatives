@@ -358,12 +358,15 @@ to date.
 
 ```{r region-initiatives}
 REGION_INITIATIVES <- c(
+  "euCanSHare",
   "ICC-dementia",
   "interconnect",
   "InterLACE",
+  "Gateway",
   "OMEGA-NET",
   "RAND",
-  "Genome Asia 100K",
+  "Genome Asia 100K  ",
+  "HELIX",
   "DEMETRIQ",
   "EU Child Cohort Network",
   "RECAP",
@@ -394,6 +397,8 @@ Before doing this, we must format the `countries` column
 from the repository to transform the ISO codes into country names in English.
 The content of `countries` and `region` is also standardized
 by changing semicolons (`;`) and "and" conjunctions by commas.
+Finally, some mistakes need to be corrected in Table 1,
+and the country names standardized appropriately.
 
 ```{r complete-regions-countries}
 # Turn ISO3 codes into country names and collapse them
@@ -410,36 +415,96 @@ mica_data_tab1 <- mica_data_tab1 |>
     .groups     = "drop"
   )
 
-# Standardize separating countries and regions by commas
-tab1_countries_regions <- tab1_countries_regions |>
-  mutate(
-    across(
-      Region..Country,
-      str_replace,
-      pattern     = REPLACE_SEPS_REGEXP,
-      replacement = COMMA
-    )
+# Values to manually change in order to crrect errors in Table 1:
+CORRECT_COUNTRIES <- tribble(
+  ~old,                 ~new,
+  "Singapore Malaysia", "Singapore, Malaysia",
+  "Belgium Spain",      "Belgium, Spain",
+  "Croatria",           "Croatia",
+  "Finland  Greece",    "Finland, Greece",
+  "NL",                 "Netherlands",
+  "England",            "United Kingdom"
+)
+
+# Replace manually incorrect values:
+CORRECT_COUNTRIES %$% walk2(
+  old, new,
+  ~{
+    tab1_countries_regions <<- tab1_countries_regions |>
+      mutate(Region..Country = Region..Country |> str_replace_all(.x, .y))
+  }
+)
+
+
+tab1_countries <- tab1_countries_regions |>
+  filter(!id %in% REGION_INITIATIVES)    |>
+  mutate(# Standardize separating countries/regions by commas
+    countries = Region..Country |>
+      str_replace(
+        pattern     = REPLACE_SEPS_REGEXP,
+        replacement = COMMA
+      ) |>
+      str_replace(
+        pattern     = ',, ',# (delete also double commas)
+        replacement = COMMA
+      )
+  )                                      |>
+  separate_rows(countries, sep = ',')    |>
+  mutate(# Standardize country names by using their ISO3 codes:
+    countries = countries                |>
+      countryname(destination = "iso3c") |>
+      countrycode(origin = 'iso3c', destination = "country.name")
+  )                                      |>
+  drop_na(countries)                     |>
+  group_by(id)                           |>
+  summarize(
+    countries   = countries |> glue_collapse(sep = COMMA),
+    # Nº of countries per initiative, for descriptive stats:
+    n_countries = n(),
+    .groups     = "drop"
   )
+
+# Values to manually replace the number of countries where necessary:
+CORRECTED_NUM_COUNTRIES <- tribble(
+  ~id,         ~n_countries,
+  "OMEGA-NET", 28,
+  "DEMETRIQ",  27,
+  "MORGAM",    16,
+  "InterLACE", 10,
+)
+
+tab1_countries_regions <- tab1_countries_regions  |>
+  mutate(
+    region = id %in% REGION_INITIATIVES |> if_else(
+      true  = Region..Country,
+      false = NA_character_
+    )
+  )                                               |>
+  left_join(tab1_countries, by = "id")            |>
+  rows_update(CORRECTED_NUM_COUNTRIES, by = "id") |>
+  select(-Region..Country)
+
 
 # Complete missing rows in the repository table
 mica_data_complete <- mica_data_tab1 |>
-  right_join(tab1_countries_regions, by = c("id", "acronym"))
-
-# Fill in countries and regions with values in Table 1
-mica_data_complete <- mica_data_complete |>
-  mutate(
+  right_join(
+    tab1_countries_regions,
+    by     = c("id", "acronym"),
+    suffix = c('', "_tab1")
+  ) |>
+  mutate(# Fill in countries and regions with values in Table 1
     countries = if_else(
       is.na(countries) & !(id %in% REGION_INITIATIVES),
-      Region..Country,
-      as.character(countries)
+      true  = countries_tab1,
+      false = countries
     ),
     region = if_else(
       is.na(region) & (id %in% REGION_INITIATIVES),
-      Region..Country,
+      region_tab1,
       region
     )
-  ) |>
-  select(-Region..Country)
+  )                                  |>
+  select(-ends_with("_tab1"))
 ```
 
 
@@ -449,7 +514,7 @@ value from the `region` column.
 
 ```{r create-region-countries-ouput}
 mica_data_complete <- mica_data_complete |> mutate(
-  region_countries = countries |> is.na() |> if_else(region, countries)
+  region_countries = countries |> coalesce(region)
 )
 ```
 
