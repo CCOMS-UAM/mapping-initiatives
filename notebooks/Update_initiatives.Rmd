@@ -443,6 +443,17 @@ mica_data_complete <- mica_data_complete |>
 ```
 
 
+Finally, we create an output column with the "Region/countries" value, which
+equals the `countries` column unless it is missing, in which case it takes the
+value from the `region` column.
+
+```{r create-region-countries-ouput}
+mica_data_complete <- mica_data_complete |> mutate(
+  region_countries = countries |> is.na() |> if_else(region, countries)
+)
+```
+
+
 ## Other variables
 
 The remaining columns are check side by side for correspondence.
@@ -689,7 +700,7 @@ mica_data_complete <- mica_data_complete |>
 The throughput dataset resulting from this data wrangling process is saved
 in Excel format in order to share it and use it in the next steps.
 
-```{r save-dataset}
+```{r save-dataset, eval=FALSE}
 # Set to `eval=FALSE` to avoid overwriting the result when executing
 #   automatically (change if necesssary)
 mica_data_complete |>
