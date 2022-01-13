@@ -640,9 +640,6 @@ EXCEPTION_IDS <- tribble(
    "GenomEUtwin", "max" # Because it says "85+"
 )
 
-# Discard the original age range column (needed for visual inspection only)
-tab1_age <- tab1_age |> select(-Age.range.of.the.sample)
-
 # Exceptions are overwitten with missing values:
 EXCEPTION_IDS %$% walk2(
   id, value,
@@ -661,9 +658,10 @@ mica_data_complete <- mica_data_complete |>
     age.max   = age.max |> coalesce(max),
     age_range = glue("{age.min} - {age.max}") |>
       na_if('NA - NA')                        |>
-      str_replace(' - NA', '+')
-  )                                      |>
-  select(-min, -max)
+      str_replace(' - NA', '+'),
+    age_range = age_range |> coalesce(Age.range.of.the.sample) # NA values...
+  )                                      |>      #   are completed with Table 1.
+  select(-min, -max, -Age.range.of.the.sample)
 ```
 
 
