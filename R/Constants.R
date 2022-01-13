@@ -36,13 +36,17 @@ SYNCHROS_URL <- "https://repository.synchros.eu"
 EMPTY_STRING               <- ''                              #   in the end
 SPACE                      <- ' '
 COMMA                      <- ', '
-BULLET_PREFIX              <- '-'
+DASH                       <- '-'
+BULLET_PREFIX              <- DASH
 LINE_FEED                  <- "\n"
+COLON                      <- ': '
 SEMICOLON                  <- '; '
 AND_CONJUNCTION            <- " and "
+ASTERISK                   <- '*'
 
 ## Regular expressions:
 AUTO_VARNAME_PREFIX_REGEXP <- r"(^\.\.\.)"
 NO_INFO_REGEXP             <- "No information obtained(\\s*)" # Any whitespace
 REPLACE_SEPS_REGEXP        <- glue("({SEMICOLON}|{AND_CONJUNCTION})")
 NUMBER_REGEXP              <- r"(\d+)"
+ASTERISK_REGEXP            <- glue("\\{ASTERISK}")

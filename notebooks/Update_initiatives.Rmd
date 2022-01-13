@@ -24,6 +24,7 @@ library(glue)
 library(countrycode)
 library(magrittr)
 library(xlsx)
+library(htm2txt)
 
 
 # Constants:
@@ -545,13 +546,51 @@ The formats identified are:
 - Acronym followed by initiative name in parentheses.
 - Acronym followed by volon and initiative name.
 
-```{r}
+```{r extract-acronyms}
 mica_data_complete <- mica_data_complete |> mutate(
   name = name                               |>
     str_remove(glue("\\s?\\({acronym}\\)")) |>
     str_remove(glue("{acronym}: "))         |>
     str_remove(glue("{acronym}\\s?\\("))    |>
     str_remove("\\)")
+)
+```
+
+
+Then, we create an output field for the table output that includes the
+acronym (when non-missing) followed by the initiative name.
+
+```{r create-initiative-output}
+mica_data_complete <- mica_data_complete |> mutate(
+  initiative = (                    # Prepend acronym to name, except when...
+    acronym |> is.na() |            #   it is missing, OR...
+      name |> str_detect(acronym) | #   it is contained in the name, OR...
+      acronym == "EUCAN-Connect"    #   special case.
+  )                                |>
+    if_else(EMPTY_STRING, paste0(acronym, COLON)) |>
+    paste0(name)
+)
+```
+
+
+## Description
+
+Some description text values need to be formatted for a proper output:
+
+- Properly format bullet points
+
+- Drop HTML tags in text
+
+```{r format-description-output}
+
+mica_data_complete <- mica_data_complete |> mutate(# Trim space from compound...
+  description = description                                      |> #   words...
+    str_replace_all(glue("(?<=[[:alpha:]]){DASH}{SPACE}"), DASH) |> #   (SIC).
+    str_replace_all(ASTERISK_REGEXP, DASH)                       |> # Bullet...
+    str_replace_all(' \\+', '\n-')                               |> #   points
+    str_replace_all(' •', '\n-')                                 |>
+    str_replace('•', '-')                                        |>
+    htm2txt()                                                       # HTML tags
 )
 ```
 
@@ -650,7 +689,7 @@ mica_data_complete <- mica_data_complete |>
 The throughput dataset resulting from this data wrangling process is saved
 in Excel format in order to share it and use it in the next steps.
 
-```{r save-dataset, eval=FALSE}
+```{r save-dataset}
 # Set to `eval=FALSE` to avoid overwriting the result when executing
 #   automatically (change if necesssary)
 mica_data_complete |>
