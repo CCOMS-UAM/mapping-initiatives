@@ -48,5 +48,14 @@ ASTERISK                   <- '*'
 AUTO_VARNAME_PREFIX_REGEXP <- r"(^\.\.\.)"
 NO_INFO_REGEXP             <- "No information obtained(\\s*)" # Any whitespace
 REPLACE_SEPS_REGEXP        <- glue("({SEMICOLON}|{AND_CONJUNCTION})")
+ENUM_SEPS_REGEXP           <- glue("({COMMA}|{AND_CONJUNCTION})")
 NUMBER_REGEXP              <- r"(\d+)"
 ASTERISK_REGEXP            <- glue("\\{ASTERISK}")
+
+## Country processing objects:
+VECTOR_CONTINENTS <- codelist |>
+  distinct(continent)         |>
+  arrange(continent)          |>
+  drop_na()                   |>
+  pull()
+

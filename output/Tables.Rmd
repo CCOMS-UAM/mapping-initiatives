@@ -30,6 +30,9 @@ library(readxl)
 library(vctrs)
 library(gtsummary)
 library(flextable)
+library(ftExtra)
+library(rlang)
+library(countrycode)
 
 # Constants:
 DOC_DIR      <- getwd()
@@ -59,11 +62,15 @@ opts_chunk$set(
 theme_gtsummary_compact()
 # theme_gtsummary_printer(print_engine = "flextable")
 
-set_flextable_defaults(font.family = "Times New Roman")
+set_flextable_defaults(
+  font.family = "Times New Roman",
+  post_process_docx = theme_box
+)
 ```
 
 ```{r includes}
 source("R/Constants.R", encoding = 'UTF-8')
+source("R/Output.R", encoding = 'UTF-8')
 ```
 
 ```{r load-chunks, cache=FALSE}
@@ -88,7 +95,12 @@ tab1_new <- read_excel(
 
 # Cast to proper vector types (easier than specifying all column types above):
 tab1_new <- tab1_new |> mutate(
-  across(methodology.moreCohortsToBeHarmonized, parse_logical)
+  across(
+    methodology.moreCohortsToBeHarmonized,
+    factor,
+    levels = c("FALSE", "TRUE"),
+    labels = c("No", "Yes")
+  )
 )
 
 # Simplify variable names
@@ -97,74 +109,158 @@ tab1_new <- tab1_new |>
   rename_with(str_remove, pattern = "nb")           |>
   rename_with(tolower)
 
-# Reorder variables
-tab1_new <- tab1_new |> select(
-  id:region,
-  countries,
-  n_countries,
-  description:participants.harmonized,
-  age_range,
-  everything()
-)
+# Create formatted output table for the initiatives table:
+tab1_new_out <- tab1_new |>
+  select(
+    initiative,
+    region_countries,
+    description:participants.harmonized,
+    age_range,
+    harmonizedvariables,
+    cohortcriteria
+  )
 ```
 
-```{r assign-headers}
+```{r country-derivate-vars}
+# Create variable counts derivated from the countries variable
+tab1_continents <- tab1_new                                                  |>
+  separate_rows(countries, sep = COMMA)                                      |>
+  select(id, countries)                                                      |>
+  drop_na()                                                                  |>
+  mutate(
+    continent = countries |>
+      countrycode(origin = "country.name", destination = "continent")
+  )                                                                          |>
+  count(id, continent)                                                       |>
+  complete(id, continent, fill = list(n = 0))                                |>
+  mutate(bool = n |> as.logical())
+
+# Complete missing values with available information in `region`:
+
+## Create dataset with existing information (with missing nº of countries where
+##   necessary):
+tab1_missing_countries <- tab1_new              |>
+  select(id, region)                            |>
+  anti_join(tab1_continents, by = "id")         |>
+  drop_na()                                     |>
+  separate_rows(region, sep = ENUM_SEPS_REGEXP) |>
+  mutate(
+    region    = region |> str_replace("American?", "Americas"), # Correct values
+    continent = region |>
+      countrycode(origin = "country.name", destination = "continent"),
+    n         = region    |>
+      str_extract("\\d+") |>
+      as.integer()        |>
+      coalesce(continent |> is.na() |> if_else(NA_integer_, 1L)),
+    continent = continent |> coalesce(
+      region |> str_extract(
+        VECTOR_CONTINENTS |> glue_collapse(sep = '|') |> enclose('(')
+      )      
+    ),
+    bool = continent != TRUE # Turns all non-missing to `TRUE`
+  )                                             |>
+  select(-region)
+
+## Complete non-present information with proper values, and overwrite the
+##   "known missings":
+tab1_missing_countries <- tab1_missing_countries                 |>
+  complete(id, continent, fill = list(n = 0, bool = FALSE))      |>
+  rows_update(tab1_missing_countries, by = c("id", "continent"))
+
+tab1_continents      <- tab1_continents |> bind_rows(tab1_missing_countries)
+tab1_continents_wide <- tab1_continents |>
+  pivot_wider(names_from = continent, values_from = n:bool)
+
+tab1_new <- tab1_new |> left_join(tab1_continents_wide, by = "id")
+```
+
+```{r create-headers}
 # Get the names from the first two rows of the file, and create names and labels
-tab1_data_header <- read_excel(
+tab1_headers <- read_excel(
   INITIATIVES_FILEPATH,
   sheet = TABLE_1_SHEET,
   n_max = 1
-)                                                                             |>
-  pivot_longer(everything(), names_to = "header", values_to = "subheader")    |>
+)                                                                          |>
+  pivot_longer(everything(), names_to = "header", values_to = "subheader") |>
   mutate(
-    header = header                          |>
-      str_detect(AUTO_VARNAME_PREFIX_REGEXP) |>
-      if_else(header |> dplyr::lag(1), header)
-  )                                                                           |>
-  # Add additional rows not present in the original Table 1
-  add_row(header = "Initiative", subheader = "Acronym", .before = 1)          |>
-  add_row(
-    header    = "Age range" |> rep(2),
-    subheader = c("Minimum", "Maximum"),
-    .after    = 10
-  )                                                                           |>
-  add_row(header = c("Countries", "Nº of countries"), .after = 3)             |>
-  # Edit headers to correspond to the new structure
-  mutate(
-    subheader = if_else(header == "INITIATIVE", "Name", subheader),
+    header = header                            |>
+      str_detect(AUTO_VARNAME_PREFIX_REGEXP)   |>
+      if_else(header |> dplyr::lag(1), header) |>
+      str_replace("harmonized", "harmonised"), # Correct errata in headers:
+  )                                                                        |>
+  mutate( # Edit headers to correspond to the new structure:
     header    = if_else(header == "INITIATIVE", "Initiative", header),
-    header    = if_else(header == "Region, Country", "Region", header),
+    header    = if_else(
+      header == "Region, Country",
+      true  = "Region / countries",
+      false = header
+    ),
     header    = if_else(header == "Main objective", "Description", header),
     header    = if_else(
       header |> str_detect("^Briefly"),
-      "Cohort criteria",
-      header
-    ),
-  )                                                                           |>
-  unite("label", header, subheader, sep = ": ", na.rm = TRUE, remove = FALSE) |>
-  # Reorder according to new structure
-  slice(-15)# |>
-  # mutate( # TODO: Decide if is necessary
-  #   subheader = subheader |> coalesce(header),
-  # )
+      true  = "Cohort criteria",
+      false = header
+    )
+  )                                                                        |>
+  # Delete unnecessary headers
+  slice(-10)                                                               |>
+  add_column(var_name = colnames(tab1_new_out)) # Add variable names column
+```
 
-# Make correspondences between the headers read and the existing variables:
-tab1_data_header <- tab1_data_header |>
-  add_column(var_name = colnames(tab1_new)[-1])
+```{r create-labels}
+tab1_labels <- tab1_headers                                          |>
+  unite(header, subheader, col = "label", na.rm = TRUE, sep = COLON) |>
+  bind_rows( # Add additional labels for descriptives table
+    tribble(
+      ~label,            ~var_name,
+       "Minimum age",     "age.min",
+       "Maximum age",     "age.max",
+       "Nº of countries", "n_countries",
+    )
+  )
 
-tab1_data_header |> pwalk(
-  \(label, header, subheader, var_name) {
+# Assign meaningful labels (after summarizing to avoid losing them)
+tab1_new <- tab1_new |> imap_dfc(# Labels to assign to the columns
+  \(column, variable) {
     
-    attr(tab1_new[[var_name]], "label")     <<- label
-    attr(tab1_new[[var_name]], "header")    <<- header
-    attr(tab1_new[[var_name]], "subheader") <<- subheader
+    column %@% "label" <- tab1_labels |>
+      filter(var_name == variable)    |>
+      pull(label)
+    
+    column
   }
 )
 ```
 
+
+```{r set-flextable-wd, cache=FALSE}
+# Necessary for flextable to find the csl file:
+opts_knit$set(root.dir = DOC_DIR)
+```
+
+```{r initiatives-table-outputs}
+tab1_headers <- tab1_headers                    |>
+  mutate( # Set duplicates for cell merging
+    subheader = subheader |>
+      is.na()             |>
+      if_else(true = header, false = subheader)
+  )
+
+initiatives_table_output <- tab1_new_out                  |>
+  flextable()                                             |>
+  set_header_df(mapping = tab1_headers, key = "var_name") |>
+  merge_h(part = "header")                                |>
+  merge_v(part = "header")                                |>
+  colformat_md(description)                               |>
+  set_table_properties(layout = "autofit")
+```
+
+
 ```{r descriptive-table}
-## TODO: Continue here
-tab1_new |> select(where(is.numeric), where(is.logical)) |> tbl_summary()
+# descriptives_table_output <- 
+  tab1_new                                     |>
+  select(where(is.numeric), where(is.logical)) |>
+  tbl_summary()
 ```
 
 
@@ -175,19 +271,20 @@ tab1_new |> select(where(is.numeric), where(is.logical)) |> tbl_summary()
 
 \newpage
 
-```{r set-flextable-wd, cache=FALSE}
-# Necessary for flextable to find the csl file:
-opts_knit$set(root.dir = DOC_DIR)
+# Tables
+
+<!---BLOCK_LANDSCAPE_START--->
+
+```{r initiatives, tab.id="initiatives", tab.cap="Descriptive information of the initiatives included in the mapping.", results='asis', cache=FALSE}
+# initiatives_table_output
 ```
 
-```{r initiatives, tab.id="initiatives", tab.cap="Descriptive information of the initiatives included in the mapping.", results='asis', cache=FALSE, eval=FALSE}
-initiatives_table_output
-```
+<!---BLOCK_LANDSCAPE_STOP--->
 
 \newpage
 
-```{r descriptives, tab.id="descriptives", tab.cap="Descriptive statistics of the initiatives mapped.", results='asis', cache=FALSE, eval=FALSE}
-descriptives_table_output
+```{r descriptives, tab.id="descriptives", tab.cap="Descriptive statistics of the initiatives mapped.", results='asis', cache=FALSE}
+# descriptives_table_output
 ```
 
 ```{r reset-root-dir, cache=FALSE}

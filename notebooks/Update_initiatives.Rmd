@@ -245,7 +245,6 @@ mica_data_tab1 <- mica_data |> select(
   nbParticipants.harmonized,
   age.min,
   age.max,
-  
   methodology.nbHarmonizedVariables,
   cohortCriteria
 )
@@ -491,7 +490,7 @@ mica_data_complete <- mica_data_tab1 |>
     tab1_countries_regions,
     by     = c("id", "acronym"),
     suffix = c('', "_tab1")
-  ) |>
+  )                                  |>
   mutate(# Fill in countries and regions with values in Table 1
     countries = if_else(
       is.na(countries) & !(id %in% REGION_INITIATIVES),
