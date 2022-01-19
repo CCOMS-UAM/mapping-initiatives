@@ -64,7 +64,7 @@ theme_gtsummary_compact()
 
 set_flextable_defaults(
   font.family = "Times New Roman",
-  post_process_docx = theme_box
+  post_process_docx = theme_booktabs
 )
 ```
 
@@ -171,6 +171,29 @@ tab1_continents_wide <- tab1_continents |>
 tab1_new <- tab1_new |> left_join(tab1_continents_wide, by = "id")
 ```
 
+```{r health-topic-derivate-vars}
+tab1_topics <- tab1_new                   |>
+  separate_rows(healthtopic, sep = '\\|') |>
+  select(id, healthtopic)
+
+tab1_topic_headers <- tab1_topics |>
+  drop_na()                       |>
+  distinct(healthtopic)           |>
+  transmute(
+    var_name  = healthtopic,
+    header      = "Topic",
+    subheader = healthtopic                         |>
+      str_replace(pattern = '_', replacement = ' ') |>
+      str_to_sentence()
+  )
+
+tab1_topics <- tab1_topics                              |>
+  mutate(value = TRUE)                                  |>
+  complete(id, healthtopic, fill = list(value = FALSE)) |>
+  drop_na()                                             |>
+  pivot_wider(names_from  = healthtopic, values_from = value)
+```
+
 ```{r create-output-dataset}
 # Create formatted output table for the initiatives table:
 tab1_new_out <- tab1_new |> select(initiative:cohortcriteria)
@@ -222,10 +245,18 @@ suppressMessages( # Message when reading empty column names
       )
     )                                                                        |>
     add_column( # Add variable names column
-      var_name = colnames(tab1_new |> select(-(id:region), -countries))
+      var_name = colnames(
+        tab1_new |> select(-(id:region), -countries, -healthtopic)
+      )
     )
 )
 
+# Add health topic variables and headers/labels
+tab1_new <- tab1_new |> left_join(tab1_topics, by = "id")
+
+tab1_headers <- tab1_headers |> bind_rows(tab1_topic_headers)
+
+# Create labels and format subheaders:
 tab1_headers <- tab1_headers |>
   unite(# TODO; Use subheaders as labels (when adding headers to the desc. tab.)
     header, subheader,
@@ -233,7 +264,7 @@ tab1_headers <- tab1_headers |>
     sep    = COLON,
     remove = FALSE,
     na.rm  = TRUE
-  )                          |>
+  ) |>
   mutate( # Set duplicates for cell merging
     subheader = subheader |> is.na() |> if_else(true = header, false = subheader)
   )
