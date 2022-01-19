@@ -231,6 +231,9 @@ tab1_data <- tab1_data |> map2_dfc(
 
 After visual exploration,
 I try to select from the MICA dataset what appear to be the columns in Table 1.
+The columns `healthTopic` and `healthTopicOther` are additional columns that
+may help provide descriptive information, so are selected as well,
+even though they are not in Table 1.
 
 ```{r select-mica-columns}
 mica_data <- mica_data |>
@@ -250,7 +253,9 @@ mica_data_tab1 <- mica_data |> select(
   age.min,
   age.max,
   methodology.nbHarmonizedVariables,
-  cohortCriteria
+  cohortCriteria,
+  healthTopic,
+  healthTopicOther
 )
 ```
 
@@ -516,22 +521,22 @@ equals the `countries` column unless it is missing, in which case it takes the
 value from the `region` column.
 
 ```{r create-region-countries-ouput}
-mica_data_complete <- mica_data_complete |> mutate(
-  region_countries = countries |> coalesce(region)
-)
+mica_data_complete <- mica_data_complete |>
+  mutate(region_countries = countries |> coalesce(region))
 ```
 
 
 ## Other variables
 
-The remaining columns are check side by side for correspondence.
+The remaining columns are check side by side for correspondence,
+except for the variables that are unique to the repository dataset.
 
 ```{r variable-correspondence}
 # Column names correspondences between the two datasets
 names_correspondence <- tibble(
-  repository = mica_data_tab1                 |>
-    select(-region, -countries, -n_countries) |>
-    colnames(),
+  repository = mica_data_tab1                                        |>
+    select(-region, -ends_with("countries"), -starts_with("health")) |>
+    colnames(), # Unique variables to the repository are discarded.
   table1     = tab1_data     |>
     select(-Region..Country) |>
     colnames()
