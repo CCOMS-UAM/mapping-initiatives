@@ -72,12 +72,14 @@ in Excel and there are errors parsing them as numbers.
 After manually performing these operations, I read the dataset.
 
 ```{r load-table-1-data, message=FALSE}
-tab1_data <- read_excel(
-  INITIATIVES_FILEPATH,
-  sheet = TABLE_1_SHEET,
-  col_types = "text",
-  na    = c("NA", "na"),
-  skip  = 1
+suppressMessages( # Empty and duplicated columns renamed
+  tab1_data <- read_excel(
+    INITIATIVES_FILEPATH,
+    sheet = TABLE_1_SHEET,
+    col_types = "text",
+    na    = c("NA", "na"),
+    skip  = 1
+  )
 )
 ```
 
@@ -149,20 +151,21 @@ I change the headers in the first place.
 
 ```{r table1-col-names, message=FALSE}
 # Get the names from the first two rows of the file, and create names and labels
-tab1_data_header <- read_excel(
-  INITIATIVES_FILEPATH,
-  sheet = TABLE_1_SHEET,
-  n_max = 1
-)                                                       |>
-  pivot_longer(everything())                            |>
-  mutate(
-    name = name                              |>
-      str_detect(AUTO_VARNAME_PREFIX_REGEXP) |>
-      if_else(name |> dplyr::lag(1), name)
-  )                                                     |>
-  unite("label", name, value, sep = ": ", na.rm = TRUE) |>
-  mutate(name = label |> vec_as_names(repair = "universal"))
-
+suppressMessages( # Empty and duplicated columns renamed
+  tab1_data_header <- read_excel(
+    INITIATIVES_FILEPATH,
+    sheet = TABLE_1_SHEET,
+    n_max = 1
+  )                                                       |>
+    pivot_longer(everything())                            |>
+    mutate(
+      name = name                              |>
+        str_detect(AUTO_VARNAME_PREFIX_REGEXP) |>
+        if_else(name |> dplyr::lag(1), name)
+    )                                                     |>
+    unite("label", name, value, sep = ": ", na.rm = TRUE) |>
+    mutate(name = label |> vec_as_names(repair = "universal"))
+)
 
 # Rename the table with the new names
 
