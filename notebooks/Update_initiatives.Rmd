@@ -135,7 +135,8 @@ mica_data <- read_csv(
     methodology.nbHarmonizedVariables     = col_integer(),
     methodology.nbCohorts.total           = col_integer(),
     methodology.nbCohorts.harmonized      = col_integer()
-  )
+  ),
+  na = c("", "NA", "na")
 )
 ```
 
