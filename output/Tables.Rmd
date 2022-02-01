@@ -1,5 +1,7 @@
 ---
-title: "Tables"
+title: |
+  Mapping of initiatives that integrate european and
+  international population cohorts
 output:
   officedown::rdocx_document:
     base_format:     bookdown::word_document2
@@ -14,7 +16,7 @@ output:
     keep_md:         no
 bibliography:        ../www/Mapping_initiatives.bib
 csl:                 ../www/apa-old-doi-prefix.csl
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -33,6 +35,9 @@ library(flextable)
 library(ftExtra)
 library(rlang)
 library(countrycode)
+library(english)
+library(magrittr)
+library(scales)
 
 # Constants:
 DOC_DIR      <- getwd()
@@ -157,15 +162,19 @@ suppressWarnings( # Warning when converting countries in `region` to `continent`
     )                                              |>
     select(-region)
 )
-  
+
 ## Complete non-present information with proper values, and overwrite the
 ##   "known missings":
 tab1_missing_countries <- tab1_missing_countries             |>
   complete(id, continent, fill = list(n = 0L, bool = FALSE)) |>
   rows_update(tab1_missing_countries, by = c("id", "continent"))
 
-tab1_continents      <- tab1_continents |> bind_rows(tab1_missing_countries)
+tab1_continents <- tab1_continents |>
+  bind_rows(tab1_missing_countries)     |>
+  group_by(id)                          |>
+  add_count(wt = bool, name = "n_continents")
 tab1_continents_wide <- tab1_continents |>
+  ungroup() |>
   pivot_wider(names_from = continent, values_from = n:bool)
 
 tab1_new <- tab1_new |> left_join(tab1_continents_wide, by = "id")
@@ -182,8 +191,12 @@ tab1_topic_headers <- tab1_topics |>
   transmute(
     var_name  = healthtopic,
     header      = "Topic",
-    subheader = healthtopic                         |>
-      str_replace(pattern = '_', replacement = ' ') |>
+    subheader = healthtopic                             |>
+      str_replace(
+        pattern     = "birth_infancy_childhood_health",
+        replacement = "Birth, infancy & childhood health"
+      )                                                 |>
+      str_replace_all(pattern = '_', replacement = ' ') |>
       str_to_sentence()
   )
 
@@ -197,6 +210,18 @@ tab1_topics <- tab1_topics                              |>
 ```{r create-output-dataset}
 # Create formatted output table for the initiatives table:
 tab1_new_out <- tab1_new |> select(initiative:cohortcriteria)
+```
+
+```{r preprocess-descriptives}
+# Initiatives without harmonized cohorts are assigned a "missing" value
+#   to the number of harmonized variables and participants, so we can have
+#   those descriptives for the actual initiatives with harmonized cohorts
+tab1_new <- tab1_new |> mutate(
+  across(
+    c(participants.harmonized, harmonizedvariables),
+    if_else, condition = cohorts.harmonized != 0, false = NA_real_
+  )
+)
 ```
 
 ```{r create-headers-labels}
@@ -234,12 +259,14 @@ suppressMessages( # Message when reading empty column names
       tibble(
         header    = c(
           "Age"             |> rep(2),
-          "Nº of countries" |> rep(6),
+          "Nº of countries",# n_countries
+          "Nº of regions",  # n_continents
+          "Nº of countries" |> rep(5),
           "Region"          |> rep(5)
         ),
         subheader = c(
           "Minimum", "Maximum",
-          NA_character_, # Total countries
+          NA_character_     |> rep(2), # Total countries and continents
           VECTOR_CONTINENTS |> rep(2) # Continents (nº countries and boolean)
         )
       )
@@ -264,9 +291,11 @@ tab1_headers <- tab1_headers |>
     sep    = COLON,
     remove = FALSE,
     na.rm  = TRUE
-  ) |>
+  )                          |>
   mutate( # Set duplicates for cell merging
-    subheader = subheader |> is.na() |> if_else(true = header, false = subheader)
+    subheader = subheader |>
+      is.na()             |>
+      if_else(true = header, false = subheader)
   )
 
 # Assign meaningful labels to columns
@@ -275,8 +304,8 @@ tab1_new <- tab1_new |> imap_dfc(# Labels to assign to the columns
     
     properties <- tab1_headers |> filter(var_name == variable)
     
-    column %@% "header" <- properties |> pull(header)
-    column %@% "label"  <- properties |> pull(label)
+    column %@% "header"     <- properties |> pull(header)
+    column %@% "label"      <- properties |> pull(label)
     column %@% "subheader"  <- properties |> pull(subheader)
     # TODO: Substituted two previous lines by the follwing:
     # column %@% "label"  <- properties |> pull(subheader)
@@ -302,16 +331,134 @@ initiatives_table_output <- tab1_new_out                  |>
 ```
 
 ```{r descriptive-table}
-descriptives_table_output <- tab1_new          |>
-  select(
-    where(is.numeric),
-    where(is.logical),
-    -matches("^n_[A-Z]", ignore.case = FALSE)
-  )                                            |>
-  tbl_summary(missing_text = "(Missing)")      |>
-  gtsummary::as_flex_table()
+tab1_new_describe <- tab1_new |> select(
+  -where(is.character),
+  -matches("^n_[A-Z]", ignore.case = FALSE)
+)
+
+descriptives_table_output <- tab1_new_describe |> tbl_summary(
+  statistic    = list(all_continuous() ~ "{median} ({min} - {max})"),
+  digits       = list(all_categorical() ~ c(0, 1)),
+  missing_text = "(Missing)"
+  # sort = # TODO: Does not seem to work
+)
 ```
 
+```{r descriptive-values, cache=FALSE}
+# Total nº of initiatives:
+total_N_out <- descriptives_table_output |> extract2("N") |> as.english()
+
+# Maximum number of missing values in one descriptive variable:
+max_missing_out <- tab1_new_out                |>
+  summarize(across(.fns = ~sum(is.na(.))/n())) |>
+  pivot_longer(everything())                   |>
+  filter(value == max(value))                  |>
+  distinct(value)                              |>
+  pull()                                       |>
+  percent(accuracy = .1)
+
+# Total nº of cohorts:
+total_cohorts_range_out  <- descriptives_table_output |>
+  inline_text(variable = "cohorts.total", pattern = "{min} and {max}")
+total_cohorts_median_out <- descriptives_table_output |>
+  inline_text(variable = "cohorts.total", pattern = "{median}")
+
+# Harmonized cohorts:
+harm_cohorts_max_out <- descriptives_table_output |>
+  inline_text(variable = "cohorts.harmonized", pattern = "{max}")
+
+# More cohorts to be harmonized:
+more_cohorts_expected_out <- descriptives_table_output |>
+  inline_text(variable = "morecohortstobeharmonized", pattern = "{n}")
+
+# Harmonized variables:
+harm_vars_range_out  <- descriptives_table_output |>
+  inline_text(variable = "harmonizedvariables", pattern = "{min} to {max}")
+harm_vars_median_out <- descriptives_table_output |>
+  inline_text(variable = "harmonizedvariables", pattern = "{median}")
+
+# Harmonized participants:
+harm_participants_max_out    <- descriptives_table_output |>
+  inline_text(variable = "participants.harmonized", pattern = "{max}")
+harm_participants_median_out <- descriptives_table_output |>
+  inline_text(variable = "participants.harmonized", pattern = "{median}")
+
+# Particinats' ages across included cohorts:
+max_age_max_out  <- descriptives_table_output |>
+  inline_text(variable = "age.max", pattern = "{max}")
+
+# Topics:
+prop_Ageing_out <- descriptives_table_output |>
+  inline_text(variable = "ageing", pattern = "{p}%")
+
+# Nº of countries:
+max_n_countries_out <- descriptives_table_output           |>
+  inline_text(variable = "n_countries", pattern = "{max}") |>
+  as.integer()                                             |>
+  as.english()
+min_n_countries_out <- descriptives_table_output           |>
+  inline_text(variable = "n_countries", pattern = "{min}") |>
+  as.integer()                                             |>
+  as.english()
+
+# Nº of continents
+prop_1_continent_out  <- descriptives_table_output |>
+  inline_text(variable = "n_continents", level = "1", pattern = "{p}%")
+prop_5_continents_out <- descriptives_table_output |>
+  inline_text(variable = "n_continents", level = "5", pattern = "{p}%")
+
+# Nº of initiatives per region
+prop_Europe_out <- descriptives_table_output |>
+  inline_text(variable = "bool_Europe", pattern = "{p}%")
+
+n_Africa_out    <- descriptives_table_output             |>
+  inline_text(variable = "bool_Africa", pattern = "{n}") |>
+  as.integer()                                           |>
+  as.english()
+prop_Africa_out <- descriptives_table_output |>
+  inline_text(variable = "bool_Africa", pattern = "{p}%")
+```
+
+A total of `r total_N_out` initiatives that integrate population cohorts
+were identified through from abovementioned sources.
+These initiatives are presented in \@ref(tab:initiatives),
+along with a subset of their most representative information.
+It is worth noting that in a large amount of cases the contact person was
+unreachable throughout the whole mapping process,
+so the proportion of missing information is sometimes as large as
+`r max_missing_out`.
+The complete descriptive information of each initiative can be consulted
+in the repository of the SYNCHROS project (www.synchros.eu).
+
+The number of harmonized cohorts ranged between `r total_cohorts_range_out`
+(median = `r total_cohorts_median_out`).
+Some initiatives had harmonized as much as `r harm_cohorts_max_out` cohorts
+while others had not harmonized their cohorts at all.
+However, at least `r more_cohorts_expected_out` initiatives expected
+to harmonize more cohorts in the future.
+The harmonized cohorts had a large variability in the number of harmonized
+variables, ranging from `r harm_vars_range_out`
+(median = `r harm_vars_median_out`).
+They would comprise as much as `r harm_participants_max_out` participants,
+although the median value was around `r harm_participants_median_out`.
+
+The targeted populations ranged in age from childbirth to as much as
+`r max_age_max_out` (although probably referring to an unbounded upper limit),
+while the most prevalent topic was that of Ageing,
+addressed by a `r prop_Ageing_out` of the initiatives.
+The cohorts comprised as much as `r max_n_countries_out`,
+although there were also initiatives with cohorts from
+only `r min_n_countries_out` country.
+Most of them (`r prop_1_continent_out`) were circumscribed
+to just one continent,
+being Europe the most frequent (`r prop_Europe_out`),
+while only a `r prop_5_continents_out` comprised cohorts from all
+the five continents.
+Africa was the most underrepresented continent,
+with only `r n_Africa_out` initiatives (`r prop_Africa_out`) including cohorts
+from it.
+The complete descriptive information of the initiatives can be found in
+\@ref(tab:descriptives).
 
 # References
 
@@ -320,12 +467,12 @@ descriptives_table_output <- tab1_new          |>
 
 \newpage
 
-# Tables
-
 <!---BLOCK_LANDSCAPE_START--->
 
+# Tables
+
 ```{r initiatives, tab.id="initiatives", tab.cap="Descriptive information of the initiatives included in the mapping.", results='asis', cache=FALSE}
-# initiatives_table_output
+initiatives_table_output
 ```
 
 <!---BLOCK_LANDSCAPE_STOP--->
@@ -333,7 +480,7 @@ descriptives_table_output <- tab1_new          |>
 \newpage
 
 ```{r descriptives, tab.id="descriptives", tab.cap="Descriptive statistics of the initiatives mapped.", results='asis', cache=FALSE}
-# descriptives_table_output
+descriptives_table_output
 ```
 
 ```{r reset-root-dir, cache=FALSE}
