@@ -323,7 +323,10 @@ opts_knit$set(root.dir = DOC_DIR)
 ```{r initiatives-table-outputs}
 initiatives_table_output <- tab1_new_out                  |>
   flextable()                                             |>
-  set_header_df(mapping = tab1_headers, key = "var_name") |>
+  set_header_df(
+    mapping = tab1_headers |> select(-label),
+    key     = "var_name"
+  )                                                       |>
   merge_h(part = "header")                                |>
   merge_v(part = "header")                                |>
   colformat_md(description)                               |>
