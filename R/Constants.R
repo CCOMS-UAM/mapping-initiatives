@@ -59,3 +59,8 @@ VECTOR_CONTINENTS <- codelist |>
   drop_na()                   |>
   pull()
 
+VECTOR_REGIONS <- codelist |>
+  distinct(region)         |>
+  arrange(region)          |>
+  drop_na()                |>
+  pull()
