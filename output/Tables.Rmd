@@ -422,32 +422,35 @@ prop_Africa_out <- descriptives_table_output |>
   inline_text(variable = "bool_Africa", pattern = "{p}%")
 ```
 
-A total of `r total_N_out` initiatives that integrate population cohorts
-were identified through from abovementioned sources.
-These initiatives are presented in \@ref(tab:initiatives),
+<!-- A total of `r total_N_out` initiatives that integrate population cohorts
+were identified. -->
+
+The initiatives are presented in \@ref(tab:initiatives),
 along with a subset of their most representative information.
 It is worth noting that in a large amount of cases the contact person was
 unreachable throughout the whole mapping process,
-so the proportion of missing information is sometimes as large as
-`r max_missing_out`.
+so the proportion of missing data was as large as
+`r max_missing_out` for some properties.
 The complete descriptive information of each initiative can be consulted
 in the repository of the SYNCHROS project (www.synchros.eu).
 
 The number of harmonized cohorts ranged between `r total_cohorts_range_out`
 (median = `r total_cohorts_median_out`).
-Some initiatives had harmonized as much as `r harm_cohorts_max_out` cohorts
-while others had not harmonized their cohorts at all.
+Some initiatives had as much as `r harm_cohorts_max_out` harmonized cohorts,
+while others had harmonized cohorts at all.
 However, at least `r more_cohorts_expected_out` initiatives expected
 to harmonize more cohorts in the future.
-The harmonized cohorts had a large variability in the number of harmonized
-variables, ranging from `r harm_vars_range_out`
+The harmonized cohorts had a large variability in the maximum number of
+harmonized variables, ranging from `r harm_vars_range_out`
 (median = `r harm_vars_median_out`).
 They would comprise as much as `r harm_participants_max_out` participants,
 although the median value was around `r harm_participants_median_out`.
 
+<br>
+
 The targeted populations ranged in age from childbirth to as much as
-`r max_age_max_out` (although probably referring to an unbounded upper limit),
-while the most prevalent topic was that of Ageing,
+`r max_age_max_out` (although this probably refers to an unbounded upper limit).
+Ageing was the most prevalent topic,
 addressed by a `r prop_Ageing_out` of the initiatives.
 The cohorts comprised as much as `r max_n_countries_out`,
 although there were also initiatives with cohorts from
