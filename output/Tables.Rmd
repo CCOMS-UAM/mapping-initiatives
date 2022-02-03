@@ -122,16 +122,16 @@ tab1_new <- tab1_new |> select(
 
 ```{r country-derivate-vars}
 # Create variable counts derivated from the countries variable
-tab1_continents <- tab1_new                                                  |>
-  separate_rows(countries, sep = COMMA)                                      |>
-  select(id, countries)                                                      |>
-  drop_na()                                                                  |>
+tab1_continents <- tab1_new                    |>
+  separate_rows(countries, sep = COMMA)        |>
+  select(id, countries)                        |>
+  drop_na()                                    |>
   mutate(
-    continent = countries |>
+    continent   = countries |>
       countrycode(origin = "country.name", destination = "continent")
-  )                                                                          |>
-  count(id, continent)                                                       |>
-  complete(id, continent, fill = list(n = 0L))                               |>
+  )                                            |>
+  count(id, continent)                         |>
+  complete(id, continent, fill = list(n = 0L)) |>
   mutate(bool = n |> as.logical())
 
 # Complete missing values with available information in `region`:
@@ -159,7 +159,7 @@ suppressWarnings( # Warning when converting countries in `region` to `continent`
         )
       ),
       bool      = continent != TRUE # Turns all non-missing to `TRUE`
-    )                                              |>
+    )                                             |>
     select(-region)
 )
 
@@ -169,12 +169,13 @@ tab1_missing_countries <- tab1_missing_countries             |>
   complete(id, continent, fill = list(n = 0L, bool = FALSE)) |>
   rows_update(tab1_missing_countries, by = c("id", "continent"))
 
-tab1_continents <- tab1_continents |>
-  bind_rows(tab1_missing_countries)     |>
-  group_by(id)                          |>
+tab1_continents <- tab1_continents  |>
+  bind_rows(tab1_missing_countries) |>
+  group_by(id)                      |>
   add_count(wt = bool, name = "n_continents")
+
 tab1_continents_wide <- tab1_continents |>
-  ungroup() |>
+  ungroup()                             |>
   pivot_wider(names_from = continent, values_from = n:bool)
 
 tab1_new <- tab1_new |> left_join(tab1_continents_wide, by = "id")
