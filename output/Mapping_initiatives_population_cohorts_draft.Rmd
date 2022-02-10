@@ -687,7 +687,7 @@ clinical trial cohorts, and others.
 In total, 11 articles were retrieved from the systematic review.
 Additionally, from the partners’ suggestions and the descendent searches,
 189 potential initiatives were obtained. After screening for eligibility,
-141 projects were excluded for one or more of the follwoing reasons:
+141 projects were excluded for one or more of the following reasons:
 initiatives published before the year 2000,
 projects that did not integrate cohorts,
 and one initiative with only cross-sectional cohorts.
@@ -752,7 +752,7 @@ low- and middle-income countries [LMICs, @lawlor_birth_2009].
 For instance, the most part of birth cohort studies [@victora_cohorts_2012]
 are conducted in high-income countries, where annual births only amount to a 10%
 of the births in LMICs. Among other factors, this may be due to
-the relative less number of health invetigators in LMICs
+the relative less number of health investigators in LMICs
 (40 times less on average; One Year on, Global Observatory on Health R&D
 Identifies Striking Gaps and Inequalities, 2018).
 Limitations in their national health and surveillance systems may also
@@ -773,7 +773,7 @@ Secondly, guiding the search for existing projects with harmonized cohorts.
 And thirdly, providing guidelines for future projects aimed at integrating and
 harmonizing cohorts.
 
-Nevertheless, we must raise awareness on the non.exhaustive nature of
+Nevertheless, we must raise awareness on the non exhaustive nature of
 this mapping. Given the big amount of population cohort studies published,
 this manuscript aims at representativeness rather than exhaustiveness.
 Also, as the response rate of the principal investigators was rather low,
@@ -790,7 +790,7 @@ cohort integration projects could yield considerable benefits for
 diverse scientific fields. In this sense, we expect the Synchros repository
 to be a valuable resource for emerging collaborative health research.
 Compared to undertaking new international mega-cohorts, integration of
-existing cohorts may be more cost-effective, [@larsen_pregnancy_2013].
+existing cohorts may be more cost-effective [@larsen_pregnancy_2013].
 One of the goals of Horizon Europe is to promote worldwide collaboration
 with countries with strong investments in science [@abbott_how_2019].
 The integration of cohort studies across these countries will certainly
