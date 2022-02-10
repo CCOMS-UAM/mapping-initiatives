@@ -89,12 +89,12 @@ The amount of scientific data is rapidly increasing [@shilo_axes_2020].
 In the healthcare domain, about 500 petabytes (10^15^ bytes)
 were produced in 2012,
 while the estimate for 2020 was between 25,000 petabytes and
-16 zettabytes [16 trillion GB, @cavanillas_new_2016, @roski_creating_2014].
+16 zettabytes [16 trillion GB, @cavanillas_new_2016; @roski_creating_2014].
 Other sectors also parallel such increase
 --finance and insurance, energy and transportation, media and entertainment,
 or the public sector [@hulsen_big_2019].
 This massive amount of available information,
-occasionally referred to as "the new oil" [@@cavanillas_new_2016],
+occasionally referred to as "the new oil" [@cavanillas_new_2016],
 provides great opportunities to improve decision-making, reduce costs,
 and extract meaningful information.
 These in turn would help develop further the different pathways
