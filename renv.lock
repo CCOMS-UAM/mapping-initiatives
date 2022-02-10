@@ -264,10 +264,10 @@
     },
     "countrycode": {
       "Package": "countrycode",
-      "Version": "1.3.0",
+      "Version": "1.3.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "0b2ceb4d9dc48332decc876ecd01ed00",
+      "Hash": "a1c9e131c5cbefd641e6aa56f16dfede",
       "Requirements": []
     },
     "cpp11": {
@@ -336,13 +336,12 @@
     },
     "dplyr": {
       "Package": "dplyr",
-      "Version": "1.0.7",
+      "Version": "1.0.8",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "36f1ae62f026c8ba9f9b5c9a08c03297",
+      "Hash": "ef47665e64228a17609d6df877bf86f2",
       "Requirements": [
         "R6",
-        "ellipsis",
         "generics",
         "glue",
         "lifecycle",
@@ -631,10 +630,10 @@
     },
     "gtsummary": {
       "Package": "gtsummary",
-      "Version": "1.5.1",
+      "Version": "1.5.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "cea30b67afeb3896c0086cf43580fb65",
+      "Hash": "631d2e8a3173204416a71bf25e8f16fe",
       "Requirements": [
         "broom",
         "broom.helpers",
@@ -1131,12 +1130,22 @@
         "withr"
       ]
     },
-    "rlang": {
-      "Package": "rlang",
-      "Version": "1.0.0",
+    "revealjs": {
+      "Package": "revealjs",
+      "Version": "0.9",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ec923a35ba44bc86fbf95dacaccf65da",
+      "Hash": "08e30caa337e6d335d83df1a05d5b9f3",
+      "Requirements": [
+        "rmarkdown"
+      ]
+    },
+    "rlang": {
+      "Package": "rlang",
+      "Version": "1.0.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "3bf0219f19d9f5b3c682acbb3546a151",
       "Requirements": []
     },
     "rmarkdown": {
@@ -1276,10 +1285,10 @@
     },
     "tibble": {
       "Package": "tibble",
-      "Version": "3.1.5",
+      "Version": "3.1.6",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "36eb05ad4cfdfeaa56f5a9b2a1311efd",
+      "Hash": "8a8f02d1934dfd6431c671361510dd0b",
       "Requirements": [
         "ellipsis",
         "fansi",
