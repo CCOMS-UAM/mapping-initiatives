@@ -1,0 +1,215 @@
+---
+title:     "WP.1 Publication: Progress update"
+author:    "Daniel Morillo"
+institute: "CIBERSAM"
+date:      "10 February 2022"
+output:
+  revealjs::revealjs_presentation:
+    mathjax:         null
+    transition:      slide
+    transitionSpeed: fast
+    theme:           beige
+    highlight:       espresso
+    smart:           yes
+    center:          no
+    incremental:     no
+    slide_level:     1
+    fig_width:       5.5
+    fig_height:      2.8
+    fig_caption:     no
+    self_contained:  no
+    keep_md:         no
+    reveal_plugins:  "notes"
+    reveal_options:
+      slideNumber:          yes
+      hash:                 yes
+      pdfSeparateFragments: no
+---
+
+```{r setup, include=FALSE}
+# Libraries:
+library(knitr)
+library(tidyverse)
+library(lubridate)
+
+
+# TODO: Revisar configuración
+
+# Configuration:
+opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, results = 'asis')
+```
+
+# Title
+
+```{css styles, echo=FALSE}
+.leftalign{
+  text-align: left;
+}
+
+.reveal ul {
+  display: block;
+}
+
+.reveal section img {
+  background: none;
+  border:     none;
+  box-shadow: none;
+}
+
+.container {
+  display:     flex;
+  align-items: center;
+}
+
+.col {
+  flex:       1;
+  align-self: center;
+}
+```
+
+<br>
+<br>
+
+## "Mapping of initiatives that integrate European and International population cohorts"
+
+::: {.notes}
+"International" already includes "European", don't think it's an issue but if
+it were it could change to "European and Worldwide"
+:::
+
+
+# First author and co-authors
+
+<br>
+
+>- Laura Alejandra Rico-Uribe
+
+::: {.fragment}
+- Ángel Rodríguez-Laso
+
+- Ellen Vorstenbosch
+
+- Leocadio Rodriguez-Mañas
+
+- Josep María Haro
+
+- José Luis Ayuso-Mateos
+:::
+
+>- Daniel Morillo-Cuadrado
+
+::: {.notes}
+- Other people that have contributed to the mapping and repository?
+  (e.g. contacting the initiatives' PIs / contact person)
+:::
+
+
+# Content: Major points / findings / conclusions (I)
+
+>- **Intro:** Mappings for three types of cohort-integrating initiatives;
+focus on (initiatives that integrate) population cohorts.
+
+::: {.fragment}
+- **Methods:** Sources of initiatives:
+
+1. Systematic search;
+
+2. Suggestions from Synchros partners; and
+
+3. Descendent search from two previous sources.
+:::
+
+::: {.notes}
+**Intro:** Synchros goals and mappings. Then focus on population cohorts
+
+**Method:** Post-processing to obtain descriptive information obtained
+:::
+
+# Content: Major points / findings / conclusions (II)
+
+::: {.fragment}
+- **Results:**
+
+  - Fifty-eight initiatives found (!)
+:::
+
+<br>
+
+::: {.fragment}
+- **Conclusions:**
+
+  - Imbalance in cohort initiatives between low- / mid- & high- income countries
+  
+  - Relevant as first step to begin harmonization of cohorts
+:::
+
+::: {.notes}
+**Results:** Initiative NCI was dropped because it fulfilled the exclusion
+criteria (not integrating exclusively population cohorts, it had patient cohorts
+and clinical trials)
+:::
+
+
+# Status of completion (time plan / finalisation / submission)
+
+<br>
+
+>- Feb. 4th: Major draft update sent to coauthors
+
+>- Feb. 4th - 18th: Feedback and target journal suggestions
+
+>- Feb. 21st: Release submission candidate.
+
+>- Mar. 11th: Approval of submission candidate and target journal.
+
+>- Mar. 16th: Submission to journal
+
+
+::: {.notes}
+Draft update sent according to timeline. Now in period of feedback collection.
+
+Timeline may be a bit too time constrained.
+Editorial meeting next week.
+
+Probably will need more time for submission candidate,
+maybe one or two additional editorial meetings.
+
+On the other hand, approval from co-authors may take shorter.
+:::
+
+
+# Journal planned for submission)
+
+<br>
+<br>
+
+## TBD (by March 11th)
+
+
+# Issues / Need for support
+
+<br>
+<br>
+
+>- Decision upon target journal
+
+<br>
+
+>- Descriptive information of initiatives
+
+<br>
+
+>- Conclusions derived from results
+
+::: {.notes}
+**Target journal:** Will be decided in consensus with coauthors
+
+**Descriptives:** Issues with previous version: Not all information is available
+
+**Conclusions:**
+
+- Too few information
+
+- Not clear whether discussion about LMICs is appropriate: The focus is not on
+  cohorts, but *initiatives* integrating those cohorts.
+:::

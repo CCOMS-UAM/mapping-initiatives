@@ -24,39 +24,11 @@ library(glue)
 library(countrycode)
 library(magrittr)
 library(xlsx)
+library(htm2txt)
 
 
 # Constants:
-
-## File system:
-INITIATIVES_FILENAME <- "synchros-initiatives.xlsx"
-TABLE_1_SHEET        <- "Table 1"
-UPDATED_TABLE_SHEET  <- "Table 1 updated"
-MICA_DATA_FILENAME   <- "mica-export.csv"
-
 ROOT_DIR <- ".."
-DATA_DIR <- "dat"
-INITIATIVES_FILEPATH <- file.path(DATA_DIR, INITIATIVES_FILENAME)
-MICA_DATA_FILEPATH   <- file.path(DATA_DIR, MICA_DATA_FILENAME)
-
-## URLs:
-SYNCHROS_URL <- "https://repository.synchros.eu"
-
-## Text strings:
-EMPTY_STRING               <- ''                              #   in the end
-SPACE                      <- ' '
-COMMA                      <- ', '
-BULLET_PREFIX              <- '-'
-LINE_FEED                  <- "\n"
-SEMICOLON                  <- '; '
-AND_CONJUNCTION            <- " and "
-
-## Regular expressions:
-AUTO_VARNAME_PREFIX_REGEXP <- r"(^\.\.\.)"
-NO_INFO_REGEXP             <- "No information obtained(\\s*)" # Any whitespace
-REPLACE_SEPS_REGEXP        <- glue("({SEMICOLON}|{AND_CONJUNCTION})")
-NUMBER_REGEXP              <- r"(\d+)"
-
 
 # Output configuration:
 
@@ -64,6 +36,9 @@ opts_knit$set(root.dir = ROOT_DIR)
 opts_chunk$set(message = FALSE)
 ```
 
+```{r includes}
+source("R/Constants.R", encoding = 'UTF-8')
+```
 
 # Introduction
 
@@ -97,12 +72,14 @@ in Excel and there are errors parsing them as numbers.
 After manually performing these operations, I read the dataset.
 
 ```{r load-table-1-data, message=FALSE}
-tab1_data <- read_excel(
-  INITIATIVES_FILEPATH,
-  sheet = TABLE_1_SHEET,
-  col_types = "text",
-  na    = c("NA", "na"),
-  skip  = 1
+suppressMessages( # Empty and duplicated columns renamed
+  tab1_data <- read_excel(
+    INITIATIVES_FILEPATH,
+    sheet = TABLE_1_SHEET,
+    col_types = "text",
+    na    = c("NA", "na"),
+    skip  = 1
+  )
 )
 ```
 
@@ -160,7 +137,8 @@ mica_data <- read_csv(
     methodology.nbHarmonizedVariables     = col_integer(),
     methodology.nbCohorts.total           = col_integer(),
     methodology.nbCohorts.harmonized      = col_integer()
-  )
+  ),
+  na = c("", "NA", "na")
 )
 ```
 
@@ -173,20 +151,21 @@ I change the headers in the first place.
 
 ```{r table1-col-names, message=FALSE}
 # Get the names from the first two rows of the file, and create names and labels
-tab1_data_header <- read_excel(
-  INITIATIVES_FILEPATH,
-  sheet = TABLE_1_SHEET,
-  n_max = 1
-)                                                       |>
-  pivot_longer(everything())                            |>
-  mutate(
-    name = name                              |>
-      str_detect(AUTO_VARNAME_PREFIX_REGEXP) |>
-      if_else(name |> dplyr::lag(1), name)
-  )                                                     |>
-  unite("label", name, value, sep = ": ", na.rm = TRUE) |>
-  mutate(name = label |> vec_as_names(repair = "universal"))
-
+suppressMessages( # Empty and duplicated columns renamed
+  tab1_data_header <- read_excel(
+    INITIATIVES_FILEPATH,
+    sheet = TABLE_1_SHEET,
+    n_max = 1
+  )                                                       |>
+    pivot_longer(everything())                            |>
+    mutate(
+      name = name                              |>
+        str_detect(AUTO_VARNAME_PREFIX_REGEXP) |>
+        if_else(name |> dplyr::lag(1), name)
+    )                                                     |>
+    unite("label", name, value, sep = ": ", na.rm = TRUE) |>
+    mutate(name = label |> vec_as_names(repair = "universal"))
+)
 
 # Rename the table with the new names
 
@@ -252,6 +231,8 @@ tab1_data <- tab1_data |> map2_dfc(
 
 After visual exploration,
 I try to select from the MICA dataset what appear to be the columns in Table 1.
+The column `healthTopic` may help provide descriptive information,
+so is selected as well even though it is not in Table 1.
 
 ```{r select-mica-columns}
 mica_data <- mica_data |>
@@ -270,9 +251,9 @@ mica_data_tab1 <- mica_data |> select(
   nbParticipants.harmonized,
   age.min,
   age.max,
-  
   methodology.nbHarmonizedVariables,
-  cohortCriteria
+  cohortCriteria,
+  healthTopic
 )
 ```
 
@@ -383,12 +364,15 @@ to date.
 
 ```{r region-initiatives}
 REGION_INITIATIVES <- c(
+  "euCanSHare",
   "ICC-dementia",
   "interconnect",
   "InterLACE",
+  "Gateway",
   "OMEGA-NET",
   "RAND",
-  "Genome Asia 100K",
+  "Genome Asia 100K  ",
+  "HELIX",
   "DEMETRIQ",
   "EU Child Cohort Network",
   "RECAP",
@@ -419,6 +403,8 @@ Before doing this, we must format the `countries` column
 from the repository to transform the ISO codes into country names in English.
 The content of `countries` and `region` is also standardized
 by changing semicolons (`;`) and "and" conjunctions by commas.
+Finally, some mistakes need to be corrected in Table 1,
+and the country names standardized appropriately.
 
 ```{r complete-regions-countries}
 # Turn ISO3 codes into country names and collapse them
@@ -435,49 +421,120 @@ mica_data_tab1 <- mica_data_tab1 |>
     .groups     = "drop"
   )
 
-# Standardize separating countries and regions by commas
-tab1_countries_regions <- tab1_countries_regions |>
-  mutate(
-    across(
-      Region..Country,
-      str_replace,
-      pattern     = REPLACE_SEPS_REGEXP,
-      replacement = COMMA
-    )
+# Values to manually change in order to crrect errors in Table 1:
+CORRECT_COUNTRIES <- tribble(
+  ~old,                 ~new,
+  "Singapore Malaysia", "Singapore, Malaysia",
+  "Belgium Spain",      "Belgium, Spain",
+  "Croatria",           "Croatia",
+  "Finland  Greece",    "Finland, Greece",
+  "NL",                 "Netherlands",
+  "England",            "United Kingdom"
+)
+
+# Replace manually incorrect values:
+CORRECT_COUNTRIES %$% walk2(
+  old, new,
+  ~{
+    tab1_countries_regions <<- tab1_countries_regions |>
+      mutate(Region..Country = Region..Country |> str_replace_all(.x, .y))
+  }
+)
+
+
+tab1_countries <- tab1_countries_regions |>
+  filter(!id %in% REGION_INITIATIVES)    |>
+  mutate(# Standardize separating countries/regions by commas
+    countries = Region..Country |>
+      str_replace(
+        pattern     = REPLACE_SEPS_REGEXP,
+        replacement = COMMA
+      ) |>
+      str_replace(
+        pattern     = ',, ',# (delete also double commas)
+        replacement = COMMA
+      )
+  )                                      |>
+  separate_rows(countries, sep = ',')    |>
+  mutate(# Standardize country names by using their ISO3 codes:
+    countries = countries                |>
+      countryname(destination = "iso3c") |>
+      countrycode(origin = 'iso3c', destination = "country.name")
+  )                                      |>
+  drop_na(countries)                     |>
+  group_by(id)                           |>
+  summarize(
+    countries   = countries |> glue_collapse(sep = COMMA),
+    # Nº of countries per initiative, for descriptive stats:
+    n_countries = n(),
+    .groups     = "drop"
   )
+
+# Values to manually replace the number of countries where necessary:
+CORRECTED_NUM_COUNTRIES <- tribble(
+  ~id,         ~n_countries,
+  "OMEGA-NET", 28,
+  "DEMETRIQ",  27,
+  "MORGAM",    16,
+  "InterLACE", 10,
+)
+
+tab1_countries_regions <- tab1_countries_regions  |>
+  mutate(
+    region = id %in% REGION_INITIATIVES |> if_else(
+      true  = Region..Country,
+      false = NA_character_
+    )
+  )                                               |>
+  left_join(tab1_countries, by = "id")            |>
+  rows_update(CORRECTED_NUM_COUNTRIES, by = "id") |>
+  select(-Region..Country)
+
 
 # Complete missing rows in the repository table
 mica_data_complete <- mica_data_tab1 |>
-  right_join(tab1_countries_regions, by = c("id", "acronym"))
-
-# Fill in countries and regions with values in Table 1
-mica_data_complete <- mica_data_complete |>
-  mutate(
+  right_join(
+    tab1_countries_regions,
+    by     = c("id", "acronym"),
+    suffix = c('', "_tab1")
+  )                                  |>
+  mutate(# Fill in countries and regions with values in Table 1
     countries = if_else(
       is.na(countries) & !(id %in% REGION_INITIATIVES),
-      Region..Country,
-      as.character(countries)
+      true  = countries_tab1,
+      false = countries
     ),
     region = if_else(
       is.na(region) & (id %in% REGION_INITIATIVES),
-      Region..Country,
+      region_tab1,
       region
     )
-  ) |>
-  select(-Region..Country)
+  )                                  |>
+  select(-ends_with("_tab1"))
+```
+
+
+Finally, we create an output column with the "Region/countries" value, which
+equals the `countries` column unless it is missing, in which case it takes the
+value from the `region` column.
+
+```{r create-region-countries-ouput}
+mica_data_complete <- mica_data_complete |>
+  mutate(region_countries = countries |> coalesce(region))
 ```
 
 
 ## Other variables
 
-The remaining columns are check side by side for correspondence.
+The remaining columns are check side by side for correspondence,
+except for the variables that are unique to the repository dataset.
 
 ```{r variable-correspondence}
 # Column names correspondences between the two datasets
 names_correspondence <- tibble(
-  repository = mica_data_tab1                 |>
-    select(-region, -countries, -n_countries) |>
-    colnames(),
+  repository = mica_data_tab1                                        |>
+    select(-region, -ends_with("countries"), -healthTopic) |>
+    colnames(), # Unique variables to the repository are discarded.
   table1     = tab1_data     |>
     select(-Region..Country) |>
     colnames()
@@ -560,6 +617,66 @@ names_correspondence %$%
 ```
 
 
+## Initiative names
+
+Some of the values in the `INITIATIVE` field include the acronym and the
+initiative name in different formats.
+We try to identify these and extract the name without the acronym.
+The formats identified are:
+
+- Initiative name with the acronym in parentheses at the end or in the middle.
+- Acronym followed by initiative name in parentheses.
+- Acronym followed by volon and initiative name.
+
+```{r extract-acronyms}
+mica_data_complete <- mica_data_complete |> mutate(
+  name = name                               |>
+    str_remove(glue("\\s?\\({acronym}\\)")) |>
+    str_remove(glue("{acronym}: "))         |>
+    str_remove(glue("{acronym}\\s?\\("))    |>
+    str_remove("\\)")
+)
+```
+
+
+Then, we create an output field for the table output that includes the
+acronym (when non-missing) followed by the initiative name.
+
+```{r create-initiative-output}
+mica_data_complete <- mica_data_complete |> mutate(
+  initiative = (                    # Prepend acronym to name, except when...
+    acronym |> is.na() |            #   it is missing, OR...
+      name |> str_detect(acronym) | #   it is contained in the name, OR...
+      acronym == "EUCAN-Connect"    #   special case.
+  )                                |>
+    if_else(EMPTY_STRING, paste0(acronym, COLON)) |>
+    paste0(name)
+)
+```
+
+
+## Description
+
+Some description text values need to be formatted for a proper output:
+
+- Properly format bullet points
+
+- Drop HTML tags in text
+
+```{r format-description-output}
+
+mica_data_complete <- mica_data_complete |> mutate(# Trim space from compound...
+  description = description                                      |> #   words...
+    str_replace_all(glue("(?<=[[:alpha:]]){DASH}{SPACE}"), DASH) |> #   (SIC).
+    str_replace_all(ASTERISK_REGEXP, DASH)                       |> # Bullet...
+    str_replace_all(' \\+', '\n-')                               |> #   points
+    str_replace_all(' •', '\n-')                                 |>
+    str_replace('•', '-')                                        |>
+    htm2txt()                                                       # HTML tags
+)
+```
+
+
 ## Age range
 
 The column "Age range of the sample" has the additional complication that
@@ -594,9 +711,6 @@ EXCEPTION_IDS <- tribble(
    "GenomEUtwin", "max" # Because it says "85+"
 )
 
-# Discard the original age range column (needed for visual inspection only)
-tab1_age <- tab1_age |> select(-Age.range.of.the.sample)
-
 # Exceptions are overwitten with missing values:
 EXCEPTION_IDS %$% walk2(
   id, value,
@@ -615,9 +729,10 @@ mica_data_complete <- mica_data_complete |>
     age.max   = age.max |> coalesce(max),
     age_range = glue("{age.min} - {age.max}") |>
       na_if('NA - NA')                        |>
-      str_replace(' - NA', '+')
-  )                                      |>
-  select(-min, -max)
+      str_replace(' - NA', '+'),
+    age_range = age_range |> coalesce(Age.range.of.the.sample) # NA values...
+  )                                      |>      #   are completed with Table 1.
+  select(-min, -max, -Age.range.of.the.sample)
 ```
 
 
@@ -635,7 +750,7 @@ nci_age_range <- tab1_data                 |>
 According to the manuscript, only initiatives that integrate population cohorts
 are considered, as the initiatives that integrate population cohorts and
 patient cohorts / clinical trials are reported in Angel's paper.
-Initiative `r NONPOP_COHORTS_INITIATIVES`,
+Initiative `r NONPOP_COHORTS_INITIATIVES`
 reports considering patient and clinical trial cohorts,
 according to field "Age range of the sample":
 
@@ -654,7 +769,7 @@ mica_data_complete <- mica_data_complete |>
 The throughput dataset resulting from this data wrangling process is saved
 in Excel format in order to share it and use it in the next steps.
 
-```{r save-dataset}
+```{r save-dataset, eval=FALSE}
 # Set to `eval=FALSE` to avoid overwriting the result when executing
 #   automatically (change if necesssary)
 mica_data_complete |>
