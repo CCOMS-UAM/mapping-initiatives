@@ -83,6 +83,186 @@ source("R/Output.R", encoding = 'UTF-8')
 # SRC_FILEPATH %>% read_chunk()
 ```
 
+# Introduction
+
+The amount of scientific data is rapidly increasing [@shilo_axes_2020].
+In the healthcare domain, about 500 petabytes (10^15^ bytes)
+were produced in 2012,
+while the estimate for 2020 was between 25,000 petabytes and
+16 zettabytes [16 trillion GB, @cavanillas_new_2016, @roski_creating_2014].
+Other sectors also parallel such increase
+--finance and insurance, energy and transportation, media and entertainment,
+or the public sector [@hulsen_big_2019].
+This massive amount of available information,
+occasionally referred to as "the new oil" [@@cavanillas_new_2016],
+provides great opportunities to improve decision-making, reduce costs,
+and extract meaningful information.
+These in turn would help develop further the different pathways
+of personalized medicine.
+
+The pressure to develop new strategies to integrate and organize
+all this information is rapidly building up,
+in order to get the most out of such a valuable resource.
+However, the potential benefits have not been optimally exploited
+due to methodological and infrastructure issues
+when integrating these data [@panahiazar_empowering_2014].
+Also, concerns about data protection as well as legal and ethical aspects
+are changing the landscape, adding new constraints that cannot be overlooked.
+
+Europe is one of the largest providers of research
+[@noauthor_2019_nodate],
+with several country members involved in large-scale cohort studies
+(e.g., Millennium Cohort Study;
+Environmental Health Risks in European Birth Cohorts,
+Collaborative Research on Ageing in Europe,
+English Longitudinal Study of Ageing).
+SYNCHROS (SYNergies for Cohorts in Health:
+integrating the Role of all Stakeholders),
+a Europe-wide project funded by the Horizon 2020 Research Program,
+has been created with these challenges in mind (https://synchros.eu).
+The main objective of its coordination and support action
+is to establish a sustainable European strategy for the development of
+the next generation of integrated cohorts,
+using consensus-based implementation science tools.
+Subsequently, it aims to contributing to an international strategic agenda for
+a global, enhanced coordination of cohorts, in order to address the practical,
+ethical, legal, and methodological challenges of optimizing
+the exploitation of past and future cohort data.
+In order to pursue its aim, the SYNCHROS partners are
+(i) mapping the cohort landscape in Europe and world-wide international cohort
+integration initiatives;
+(ii) compiling the different methodologies for integrating cohort data;
+(iii) recognizing solutions for practical, ethical, and legal challenges in
+harmonizing information from patients, clinical trial, and population cohorts;
+and (iv) assessing new data collection technologies and new types of data.
+With the first of these goals in mind, our objective here is to report
+the state of the art in the integration of population cohorts.
+We do so by gathering a collection of initiatives that have integrated
+such cohorts in the last twenty years,
+internationally and in Europe in particular.
+
+# Methods
+
+## Identification of initiatives
+
+In order to find initiatives that integrate population cohorts,
+three different methods were used.
+The first was a systematic search in the MEDLINE database.
+The second were candidate initiatives suggested by the SYNCHROS
+consortium partners.
+The third was a descendent search using the information
+(references, descriptions, and links) from the two previous sources.
+
+## Database search in MEDLINE
+
+The search terms applied tried to cover the objectives of the SYNCHROS project
+and produce a representative, rather than exhaustive, list of initiatives.
+These terms were selected and agreed upon by a consensus among
+the consortium partners.
+The terms that provided less than 500 hits were kept. New terms for use in
+follow-up searches were then extracted from their abstracts.
+The term "cohort" was included in some searches,
+in order to limit the number of hits.  
+The final search query was:
+
+```
+(cohort OR “prospective study” OR
+  “longitudinal study” OR
+  "individual meta-analysis"[All Fields] OR
+  "individual participant data meta-analysis"[All Fields] OR
+  "individual patient data meta-analysis"[All Fields] OR
+  "individual meta analysis"[All Fields] OR
+  "individual participant data meta analysis"[All Fields] OR
+  "individual patient data meta analysis"[All Fields] OR
+  "meta analysis using individual"[All Fields] OR
+  "meta-analysis using individual"[All Fields] OR
+  "meta analysis of individual"[All Fields] OR
+  "meta-analysis of individual"[All Fields] OR
+  "mega-analysis"[All Fields] OR
+  "mega analysis"[All Fields])  
+AND  
+("harmonization study" OR
+  "integration study" OR
+  "integration initiative" OR
+  "integrated study" OR
+  "merged cohort" OR
+  "data pooling" OR
+  "pooled sample" OR
+  "combined data" OR
+  "combining data" OR
+  "harmonized data" OR
+  "harmonised data" OR
+  "harmonizing data" OR
+  "data harmonization" OR
+  "data harmonisation" OR
+  "data sharing" OR
+  "common database" OR
+  "multiple cohorts" OR
+  "multiple longitudinal studies" OR
+  "international consortium" OR
+  "collaborative effort").  
+AND  
+("2000/01/01"[Date - Publication] : "2019/07/31"[Date - Publication])  
+AND  
+English[Language]  
+AND  
+Humans[MeSH]
+```
+
+## Selection of initiatives
+
+**Inclusion criteria.** Initiatives published in English from 2000 to july 2019
+were included if they integrated health population cohorts of any age
+(birth, adolescents, adults, elderly, oldest old),
+and included sociodemographic, lifestyle, biological, genetic, omics
+(genomics, proteomics, metabolomics), imaging, or environment factors data.
+Face-to-face, online, or ICT assessments were included.
+Additionally, at least one cohort included in the initiative had to
+have information about the sample at two or more time points.
+
+**Exclusion criteria.** Initiatives without available data about (or access to)
+their descriptive information (webpage, a main report describing the main aim(s)
+in detail) were excluded.
+Initiatives that integrated clinical trial cohorts and/or patient cohorts were
+are the subject of another publication [@rodriguez-laso_map_2021]
+and thus were also excluded.
+
+For all the initiatives found, a double-check was performed by
+two different researchers in order to carry out an objective evaluation and
+reducing the risk of bias.
+In case of discrepancy between the two reviewers, a third person was consulted.
+
+## Data extraction and analysis
+
+The following technical information was extracted from the initiatives:
+name, principal investigator (PI), initiative partners,
+region(s)/country/ies included,
+name of the institution responsible for the initiative, funding resources,
+contact person, information source, whether the research team of
+the initiative was active at the time of consultation, main objectives,
+criteria for the cohorts to be included,
+type of harmonization (prospective/retrospective),
+number of cohorts included (total number and number of harmonized cohorts),
+whether more cohorts were foreseen to be harmonized,
+number of participants (total number, and number of participants with
+harmonized data), age range of the sample,
+maximum number of variables that had been harmonized
+(including those where harmonization was not possible for all the cohorts),
+setting of the harmonized cohorts (local-regional/national/international),
+countries and research topics addressed,
+and a brief description of the population addressed. When the information
+was not available through the website or published articles,
+the principal investigator and/or the contact person of the project
+was consulted, by email first and, if no reply was received,
+by telephone or postal mail. Descriptive statistics were computed for this
+information (absolute frequencies and proportions for the categorical variables,
+and median, minimum, and maximum for the quantitative ones).
+In the case of the number of participants with harmonized data and
+the maximum number of harmonized variables, the descriptives were computed
+only using the initiatives that had harmonized cohorts.
+
+# Results
+
 ```{r load-data}
 # N.B.: Correspondence with the generating dataset
 #   (see `notebook/Update_initiatives.Rmd`, result is stored in object
@@ -181,7 +361,7 @@ tab1_continents_wide <- tab1_continents |>
 tab1_new <- tab1_new |> left_join(tab1_continents_wide, by = "id")
 ```
 
-```{r wbdi-regions}
+```{r wbdi-regions, eval=FALSE}
 # Create variable counts derivated from the countries variable
 tab1_regions <- tab1_new                         |>
   separate_rows(countries, sep = COMMA)          |>
@@ -492,6 +672,28 @@ prop_Africa_out <- descriptives_table_output |>
   inline_text(variable = "bool_Africa", pattern = "{p}%")
 ```
 
+The flowchart diagram in Figure 1 summarizes the initiatives
+included and excluded using the three methods.
+The MEDLINE search identified 843 articles that describe initiatives
+to be potentially included. After screening the titles and abstracts,
+the number of articles that met the inclusion criteria was cut down to 166.
+From the full-text review, 155 articles were excluded due to one or more of
+the following reasons: one-time efforts (articles where the merging of data
+was done only for carrying out the research presented in the paper),
+initiatives already submitted by partners, articles with
+cross-sectional harmonization only, multisite cohorts/harmonization of waves,
+meta-analyses, reviews, case control studies, patients' cohorts,
+clinical trial cohorts, and others.
+In total, 11 articles were retrieved from the systematic review.
+Additionally, from the partners’ suggestions and the descendent searches,
+189 potential initiatives were obtained. After screening for eligibility,
+141 projects were excluded for one or more of the follwoing reasons:
+initiatives published before the year 2000,
+projects that did not integrate cohorts,
+and one initiative with only cross-sectional cohorts.
+Forty-eight initiatives that integrate population cohorts were finally included.
+
+
 <!-- A total of `r total_N_out` initiatives that integrate population cohorts
 were identified. -->
 
@@ -536,6 +738,66 @@ from it.
 The complete descriptive information of the initiatives can be found in
 \@ref(tab:descriptives).
 
+# Discussion
+
+The purpose of this mapping was to gather knowledge about the state of art of
+the initiatives that integrate population cohorts.
+The landscape of these initiatives has revealed to be quite disparate,
+with a high variability of populations and variables as well as topics and
+regions addressed by the integrated cohorts.
+
+Interestingly, very few of the initiatives included cohorts focused on Africa.
+Previous studies emphasize the relative lack of health studies conducted in
+low- and middle-income countries [LMICs, @lawlor_birth_2009].
+For instance, the most part of birth cohort studies [@victora_cohorts_2012]
+are conducted in high-income countries, where annual births only amount to a 10%
+of the births in LMICs. Among other factors, this may be due to
+the relative less number of health invetigators in LMICs
+(40 times less on average; One Year on, Global Observatory on Health R&D
+Identifies Striking Gaps and Inequalities, 2018).
+Limitations in their national health and surveillance systems may also
+hinder their capacity to reliably process health information
+[@cash-gibson_inequalities_2018+. Whatever the reason, more representativeness
+of LMICs will be necessary to grant the external validity of
+the cohort studies that inform global health policy recommendations.
+
+## Strengths and weaknesses
+
+To our knowledge, this is the first effort to map and describe in detail all
+the initiatives integrating population cohorts. Given the difficulties reported
+by authors when integrating cohorts [@gatz_data_2015],
+we expect that our results are helpful in three ways:
+Firstly, identifying the barriers researches find when integrating
+the different cohort studies.
+Secondly, guiding the search for existing projects with harmonized cohorts.
+And thirdly, providing guidelines for future projects aimed at integrating and
+harmonizing cohorts.
+
+Nevertheless, we must raise awareness on the non.exhaustive nature of
+this mapping. Given the big amount of population cohort studies published,
+this manuscript aims at representativeness rather than exhaustiveness.
+Also, as the response rate of the principal investigators was rather low,
+relevant information of some initiatives is still missing.
+However, the Synchros repository is an evolving project,
+where the most recent information available is continuously updated.
+
+## Conclusions
+
+The promotion of interdisciplinary collaborations, with the aim of developing
+and enriching a "learning healthcare system", should be in the spotlight
+[@frohlich_hype_2018]. Synergies across a wide variety of existing
+cohort integration projects could yield considerable benefits for
+diverse scientific fields. In this sense, we expect the Synchros repository
+to be a valuable resource for emerging collaborative health research.
+Compared to undertaking new international mega-cohorts, integration of
+existing cohorts may be more cost-effective, [@larsen_pregnancy_2013].
+One of the goals of Horizon Europe is to promote worldwide collaboration
+with countries with strong investments in science [@abbott_how_2019].
+The integration of cohort studies across these countries will certainly
+drive us towards the longed-for scenario where we will be able
+to highly improve the value of worldwide scientific data,
+with the ultimate goal of maximizing health outcomes.
+ 
 # References
 
 ::: {#refs}
