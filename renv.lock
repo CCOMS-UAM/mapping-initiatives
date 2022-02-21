@@ -392,10 +392,10 @@
     },
     "evaluate": {
       "Package": "evaluate",
-      "Version": "0.14",
+      "Version": "0.15",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ec8ca05cffcc70569eaaad8469d2a3a7",
+      "Hash": "699a7a93d08c962d9f8950b2d7a227f1",
       "Requirements": []
     },
     "fansi": {
@@ -505,10 +505,10 @@
     },
     "gdtools": {
       "Package": "gdtools",
-      "Version": "0.2.3",
+      "Version": "0.2.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "12a524de5a491ff39debb9311fc0763f",
+      "Hash": "bdfa7431687797edff8c9b0eb9271cc8",
       "Requirements": [
         "Rcpp",
         "systemfonts"
@@ -597,10 +597,10 @@
     },
     "gt": {
       "Package": "gt",
-      "Version": "0.3.1",
+      "Version": "0.4.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "e027761c361e66a24e22f9446b3dd86c",
+      "Hash": "4905765870343c66704c9e495e4e3bc0",
       "Requirements": [
         "base64enc",
         "bitops",
@@ -1374,10 +1374,10 @@
     },
     "tinytex": {
       "Package": "tinytex",
-      "Version": "0.36",
+      "Version": "0.37",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "130fe4c61e55b271a2655b3a284a205f",
+      "Hash": "a80abeb527a977e4bef21873d29222dd",
       "Requirements": [
         "xfun"
       ]
