@@ -1,0 +1,448 @@
+---
+title: "Update of the 'initiatives of population cohorts' dataset"
+date:  "10/12/2021"
+output:
+  html_document:
+    toc:           yes
+    toc_float:     yes
+    df_print:      paged
+    code_folding:  hide
+    code_download: yes
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+# Libraries:
+
+library(knitr)
+library(tidyverse)
+library(readxl)
+library(vctrs)
+library(micar)
+library(stringr)
+library(rlang)
+library(glue)
+library(countrycode)
+library(magrittr)
+library(xlsx)
+library(htm2txt)
+
+
+# Constants:
+ROOT_DIR <- ".."
+
+# Output configuration:
+
+opts_knit$set(root.dir = ROOT_DIR)
+opts_chunk$set(message = FALSE)
+```
+
+```{r includes, cache=FALSE}
+source("R/Constants.R", encoding = 'UTF-8')
+```
+
+# Introduction
+
+The initiatives dataset is incomplete as some of the information in the first
+draft and in Syncrhos deliverable 1.3 was not available at the time of
+circulating draft V2.0 among co-authors.
+According to the information gathered in the last meetings,
+that information is available in the repository.
+Also, partially complete versions of other Excel spreadsheets
+have been sent by Laura (``r EXTRAS_FILENAME``)
+and Ellen (``r UPDATES_FILENAME``), which may help completing those gaps.
+
+The following table shows the correspondence of variables among the different
+sources, these two files, the original table 1 in the first version of the
+draft (also in Deliverable 1.3), and in the respository:
+
+```{r var-correspondence, echo=FALSE}
+# Read in dataset:
+var_correspondence <- read_excel(VAR_CORRESP_FILEPATH, skip = 1) |>
+  select(-where(is.logical))
+
+# Read column names to assign to the dataset:
+var_corr_headers   <- read_excel(
+  VAR_CORRESP_FILEPATH,
+  col_names = FALSE,
+  n_max     = 1
+)                            |>
+  pivot_longer(everything()) |>
+  filter(!is.na(value))      |>
+  pull()
+
+var_correspondence <- var_correspondence |>
+  set_colnames(var_corr_headers)         |> # Set column headers
+  mutate( # Create position vectors
+    col_extra = (!!sym(EXTRAS_FILENAME)) |>
+      match(EXCEL_COL_POSITIONS)         |>
+      as.integer(),
+    col_update = (!!sym(UPDATES_FILENAME))        |>
+      str_extract(UPPERCASE_LETTERS_BEGIN_REGEXP) |>
+      match(EXCEL_COL_POSITIONS)                  |>
+      as.integer()
+  )
+
+var_correspondence |> select(-starts_with(COL_PREFFIX))
+```
+
+This notebook updates the table of initiatives with the variables that
+have been gathered out of those that were missing.
+
+# Dataset loading
+
+## Data set with extra information (provided by Laura)
+
+A table with additional information was sent by Laura along with some
+infomation to interpret part of the columns therein.
+I load the spreadsheet from file ``r EXTRAS_FILENAME`` in sheet
+``r TABLE_1_EXTRA_SHEET`` and select the columns that I will be interested in.
+As happened with Table 1 from the first version of the draft
+(see also Synchros Deliverable 1.3), this table has a a complex header with
+collapsed cells, so we also set proper headers.
+
+```{r load-table-extra-data}
+suppressMessages( # Empty and duplicated columns renamed
+  tab1_extra <- read_excel(
+    EXTRAS_FILEPATH,
+    sheet     = TABLE_1_EXTRA_SHEET,
+    col_types = "text",
+    na        = c(
+      "NA",
+      "na",
+      "no information obtained",
+      "No information obtained"
+    ),
+    skip      = 1
+  )
+)
+
+tab1_extra_vars <- var_correspondence |>
+  filter(!is.na(col_extra))           |>
+  pull(col_extra)
+
+tab1_extra_subset <- tab1_extra         |>
+  # Select columns (Z, K, P, AF; see table in introduction):
+  select(...1, all_of(tab1_extra_vars)) |>
+  # Rename columns:
+  set_colnames(
+    c(
+      "initiative",
+      "team_activity",
+      "country_institution",
+      "funding",
+      "harmonization"
+    )
+  )                                     |>
+  slice(-10) # Discard second entry of "CHARGE" (repeated)
+```
+
+## Data set with repository updates (provided by Ellen)
+
+Similarly, I read and select the columns from file ``r UPDATES_FILENAME`` in
+sheet ``r TABLE_1_UPDATE_SHEET``.
+
+```{r load-table-update-data}
+suppressMessages( # Empty and duplicated columns renamed
+  tab1_update <- read_excel(
+    UPDATES_FILEPATH,
+    sheet     = TABLE_1_UPDATE_SHEET,
+    col_names = FALSE,
+    col_types = "text",
+    na        = c(
+      "NA",
+      "na",
+      "no information obtained",
+      "No information obtained"
+    ),
+    skip      = 23
+  )
+)
+
+tab1_update_vars <- var_correspondence |>
+  filter(!is.na(col_update))           |>
+  pull(col_update)
+
+tab1_update_subset <- tab1_update |>
+  # Select columns (see table in introduction):
+  select(...3, ...4, all_of(tab1_update_vars))
+
+# Get variable names from the repository (when possible)
+tab1_update_varnames <- var_correspondence |>
+  filter(!is.na(col_update))               |>
+  pull(`mica Synchros repository`)         |>
+  coalesce("omics")                        |>
+  append(values = c("initiative", "acronym"), after = 0)
+
+tab1_update_subset <- tab1_update_subset |> set_colnames(tab1_update_varnames)
+```
+
+## Additional columns from the repository
+
+I use the file `r MICA_DATA_FILEPATH` with the data downloaded from the
+mica repository, which will be completed with the information from the
+previous spreadsheet.
+This file was downloaded and saved from the repository in the notebook
+[Update_initiatives.html](Update_initiatives.html#loading-and-formatting-datasets).
+
+```{r load-table-mica}
+mica_data <- read_csv(
+  MICA_DATA_FILEPATH,
+  col_types = cols(
+    .default                              = col_character(),
+    studies                               = col_integer(),
+    variables                             = col_integer(),
+    collectedDatasets                     = col_integer(),
+    collectedVariables                    = col_integer(),
+    harmonizedDatasets                    = col_integer(),
+    dataschemaVariables                   = col_integer(),
+    yearCreated                           = col_integer(),
+    nbParticipants.total                  = col_integer(),
+    nbParticipants.harmonized             = col_integer(),
+    dataEntryDate                         = col_date(format = ""),
+    age.min                               = col_integer(),
+    age.max                               = col_integer(),
+    methodology.moreCohortsToBeHarmonized = col_logical(),
+    methodology.nbHarmonizedVariables     = col_integer(),
+    methodology.nbCohorts.total           = col_integer(),
+    methodology.nbCohorts.harmonized      = col_integer()
+  ),
+  na = c("", "NA", "na")
+)
+
+mica_vars <- var_correspondence |>
+  filter(!is.na(`mica Synchros repository`)) |>
+  pull(`mica Synchros repository`)
+
+mica_subset <- mica_data |> select(id = acronym, all_of(mica_vars))
+```
+
+## Original collapsed dataset
+
+Finally, we read the original dataset with the columns from the repository and
+Table 1 already processed and collapsed into a single dataset,
+in order to use it as a guide for the rest of the information to include.
+
+```{r load-table-init, message=FALSE}
+tab1_init <- read_excel(INITIATIVES_FILEPATH, sheet = UPDATED_TABLE_SHEET)
+```
+
+# Data wrangling
+
+## Acronyms from the *extra information* dataset
+
+Similarly to what we did with Table 1 in the first version of the draft
+(the table in Deliverable 1.3) we extract the initiative acronyms,
+with the same procedure, and we compute an `id` to fill in the initiative name
+when the acronym is missing.
+
+```{r create-acronyms-table-extra}
+tab1_extra_subset <- tab1_extra_subset |>
+  mutate(
+    # Fix initiative name (in value "Tohoku Medical  Megabank Project"):
+    initiative = initiative |> str_replace(paste0(SPACE, LINE_FEED), SPACE),
+    acronym    = initiative                            |>
+      str_extract("(?<=\\()[^\\s]+(?=\\))")            |>
+      coalesce(initiative |> str_extract("^[^\\s:]+")) |>
+      na_if("The")                                     |> # Values matched by
+      na_if("Genome")                                  |> #   regexp that are
+      na_if("Tohoku")                                  |> #   not actual
+      na_if("EU")                                      |> #   acronyms
+      recode( # Values to recode manually to match the MICA dataset acronyms
+        EUCAN               = "EUCAN-Connect",
+        `BBMRI-NL-Biobank`  = "BBMRI-NL",
+        Interconnect        = "interconnect",
+        `CPTP-HP`           = "CanPath",
+        g2aging             = "Gateway"
+      ),
+    # Fill in missing values with name:
+    id         = acronym |> coalesce(initiative)
+  )                                    |>
+  select(id, acronym, everything())
+```
+
+## Initiative filtering
+
+We then use the collapsed original dataset as a guide to find and filter
+the initiatives in the other datasets.
+Before doing so, we test whether the `id` values match those in
+the original dataset.
+
+```{r select-initiatives-table-extra}
+tab1_extra_subset |> anti_join(tab1_init,         by = "id")
+tab1_init         |> anti_join(tab1_extra_subset, by = "id")
+# There are no mismatches in `id` after correcting "Tohoku" and "I3C" above
+
+tab1_extra_subset <- tab1_extra_subset |> semi_join(tab1_init, by = "id")
+```
+
+The same is done in the dataset with the initiative updates.
+
+```{r process-acronyms-table-updates}
+# Mismatches to correct: "Tohoku", "ACC", "g2aging", and "LifeCycle"
+tab1_update_subset <- tab1_update_subset |> mutate(
+  id = acronym |>
+    str_remove(paste0(CARRIAGE_RETURN, LINE_FEED)) |> # Corrects "Tohoku"
+    recode(
+      g2aging   = "Gateway",
+      ACC       = "The Asia Cohort Consortium",
+      LifeCycle = "EU Child Cohort Network"
+  )
+)
+```
+
+```{r select-initiatives-table-updates}
+tab1_update_subset |> anti_join(tab1_init,          by = "id")
+tab1_init          |> anti_join(tab1_update_subset, by = "id")
+# There are no mismatches in `id` after correcting for the ones above
+
+tab1_update_subset <- tab1_update_subset |> semi_join(tab1_init, by = "id")
+```
+
+The repository entries are also filtered using the entries in the original
+dataset.
+
+```{r select-initiatives-table-mica}
+# Acronyms have already been matched in notebook "Update_initiatives.Rmd"
+mica_subset <- mica_subset         |>
+  semi_join(tab1_init,  by = "id") |>
+  arrange(id) # In case it is needed later on (which will be)
+```
+
+## Comparison of the two new data sources
+
+The two spreadsheets only share one column related to the
+"Harmonization strategy".
+I first compare their content to get an idea of which one is more updated and/or
+closer to the information in the repository.
+
+```{r compare-harmonization-strategy}
+mica_subset                                            |>
+  select(id, mica = methodology.harmonizationStrategy) |>
+  full_join(
+    tab1_update_subset |>
+      select(id, update = methodology.harmonizationStrategy),
+    by = "id"
+  )                                                    |>
+  full_join(
+    tab1_extra_subset |> select(id, extra = harmonization),
+    by = "id"
+  )
+```
+
+It seems that the dataset with the repository updates matches more closely
+what appears in the repository (although there are some mismatches).
+Also, this dataset has more precise information about the type of retrospective
+harmonization (ex-ante or ex-post, when applicable).
+Therefore, we use this one to complete the repository data, when necessary.
+
+## Recoding of values in the repository updates dataset
+
+We first list the unique values in the repository and in the dataset with the
+last updates.
+
+```{r compare-values-table-updates}
+mica_subset        |> select(-id)                        |> map(unique)
+tab1_update_subset |> select(-id, -initiative, -acronym) |> map(unique)
+```
+
+We see that the variables in the updates dataset have different values than
+the ones in the repository.
+In order to make them match, we recode its values first.
+
+```{r recode-values-table-updates}
+tab1_update_subset <- tab1_update_subset |> mutate(
+  across(
+    -c(id, initiative, acronym, ends_with("Other")),
+    ~str_to_lower(.)                                           |>
+      str_remove_all(ANALYSES_SUFFIX_REGEXP)                   |>
+      str_replace_all(pattern = SEMICOLON, replacement = PIPE) |>
+      str_replace_all(
+        pattern     = UPDATE_VARS_CHARCLASS_REGEXP,
+        replacement = UNDERSCORE
+      )
+  )
+)
+```
+
+# Construction of the updated dataset
+
+## Variables in the repository
+
+We explore first the repository dataset for missing values.
+
+```{r explore-missing-table-mica}
+mica_subset |> map_df(~sum(is.na(.))) |> pivot_longer(everything())
+```
+
+The missing values in the repository are filled-in with the new values
+in the dataset with the updates.
+
+```{r update-table-mica-initiatives}
+tab1_update_fill_initiatives <- tab1_update_subset |>
+  semi_join(mica_subset, by = "id")                |>
+  arrange(id)
+
+mica_subset_completed <- mica_subset |>
+  select(id)                         |>
+  bind_cols(
+    imap_dfr(
+      mica_subset |> select(-id),
+      ~coalesce(.x, tab1_update_fill_initiatives |> pull(all_of(.y)))
+    )
+  )
+
+```
+
+Then the initiatives in the repository are completed with the ones in the
+dataset with the updates.
+
+```{r complete-table-mica-initiatives}
+tab1_update_new_initiatives <- tab1_update_subset |>
+  anti_join(mica_subset, by = "id")
+
+initiatives_complete <- mica_subset |> bind_rows(tab1_update_new_initiatives)
+```
+
+## Variables in the dataset with extra information
+
+The variables in the spreadsheet with the extra information contained in the
+first version of the draft are included in the dataset.
+
+```{r complete-extra-variables}
+initiatives_complete <- initiatives_complete |>
+  full_join(
+    tab1_extra_subset |>
+      select(id, team_activity, country_institution, funding),
+    by = "id"
+  )                                          |>
+  arrange(id)
+```
+
+## Original variables
+
+Finally, the original dataset with the previous process of collapsing and
+updating the variables is joined with this one.
+
+```{r}
+initiatives_complete <- tab1_init |> left_join(initiatives_complete, by = "id")
+```
+
+
+# Dataset saving
+
+This throughput dataset is saved again in Excel format in order to
+use it in the next steps.
+
+```{r save-dataset, eval=FALSE}
+# Set to `eval=FALSE` to avoid overwriting the result when executing
+#   automatically (change if necesssary)
+initiatives_complete |>
+  as.data.frame()    |> # Necessary to avoid an error when writting a tibble
+  write.xlsx(
+    INITIATIVES_FILEPATH,
+    sheet     = COMPLETE_TABLE_SHEET,
+    row.names = FALSE,
+    showNA    = FALSE,
+    append    = TRUE
+  )
+```
