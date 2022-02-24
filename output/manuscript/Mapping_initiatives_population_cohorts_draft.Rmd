@@ -265,12 +265,14 @@ only using the initiatives that had harmonized cohorts.
 
 ```{r load-data}
 # N.B.: Correspondence with the generating dataset
-#   (see `notebook/Update_initiatives.Rmd`, result is stored in object
-#   `mica_data_complete`) has been checked. The differences are due to trailing
-#   whitespaces and end of line (\n) characters, which are trimmed off when
+#   (see `notebooks/Update_initiatives.Rmd` and
+#   `notebooks/Complete_initiatives_additional`, result is stored in object
+#   `mica_data_complete` and `initiatives_complete`, respectively)
+#   has been checked. The differences are due to trailing whitespaces and
+#   end of line (\n) characters, which are trimmed off when
 #   reading with `readxl::read_excel()`.
-
-tab1_new <- read_excel(INITIATIVES_FILEPATH, sheet = UPDATED_TABLE_SHEET)
+tab1_new <- read_excel(INITIATIVES_FILEPATH, sheet = COMPLETE_TABLE_SHEET)
+## TODO: Continue here (compare the written and read table)
 
 # Cast to proper vector types (easier than specifying all column types above):
 tab1_new <- tab1_new |> mutate(
