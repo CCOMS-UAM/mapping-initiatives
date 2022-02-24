@@ -8,6 +8,8 @@ output:
     df_print:      paged
     code_folding:  hide
     code_download: yes
+params:
+  write_file: no
 ---
 
 ```{r setup, message=FALSE, warning=FALSE}
@@ -438,9 +440,20 @@ initiatives_complete <- tab1_init |>
 This throughput dataset is saved again in Excel format in order to
 use it in the next steps.
 
-```{r save-dataset, eval=FALSE}
+```{r save-dataset, eval=params$write_file}
 # Set to `eval=FALSE` to avoid overwriting the result when executing
-#   automatically (change if necesssary)
+#   automatically (if necesssary, "Knit with Parameters...")
+
+# Try to remove sheet (if exists):
+excel_file <- loadWorkbook(INITIATIVES_FILEPATH)
+sheets     <- getSheets(excel_file) |> names()
+
+if (COMPLETE_TABLE_SHEET %in% sheets) {
+  
+  excel_file |> removeSheet(sheetName = COMPLETE_TABLE_SHEET)
+}
+excel_file |> saveWorkbook(file = INITIATIVES_FILEPATH)
+
 initiatives_complete |>
   as.data.frame()    |> # Necessary to avoid an error when writting a tibble
   write.xlsx(
