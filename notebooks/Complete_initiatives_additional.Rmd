@@ -427,7 +427,8 @@ Finally, the original dataset with the previous process of collapsing and
 updating the variables is joined with this one.
 
 ```{r}
-initiatives_complete <- tab1_init |> left_join(initiatives_complete, by = "id")
+initiatives_complete <- tab1_init |>
+  left_join(initiatives_complete, by = c("id", "acronym", "initiative"))
 ```
 
 
