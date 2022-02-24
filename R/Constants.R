@@ -49,21 +49,23 @@ EXCEL_COL_POSITIONS <- c(LETTERS, paste0('A', LETTERS))
 SYNCHROS_URL <- "https://repository.synchros.eu"
 
 ## Text strings:
-EMPTY_STRING    <- ''
-SPACE           <- ' '
-COMMA           <- ', '
-DASH            <- '-'
-UNDERSCORE      <- '_'
-PIPE            <- '|'
-BULLET_PREFIX   <- DASH
-SLASH           <- '/'
-LINE_FEED       <- "\n"
-CARRIAGE_RETURN <- "\r"
-COLON           <- ': '
-SEMICOLON       <- '; '
-AND_CONJUNCTION <- " and "
-ASTERISK        <- '*'
-COL_PREFFIX     <- "col_"
+EMPTY_STRING        <- ''
+SPACE               <- ' '
+COMMA               <- ', '
+DASH                <- '-'
+UNDERSCORE          <- '_'
+PIPE                <- '|'
+BULLET_PREFIX       <- DASH
+SLASH               <- '/'
+LINE_FEED           <- "\n"
+CARRIAGE_RETURN     <- "\r"
+COLON               <- ': '
+SEMICOLON           <- '; '
+AND_CONJUNCTION     <- " and "
+ASTERISK            <- '*'
+COL_PREFFIX         <- "col_"
+ELLIPSIS            <- "..."
+AUTO_VARNAME_PREFIX <- ELLIPSIS
 
 ## Regular expressions:
 AUTO_VARNAME_PREFIX_REGEXP     <- r"(^\.\.\.)"
