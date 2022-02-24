@@ -401,9 +401,10 @@ dataset with the updates.
 
 ```{r complete-table-mica-initiatives}
 tab1_update_new_initiatives <- tab1_update_subset |>
-  anti_join(mica_subset, by = "id")
+  anti_join(mica_subset_completed, by = "id")
 
-initiatives_complete <- mica_subset |> bind_rows(tab1_update_new_initiatives)
+initiatives_complete <- mica_subset_completed |>
+  bind_rows(tab1_update_new_initiatives)
 ```
 
 ## Variables in the dataset with extra information
@@ -426,9 +427,9 @@ initiatives_complete <- initiatives_complete |>
 Finally, the original dataset with the previous process of collapsing and
 updating the variables is joined with this one.
 
-```{r}
+```{r collapse-table-init}
 initiatives_complete <- tab1_init |>
-  left_join(initiatives_complete, by = c("id", "acronym", "initiative"))
+  full_join(initiatives_complete |> select(-acronym, -initiative), by = "id")
 ```
 
 
