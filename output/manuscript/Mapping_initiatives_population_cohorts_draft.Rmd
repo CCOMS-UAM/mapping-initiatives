@@ -305,7 +305,7 @@ tab1_new <- tab1_new |> select(
 ```{r country-derivate-vars}
 # Create variable counts derivated from the countries variable
 tab1_continents <- tab1_new                    |>
-  separate_rows(countries, sep = COMMA)        |>
+  separate_rows(countries, sep = COMMA_SEP)    |>
   select(id, countries)                        |>
   drop_na()                                    |>
   mutate(
@@ -366,7 +366,7 @@ tab1_new <- tab1_new |> left_join(tab1_continents_wide, by = "id")
 ```{r wbdi-regions, eval=FALSE}
 # Create variable counts derivated from the countries variable
 tab1_regions <- tab1_new                         |>
-  separate_rows(countries, sep = COMMA)          |>
+  separate_rows(countries, sep = COMMA_SEP)      |>
   select(id, countries)                          |>
   drop_na()                                      |>
   mutate(

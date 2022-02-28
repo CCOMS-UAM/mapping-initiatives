@@ -358,9 +358,9 @@ In order to make them match, we recode its values first.
 tab1_update_subset <- tab1_update_subset |> mutate(
   across(
     -c(id, initiative, acronym, ends_with("Other")),
-    ~str_to_lower(.)                                           |>
-      str_remove_all(ANALYSES_SUFFIX_REGEXP)                   |>
-      str_replace_all(pattern = SEMICOLON, replacement = PIPE) |>
+    ~str_to_lower(.)                                               |>
+      str_remove_all(ANALYSES_SUFFIX_REGEXP)                       |>
+      str_replace_all(pattern = SEMICOLON_SEP, replacement = PIPE) |>
       str_replace_all(
         pattern     = UPDATE_VARS_CHARCLASS_REGEXP,
         replacement = UNDERSCORE

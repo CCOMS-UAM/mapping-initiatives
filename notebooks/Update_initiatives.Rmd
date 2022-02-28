@@ -418,7 +418,7 @@ mica_data_tab1 <- mica_data_tab1 |>
   )                              |>
   group_by(across(-countries))   |>
   summarize(
-    countries   = countries |> glue_collapse(sep = COMMA),
+    countries   = countries |> glue_collapse(sep = COMMA_SEP),
     n_countries = n(), # Nº of countries per initiative, for descriptive stats
     .groups     = "drop"
   )
@@ -450,11 +450,11 @@ tab1_countries <- tab1_countries_regions |>
     countries = Region..Country |>
       str_replace(
         pattern     = REPLACE_SEPS_REGEXP,
-        replacement = COMMA
+        replacement = COMMA_SEP
       ) |>
       str_replace(
         pattern     = ',, ',# (delete also double commas)
-        replacement = COMMA
+        replacement = COMMA_SEP
       )
   )                                      |>
   separate_rows(countries, sep = ',')    |>
@@ -466,7 +466,7 @@ tab1_countries <- tab1_countries_regions |>
   drop_na(countries)                     |>
   group_by(id)                           |>
   summarize(
-    countries   = countries |> glue_collapse(sep = COMMA),
+    countries   = countries |> glue_collapse(sep = COMMA_SEP),
     # Nº of countries per initiative, for descriptive stats:
     n_countries = n(),
     .groups     = "drop"
