@@ -79,6 +79,7 @@ ASTERISK_REGEXP                <- glue("\\{ASTERISK}")
 UPPERCASE_LETTERS_BEGIN_REGEXP <- "^[A-Z]+"
 UPDATE_VARS_CHARCLASS_REGEXP   <- glue("[{SPACE}{SLASH}{DASH}]")
 ANALYSES_SUFFIX_REGEXP         <- glue("[{SPACE}{DASH}]analyses")
+PIPE_REGEXP                    <- glue("\\{PIPE}")
 
 ## Country processing objects:
 VECTOR_CONTINENTS <- codelist |>

@@ -274,14 +274,13 @@ only using the initiatives that had harmonized cohorts.
 
 tab1_new <- read_excel(INITIATIVES_FILEPATH, sheet = COMPLETE_TABLE_SHEET)
 
-# Cast to proper vector types (easier than specifying all column types above):
-tab1_new <- tab1_new |> mutate(
-  across(
-    methodology.moreCohortsToBeHarmonized,
-    factor,
-    levels = c("FALSE", "TRUE"),
-    labels = c("No", "Yes")
-  )
+FACTOR_VARS <- c( # Without stripped-off prefixes when appropriate
+  "setting",
+  "harmonizationstrategy",
+  "omics",
+  "team_activity",
+  "country_institution",
+  "funding"
 )
 
 # Simplify variable names
@@ -289,6 +288,22 @@ tab1_new <- tab1_new |>
   rename_with(str_remove, pattern = "methodology.") |>
   rename_with(str_remove, pattern = "nb")           |>
   rename_with(tolower)
+
+# Cast to proper vector types (easier than specifying all column types above):
+tab1_new <- tab1_new |> mutate(
+  across(
+    morecohortstobeharmonized,
+    factor,
+    levels = c("FALSE", "TRUE"),
+    labels = c("No", "Yes")
+  ),
+  across(
+    all_of(FACTOR_VARS),
+    str_replace, pattern = UNDERSCORE, replacement = SPACE
+  ),
+  across(all_of(FACTOR_VARS), str_to_sentence),
+  across(all_of(FACTOR_VARS), factor),
+)
 
 # Reorder variables (the ones to the output first, then the rest)
 tab1_new <- tab1_new |> select(
@@ -433,8 +448,8 @@ tab1_new <- tab1_new |> left_join(tab1_regions_wide, by = "id")
 ```
 
 ```{r health-topic-derivate-vars}
-tab1_topics <- tab1_new                   |>
-  separate_rows(healthtopic, sep = '\\|') |>
+tab1_topics <- tab1_new                         |>
+  separate_rows(healthtopic, sep = PIPE_REGEXP) |>
   select(id, healthtopic)
 
 tab1_topic_headers <- tab1_topics |>
@@ -442,13 +457,13 @@ tab1_topic_headers <- tab1_topics |>
   distinct(healthtopic)           |>
   transmute(
     var_name  = healthtopic,
-    header      = "Topic",
-    subheader = healthtopic                             |>
+    header    = "Topic",
+    subheader = healthtopic                                      |>
       str_replace(
         pattern     = "birth_infancy_childhood_health",
         replacement = "Birth, infancy & childhood health"
-      )                                                 |>
-      str_replace_all(pattern = '_', replacement = ' ') |>
+      )                                                          |>
+      str_replace_all(pattern = UNDERSCORE, replacement = SPACE) |>
       str_to_sentence()
   )
 
@@ -457,6 +472,128 @@ tab1_topics <- tab1_topics                              |>
   complete(id, healthtopic, fill = list(value = FALSE)) |>
   drop_na()                                             |>
   pivot_wider(names_from  = healthtopic, values_from = value)
+```
+
+```{r socioenvcontext-derivate-vars}
+tab1_context <- tab1_new                            |>
+  separate_rows(socioenvcontext, sep = PIPE_REGEXP) |>
+  select(id, socioenvcontext)
+
+tab1_context_headers <- tab1_context |>
+  drop_na()                          |>
+  distinct(socioenvcontext)          |>
+  transmute(
+    var_name  = socioenvcontext,
+    header    = "Socio-environmental context",
+    subheader = socioenvcontext                                  |>
+      str_replace(
+        pattern     = "work_",
+        replacement = "work-"
+      )                                                          |>
+      str_replace(
+        pattern     = "short_half_",
+        replacement = "short-half-"
+      )                                                          |>
+      str_replace_all(pattern = UNDERSCORE, replacement = SPACE) |>
+      str_to_sentence()
+  )
+
+tab1_context <- tab1_context                                |>
+  mutate(value = TRUE)                                      |>
+  complete(id, socioenvcontext, fill = list(value = FALSE)) |>
+  drop_na()                                                 |>
+  pivot_wider(names_from = socioenvcontext, values_from = value)
+```
+
+```{r socioenvcontext-other-values}
+tab1_socioenvcontext_other <- tab1_new |>
+  separate_rows(
+    socioenvcontextother,
+    sep = glue("({COMMA_SEP}|{SEMICOLON_SEP})")
+  )                                    |>
+  distinct(id, socioenvcontextother)   |>
+  drop_na()                            |>
+  count(socioenvcontextother)          |>
+  arrange(desc(n))                     |>
+  mutate(socioenvcontextother = socioenvcontextother |> str_to_sentence())
+```
+
+```{r analyses-derivate-vars}
+tab1_analysis <- tab1_new                    |>
+  separate_rows(analyses, sep = PIPE_REGEXP) |>
+  select(id, analyses)                       |>
+  filter(analyses != "na") # Missing values that appear in the listed values
+
+tab1_analysis_headers <- tab1_analysis |>
+  drop_na()                            |>
+  distinct(analyses)                   |>
+  transmute(
+    var_name  = analyses,
+    header    = "Analysis",
+    subheader = analyses |> str_to_sentence()
+  )
+
+tab1_analysis <- tab1_analysis                       |>
+  mutate(value = TRUE)                               |>
+  complete(id, analyses, fill = list(value = FALSE)) |>
+  drop_na()                                          |>
+  pivot_wider(names_from = analyses, values_from = value)
+```
+
+```{r access-metadata-derivate_vars}
+tab1_access_md <- tab1_new |> select(id, access.metadata)
+
+tab1_access_md_headers <- tab1_access_md |>
+  drop_na()                              |>
+  distinct(access.metadata)              |>
+  transmute(
+    var_name  = access.metadata |> paste0("_metadata"),
+    header    = "Metadata access",
+    subheader = access.metadata                              |>
+      str_replace(pattern = UNDERSCORE, replacement = SPACE) |>
+      str_to_sentence()
+  )
+
+tab1_access_md <- tab1_access_md                            |>
+  mutate(
+    value            = TRUE,
+    access.metadata  = access.metadata %>% if_else(
+      condition = !is.na(.),
+      true      = paste0(., "_metadata"),
+      false     = NA_character_
+    )
+  )                                                         |>
+  complete(id, access.metadata, fill = list(value = FALSE)) |>
+  drop_na()                                                 |>
+  pivot_wider(names_from = access.metadata, values_from = value)
+```
+
+```{r access-individual-data-derivate_vars}
+tab1_access_id <- tab1_new |> select(id, access.individualdata)
+
+tab1_access_id_headers <- tab1_access_id |>
+  drop_na()                              |>
+  distinct(access.individualdata)        |>
+  transmute(
+    var_name  = access.individualdata |> paste0("_individual"),
+    header    = "Individual data access",
+    subheader = access.individualdata                        |>
+      str_replace(pattern = UNDERSCORE, replacement = SPACE) |>
+      str_to_sentence()
+  )
+
+tab1_access_id <- tab1_access_id                                  |>
+  mutate(
+    value                 = TRUE,
+    access.individualdata = access.individualdata %>% if_else(
+      condition = !is.na(.),
+      true      = paste0(., "_individual"),
+      false     = NA_character_
+    )
+  )                                                               |>
+  complete(id, access.individualdata, fill = list(value = FALSE)) |>
+  drop_na()                                                       |>
+  pivot_wider(names_from = access.individualdata, values_from = value)
 ```
 
 ```{r create-output-dataset}
@@ -524,16 +661,28 @@ suppressMessages( # Message when reading empty column names
       )
     )                                                                        |>
     add_column( # Add variable names column
-      var_name = colnames(
-        tab1_new |> select(-(id:region), -countries, -healthtopic)
+      var_name = tab1_new                                                |>
+        select(-c(id:region, setting:funding), -countries, -healthtopic) |>
+        colnames()
       )
-    )
+  ## TODO: Continue here (añadir headers para setting, harmonizationstrategy, omics, team_activity, country_institution, funding)
 )
 
 # Add health topic variables and headers/labels
-tab1_new <- tab1_new |> left_join(tab1_topics, by = "id")
+tab1_new <- tab1_new                   |>
+  left_join(tab1_topics,    by = "id") |>
+  left_join(tab1_context,   by = "id") |>
+  left_join(tab1_analysis,  by = "id") |>
+  left_join(tab1_access_md, by = "id") |>
+  left_join(tab1_access_id, by = "id")
 
-tab1_headers <- tab1_headers |> bind_rows(tab1_topic_headers)
+tab1_headers <- tab1_headers |> bind_rows(
+  tab1_topic_headers,
+  tab1_context_headers,
+  tab1_analysis_headers,
+  tab1_access_md_headers,
+  tab1_access_id_headers
+)
 
 # Create labels and format subheaders:
 tab1_headers <- tab1_headers |>
