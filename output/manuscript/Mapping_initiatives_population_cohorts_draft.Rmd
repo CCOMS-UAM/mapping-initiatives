@@ -5,7 +5,7 @@ title: |
 output:
   officedown::rdocx_document:
     base_format:     bookdown::word_document2
-    reference_docx:  ../www/APA_6th_edition_template.docx
+    reference_docx:  ../../www/APA_6th_edition_template.docx
     fig_width:       6.73
     fig_asp:          .75
     number_sections: no
@@ -14,8 +14,8 @@ output:
       caption:
         sep: '. '
     keep_md:         no
-bibliography:        ../www/Mapping_initiatives.bib
-csl:                 ../www/apa-old-doi-prefix.csl
+bibliography:        ../../www/Mapping_initiatives.bib
+csl:                 ../../www/apa-old-doi-prefix.csl
 editor_options:
   chunk_output_type: console
 ---
@@ -41,7 +41,7 @@ library(scales)
 
 # Constants:
 DOC_DIR      <- getwd()
-ROOT_DIR     <- ".."
+ROOT_DIR     <- "../.."
 SRC_DIR      <- "src"
 SRC_FILEPATH <- file.path(SRC_DIR, "<TODO: Complete when necessary>.R")
 
@@ -73,9 +73,9 @@ set_flextable_defaults(
 )
 ```
 
-```{r includes}
+```{r includes, cache=FALSE}
 source("R/Constants.R", encoding = 'UTF-8')
-source("R/Output.R", encoding = 'UTF-8')
+source("R/Output.R",    encoding = 'UTF-8')
 ```
 
 ```{r load-chunks, cache=FALSE}
