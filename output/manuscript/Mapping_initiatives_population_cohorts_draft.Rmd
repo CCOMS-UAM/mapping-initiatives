@@ -276,6 +276,8 @@ tab1_new <- read_excel(INITIATIVES_FILEPATH, sheet = COMPLETE_TABLE_SHEET)
 
 FACTOR_VARS <- c( # Without stripped-off prefixes when appropriate
   "setting",
+  "access.metadata",
+  "access.individualdata",
   "harmonizationstrategy",
   "omics",
   "team_activity",
@@ -296,6 +298,10 @@ tab1_new <- tab1_new |> mutate(
     factor,
     levels = c("FALSE", "TRUE"),
     labels = c("No", "Yes")
+  ),
+  across(
+    harmonizationstrategy,
+    str_replace, pattern = "ex_", replacement = "ex-"
   ),
   across(
     all_of(FACTOR_VARS),
@@ -370,6 +376,20 @@ tab1_continents <- tab1_continents  |>
   bind_rows(tab1_missing_countries) |>
   group_by(id)                      |>
   add_count(wt = bool, name = "n_continents")
+
+## Create headers:
+tab1_continent_headers <- tab1_continents                |>
+  ungroup()                                              |>
+  distinct(continent)                                    |>
+  drop_na()                                              |>
+  expand_grid(type = c("n", "bool"))                     |>
+  unite(col = var_name, type, continent, remove = FALSE) |>
+  arrange(desc(type))                                    |>
+  transmute(
+    var_name,
+    header    = if_else(type == "n", "Nº of countries", "Continent"),
+    subheader = continent
+  )
 
 tab1_continents_wide <- tab1_continents |>
   ungroup()                             |>
@@ -472,6 +492,8 @@ tab1_topics <- tab1_topics                              |>
   complete(id, healthtopic, fill = list(value = FALSE)) |>
   drop_na()                                             |>
   pivot_wider(names_from  = healthtopic, values_from = value)
+
+tab1_new <- tab1_new |> left_join(tab1_topics, by = "id")
 ```
 
 ```{r socioenvcontext-derivate-vars}
@@ -503,6 +525,9 @@ tab1_context <- tab1_context                                |>
   complete(id, socioenvcontext, fill = list(value = FALSE)) |>
   drop_na()                                                 |>
   pivot_wider(names_from = socioenvcontext, values_from = value)
+
+
+tab1_new <- tab1_new |> left_join(tab1_context, by = "id")
 ```
 
 ```{r socioenvcontext-other-values}
@@ -538,9 +563,11 @@ tab1_analysis <- tab1_analysis                       |>
   complete(id, analyses, fill = list(value = FALSE)) |>
   drop_na()                                          |>
   pivot_wider(names_from = analyses, values_from = value)
+
+tab1_new <- tab1_new |> left_join(tab1_analysis, by = "id")
 ```
 
-```{r access-metadata-derivate_vars}
+```{r access-metadata-derivate_vars, eval=FALSE}
 tab1_access_md <- tab1_new |> select(id, access.metadata)
 
 tab1_access_md_headers <- tab1_access_md |>
@@ -568,7 +595,7 @@ tab1_access_md <- tab1_access_md                            |>
   pivot_wider(names_from = access.metadata, values_from = value)
 ```
 
-```{r access-individual-data-derivate_vars}
+```{r access-individual-data-derivate_vars, eval=FALSE}
 tab1_access_id <- tab1_new |> select(id, access.individualdata)
 
 tab1_access_id_headers <- tab1_access_id |>
@@ -649,39 +676,43 @@ suppressMessages( # Message when reading empty column names
         header    = c(
           "Age"             |> rep(2),
           "Nº of countries",# n_countries
-          "Nº of regions",  # n_continents
-          "Nº of countries" |> rep(5),
-          "Region"          |> rep(5)
+          "Setting",
+          "Access to" |> rep(2),
+          "Harmonization strategy",
+          "With omics data",
+          "Team active (at consultation)",
+          "Country of responsible institution",
+          "Funding",
+          "Nº of continents"# n_continents
         ),
         subheader = c(
-          "Minimum", "Maximum",
-          NA_character_     |> rep(2), # Total countries and continents
-          VECTOR_CONTINENTS |> rep(2) # Continents (nº countries and boolean)
+          "Minimum", "Maximum",          # Age
+          NA_character_ |> rep(2),       # Nº of countries and seting
+          "Metadata", "Individual data", # Access to data
+          NA_character_ |> rep(6)   # Harmonization strategy to Nº of continents
         )
       )
     )                                                                        |>
     add_column( # Add variable names column
-      var_name = tab1_new                                                |>
-        select(-c(id:region, setting:funding), -countries, -healthtopic) |>
+      var_name = tab1_new |>
+        select(
+          -(id:region),
+          -(socioenvcontext:analysesother),
+          -countries,
+          -healthtopic,
+          -(n_Africa:pooled)
+        )                 |>
         colnames()
-      )
-  ## TODO: Continue here (añadir headers para setting, harmonizationstrategy, omics, team_activity, country_institution, funding)
+    )
+  ## TODO: Continue here (añadir headers para setting, access.metadata, access.individualdata, harmonizationstrategy, omics, team_activity, country_institution, funding)
 )
 
-# Add health topic variables and headers/labels
-tab1_new <- tab1_new                   |>
-  left_join(tab1_topics,    by = "id") |>
-  left_join(tab1_context,   by = "id") |>
-  left_join(tab1_analysis,  by = "id") |>
-  left_join(tab1_access_md, by = "id") |>
-  left_join(tab1_access_id, by = "id")
-
+# Add headers/labels
 tab1_headers <- tab1_headers |> bind_rows(
+  tab1_continent_headers,
   tab1_topic_headers,
   tab1_context_headers,
-  tab1_analysis_headers,
-  tab1_access_md_headers,
-  tab1_access_id_headers
+  tab1_analysis_headers
 )
 
 # Create labels and format subheaders:
