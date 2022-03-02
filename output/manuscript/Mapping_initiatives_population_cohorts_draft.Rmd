@@ -647,8 +647,9 @@ suppressMessages( # Message when reading empty column names
         select(
           -(id:region),
           -(socioenvcontext:analysesother),
-          -countries,
           -healthtopic,
+          -countries,
+          -country_institution,
           -(n_Africa:pooled)
         )                 |>
         colnames()
