@@ -281,18 +281,17 @@ FACTOR_VARS <- c( # Without stripped-off prefixes when appropriate
   "harmonizationstrategy",
   "omics",
   "team_activity",
-  "country_institution",
   "funding"
 )
 
-# Simplify variable names
+# Simplify variable names:
 tab1_new <- tab1_new |>
   rename_with(str_remove, pattern = "methodology.") |>
   rename_with(str_remove, pattern = "nb")           |>
   rename_with(tolower)
 
-# Cast to proper vector types (easier than specifying all column types above):
 tab1_new <- tab1_new |> mutate(
+  # Cast to proper vector types (easier than specifying all column types above):
   across(
     morecohortstobeharmonized,
     factor,
@@ -303,15 +302,21 @@ tab1_new <- tab1_new |> mutate(
     harmonizationstrategy,
     str_replace, pattern = "ex_", replacement = "ex-"
   ),
+  across(setting, str_replace, pattern = UNDERSCORE, replacement = SLASH),
   across(
     all_of(FACTOR_VARS),
     str_replace, pattern = UNDERSCORE, replacement = SPACE
   ),
   across(all_of(FACTOR_VARS), str_to_sentence),
   across(all_of(FACTOR_VARS), factor),
+  # Compute continent of institution responsible:
+  across(country_institution, recode, Southafrica = "South Africa"),
+  continent_institution = country_institution                       |>
+    countrycode(origin = "country.name", destination = "continent") |>
+    factor()
 )
 
-# Reorder variables (the ones to the output first, then the rest)
+# Reorder variables (the ones to the output first, then the rest):
 tab1_new <- tab1_new |> select(
   initiative,
   region_countries,
@@ -567,62 +572,6 @@ tab1_analysis <- tab1_analysis                       |>
 tab1_new <- tab1_new |> left_join(tab1_analysis, by = "id")
 ```
 
-```{r access-metadata-derivate_vars, eval=FALSE}
-tab1_access_md <- tab1_new |> select(id, access.metadata)
-
-tab1_access_md_headers <- tab1_access_md |>
-  drop_na()                              |>
-  distinct(access.metadata)              |>
-  transmute(
-    var_name  = access.metadata |> paste0("_metadata"),
-    header    = "Metadata access",
-    subheader = access.metadata                              |>
-      str_replace(pattern = UNDERSCORE, replacement = SPACE) |>
-      str_to_sentence()
-  )
-
-tab1_access_md <- tab1_access_md                            |>
-  mutate(
-    value            = TRUE,
-    access.metadata  = access.metadata %>% if_else(
-      condition = !is.na(.),
-      true      = paste0(., "_metadata"),
-      false     = NA_character_
-    )
-  )                                                         |>
-  complete(id, access.metadata, fill = list(value = FALSE)) |>
-  drop_na()                                                 |>
-  pivot_wider(names_from = access.metadata, values_from = value)
-```
-
-```{r access-individual-data-derivate_vars, eval=FALSE}
-tab1_access_id <- tab1_new |> select(id, access.individualdata)
-
-tab1_access_id_headers <- tab1_access_id |>
-  drop_na()                              |>
-  distinct(access.individualdata)        |>
-  transmute(
-    var_name  = access.individualdata |> paste0("_individual"),
-    header    = "Individual data access",
-    subheader = access.individualdata                        |>
-      str_replace(pattern = UNDERSCORE, replacement = SPACE) |>
-      str_to_sentence()
-  )
-
-tab1_access_id <- tab1_access_id                                  |>
-  mutate(
-    value                 = TRUE,
-    access.individualdata = access.individualdata %>% if_else(
-      condition = !is.na(.),
-      true      = paste0(., "_individual"),
-      false     = NA_character_
-    )
-  )                                                               |>
-  complete(id, access.individualdata, fill = list(value = FALSE)) |>
-  drop_na()                                                       |>
-  pivot_wider(names_from = access.individualdata, values_from = value)
-```
-
 ```{r create-output-dataset}
 # Create formatted output table for the initiatives table:
 tab1_new_out <- tab1_new |> select(initiative:cohortcriteria)
@@ -681,16 +630,16 @@ suppressMessages( # Message when reading empty column names
           "Harmonization strategy",
           "With omics data",
           "Team active (at consultation)",
-          "Country of responsible institution",
           "Funding",
-          "Nº of continents"# n_continents
+          "Nº of continents", # n_continents
+          "Continent of responsible institution"
         ),
         subheader = c(
           "Minimum", "Maximum",          # Age
           NA_character_ |> rep(2),       # Nº of countries and seting
           "Metadata", "Individual data", # Access to data
-          NA_character_ |> rep(6)   # Harmonization strategy to Nº of continents
-        )
+          NA_character_ |> rep(6) # Harmonization strategy to continent of ...
+        )                         #   responsible institution.
       )
     )                                                                        |>
     add_column( # Add variable names column
@@ -704,7 +653,6 @@ suppressMessages( # Message when reading empty column names
         )                 |>
         colnames()
     )
-  ## TODO: Continue here (añadir headers para setting, access.metadata, access.individualdata, harmonizationstrategy, omics, team_activity, country_institution, funding)
 )
 
 # Add headers/labels
@@ -779,7 +727,7 @@ descriptives_table_output <- tab1_new_describe |> tbl_summary(
 )
 ```
 
-```{r descriptive-values, cache=FALSE}
+```{r compute-descriptive-values}
 # Total nº of initiatives:
 total_N_out <- descriptives_table_output |> extract2("N") |> as.english()
 
@@ -852,6 +800,52 @@ n_Africa_out    <- descriptives_table_output             |>
   as.english()
 prop_Africa_out <- descriptives_table_output |>
   inline_text(variable = "bool_Africa", pattern = "{p}%")
+```
+
+```{r uncache-descriptive-values, cache=FALSE, include=FALSE}
+# Total nº of initiatives:
+total_N_out
+
+# Maximum number of missing values in one descriptive variable:
+max_missing_out
+
+# Total nº of cohorts:
+total_cohorts_range_out
+total_cohorts_median_out
+
+# Harmonized cohorts:
+harm_cohorts_max_out
+
+# More cohorts to be harmonized:
+more_cohorts_expected_out
+
+# Harmonized variables:
+harm_vars_range_out
+harm_vars_median_out
+
+# Harmonized participants:
+harm_participants_max_out
+harm_participants_median_out
+
+# Particinats' ages across included cohorts:
+max_age_max_out
+
+# Topics:
+prop_Ageing_out
+
+# Nº of countries:
+max_n_countries_out
+min_n_countries_out
+
+# Nº of continents
+prop_1_continent_out
+prop_5_continents_out
+
+# Nº of initiatives per region
+prop_Europe_out
+
+n_Africa_out
+prop_Africa_out
 ```
 
 The flowchart diagram in Figure 1 summarizes the initiatives
