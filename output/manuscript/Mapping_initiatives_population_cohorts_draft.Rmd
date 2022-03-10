@@ -1051,20 +1051,32 @@ The landscape of these initiatives has revealed to be quite disparate,
 with a high variability of populations and variables as well as topics and
 regions addressed by the integrated cohorts.
 
+Most of the initiatives found were funded by public entities
+(and mainly from the European Union).
+We found a scarcity of private funding,
+with only a few initiatives being partially funded by private institutions.
+One might think that e.g. pharmaceutical companies would be highly interested in
+integrating evidence across cohorts and thrive towards personalized medicine.
+However, private entities may be more interested in investing in patient cohorts
+or clinical trials rather than population cohorts.
+
+Although there was a high rate of missingness, very few of the initiatives
+were found to harmonize and integrate biological samples.
+Projects including them have potential advantages:
+They help discover possible causal pathways from biology to behavioral, social,
+demographic, economic, and health outcomes (Hobcraft, 2009).
+Unfortunately, it is not always viable to incorporate bio-measures
+in cohort research.
+
+Most of the initiatives were being conducted in Europe and America and,
+as would be expected, most of the integrated cohorts were collected in
+these two continents.
 Interestingly, very few of the initiatives included cohorts focused on Africa.
 Previous studies emphasize the relative lack of health studies conducted in
 low- and middle-income countries [LMICs, @lawlor_birth_2009].
-For instance, the most part of birth cohort studies [@victora_cohorts_2012]
-are conducted in high-income countries, where annual births only amount to a 10%
-of the births in LMICs. Among other factors, this may be due to
-the relative less number of health investigators in LMICs
-(40 times less on average; One Year on, Global Observatory on Health R&D
-Identifies Striking Gaps and Inequalities, 2018).
-Limitations in their national health and surveillance systems may also
-hinder their capacity to reliably process health information
-[@cash-gibson_inequalities_2018+. Whatever the reason, more representativeness
-of LMICs will be necessary to grant the external validity of
-the cohort studies that inform global health policy recommendations.
+More representativeness of LMICs will be necessary to grant
+the external validity of the cohort studies that inform
+global health policy recommendations.
 
 ## Strengths and weaknesses
 
