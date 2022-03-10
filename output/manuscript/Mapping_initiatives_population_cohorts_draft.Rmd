@@ -767,8 +767,6 @@ max_missing_out <- tab1_new_out                |>
   pull()                                       |>
   percent(accuracy = .1)
 
-############################### NEW ############################################
-
 # Active projects:
 active_projects_prop_out <- descriptives_table_output |>
   inline_text(variable = "team_activity", pattern = "{p}%")
@@ -828,7 +826,6 @@ analysis_meta_out      <- descriptives_table_output |>
   inline_text(variable = "meta",      pattern = "{p}%")
 analysis_federated_out <- descriptives_table_output |>
   inline_text(variable = "federated", pattern = "{p}%")
-
 
 # Omics:
 omics_out <- descriptives_table_output |>
@@ -902,6 +899,32 @@ total_N_out
 
 # Maximum number of missing values in one descriptive variable:
 max_missing_out
+
+############################### NEW ############################################
+
+# Active projects:
+active_projects_prop_out <- descriptives_table_output |>
+  inline_text(variable = "team_activity", pattern = "{p}%")
+
+# Countries of responsible institutions:
+country_institution_max_freq_out
+country_institution_ranking_next_out
+
+# Funding sources:
+funding_public_out
+funding_mixed_out
+
+# Harmonization strategy:
+harmo_strategy_max_out
+harmo_max_prop_out
+
+# Analysis:
+analysis_pooled_out
+analysis_meta_out
+analysis_federated_out
+
+# Omics:
+omics_out
 
 # Total nº of cohorts:
 total_cohorts_range_out
