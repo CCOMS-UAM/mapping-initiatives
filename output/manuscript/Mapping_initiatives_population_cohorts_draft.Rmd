@@ -1043,6 +1043,9 @@ the initiatives that integrate population cohorts.
 The landscape of these initiatives has revealed to be quite disparate,
 with a high variability of populations and variables as well as topics and
 regions addressed by the integrated cohorts.
+Still, the number of integration initiatives seems rather low,
+compared to the overall and increasing number of very large cohort datasets
+worldwide.<!-- # TODO: Reference needed? -->
 
 Most of the initiatives found were funded by public entities
 (and mainly from the European Union).
@@ -1053,11 +1056,11 @@ integrating evidence across cohorts and thrive towards personalized medicine.
 However, private entities may be more interested in investing in patient cohorts
 or clinical trials rather than population cohorts.
 
-Although there was a high rate of missingness, very few of the initiatives
-were found to harmonize and integrate biological samples.
-Projects including them have potential advantages:
-They help discover possible causal pathways from biology to behavioral, social,
-demographic, economic, and health outcomes (Hobcraft, 2009).
+Very few of the initiatives were found to harmonize and integrate
+biological samples
+(although there was a high rate of missingness in this variable).
+Including them may help discover possible causal pathways from biology to
+behavioral, social, demographic, economic, and health outcomes (Hobcraft, 2009).
 Unfortunately, it is not always viable to incorporate bio-measures
 in cohort research.
 
