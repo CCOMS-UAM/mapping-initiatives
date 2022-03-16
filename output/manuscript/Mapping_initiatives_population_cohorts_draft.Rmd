@@ -1077,20 +1077,27 @@ global health policy recommendations.
 ## Strengths and weaknesses
 
 To our knowledge, this is the first effort to map and describe in detail all
-the initiatives integrating population cohorts. Given the difficulties reported
-by authors when integrating cohorts [@gatz_data_2015],
-we expect that our results are helpful in three ways:
-Firstly, identifying the barriers researches find when integrating
-the different cohort studies.
-Secondly, guiding the search for existing projects with harmonized cohorts.
-And thirdly, providing guidelines for future projects aimed at integrating and
-harmonizing cohorts.
+the initiatives integrating population cohorts.
+Given the difficulties reported by authors when integrating cohorts
+[@gatz_data_2015],
+we expect positive outcomes of our results in three main aspects.
+First, the Synchros repository is a resource where interested researchers can
+find integrated population cohort data or contribute their population cohorts.
+Secondly, several PI and project managers have provided first-hand information
+on the barriers and solutions they have found when integrating cohorts.
+Finally, we expect all this information to be extremely relevant to design
+n European strategy for cohort integration, such as is the aim of
+the Synchros project.
 
 Nevertheless, we must raise awareness on the non exhaustive nature of
 this mapping. Given the big amount of population cohort studies published,
 this manuscript aims at representativeness rather than exhaustiveness.
+It should be noted though that, given the huge amount of work involved in
+integrating population cohorts, we deem it likely that any initiatives that
+have been missed by our search strategy have not published any results at all.
 Also, as the response rate of the principal investigators was rather low,
-relevant information of some initiatives is still missing.
+relevant information of some initiatives is still missing
+at the time of submission of this manuscript.
 However, the Synchros repository is an evolving project,
 where the most recent information available is continuously updated.
 
