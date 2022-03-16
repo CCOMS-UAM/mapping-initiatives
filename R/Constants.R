@@ -93,3 +93,8 @@ VECTOR_REGIONS <- codelist |>
   arrange(region)          |>
   drop_na()                |>
   pull()
+
+CONTINENT_REGION_CORRESPONDENCE <- codelist |>
+  distinct(continent, wbdi_region = region) |>
+  drop_na(continent, wbdi_region)           |>
+  mutate(wbdi_region = wbdi_region |> factor())

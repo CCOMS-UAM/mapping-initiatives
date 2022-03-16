@@ -356,14 +356,18 @@ tab1_new <- tab1_new |> select(
 
 ```{r country-derivate-vars}
 # Create variable counts derivated from the countries variable
-tab1_continents <- tab1_new                    |>
-  separate_rows(countries, sep = COMMA_SEP)    |>
-  select(id, countries)                        |>
-  drop_na()                                    |>
+tab1_countries <- tab1_new                  |>
+  separate_rows(countries, sep = COMMA_SEP) |>
+  select(id, countries)                     |>
+  drop_na()                                 |>
   mutate(
     continent   = countries |>
-      countrycode(origin = "country.name", destination = "continent")
-  )                                            |>
+      countrycode(origin = "country.name", destination = "continent"),
+    wbdi_region = countries |>
+      countrycode(origin = "country.name", destination = "region")
+  )
+
+tab1_continents <- tab1_countries              |>
   count(id, continent)                         |>
   complete(id, continent, fill = list(n = 0L)) |>
   mutate(bool = n |> as.logical())
@@ -394,18 +398,13 @@ suppressWarnings( # Warning when converting countries in `region` to `continent`
       ),
       bool      = continent != TRUE # Turns all non-missing to `TRUE`
     )                                             |>
-    select(-region)
+    ## Complete non-present information with proper values:
+    complete(id, continent, fill = list(n = 0L, bool = FALSE), explicit = FALSE)
 )
 
-## Complete non-present information with proper values, and overwrite the
-##   "known missings":
-tab1_missing_countries <- tab1_missing_countries             |>
-  complete(id, continent, fill = list(n = 0L, bool = FALSE)) |>
-  rows_update(tab1_missing_countries, by = c("id", "continent"))
-
-tab1_continents <- tab1_continents  |>
-  bind_rows(tab1_missing_countries) |>
-  group_by(id)                      |>
+tab1_continents <- tab1_continents                     |>
+  bind_rows(tab1_missing_countries |> select(-region)) |>
+  group_by(id)                                         |>
   add_count(wt = bool, name = "n_continents")
 
 ## Create headers:
@@ -431,71 +430,65 @@ tab1_new <- tab1_new |> left_join(tab1_continents_wide, by = "id")
 
 ```{r wbdi-regions, eval=FALSE}
 # Create variable counts derivated from the countries variable
-tab1_regions <- tab1_new                         |>
-  separate_rows(countries, sep = COMMA_SEP)      |>
-  select(id, countries)                          |>
-  drop_na()                                      |>
-  mutate(
-    wbdi_region = countries |>
-      countrycode(origin = "country.name", destination = "region")
-  )                                              |>
+tab1_regions <- tab1_countries                   |>
   count(id, wbdi_region)                         |>
   complete(id, wbdi_region, fill = list(n = 0L)) |>
   mutate(bool = n |> as.logical())
 
 # Complete missing values with available information in `region`:
+tab1_missing_regions <- tab1_missing_countries                 |>
+  select(everything(), -n, country = region)                   |>
+  group_by(id, continent)                                      |>
+  mutate(
+    country = country       |>
+      str_detect(continent) |>
+      if_else(NA_character_, country),
+    n       = country |>
+      is.na()         %>%
+      { if_else(all(.) & bool, NA_integer_, not(.) |> sum()) }
+  )                                                            |>
+  ungroup()                                                    |>
+  left_join(CONTINENT_REGION_CORRESPONDENCE, by = "continent") |>
+  # When possible, get the wbdi_region from the country name in `region`:
+  mutate(
+    wbdi_region = country                   |>
+      countrycode("country.name", "region") |>
+      factor()                              |>
+      coalesce(wbdi_region)
+  )                                                            |>
+  # Complete the missing regions when they are known to not be considered:
+  complete(
+    id, wbdi_region,
+    fill     = list(n = 0L, bool = FALSE),
+    explicit = FALSE
+  )                                                            |>
+  # Discard duplicate cases when `wbdi_region` is univocally identified:
+  distinct()                                                   |>
+  # Duplicate `TRUE` values of continents do not univocally map to regions:
+  group_by(id, continent)                                      |>
+  mutate(bool = if_else(bool & n() > 1L, NA, bool))            |>
+  # Discard duplicates
+  ungroup()                                                    |>
+  distinct(id, wbdi_region, bool, n)                           |>
+  # Collapse values from the same region:
+  group_by(id, wbdi_region)                                    |>
+  summarize(bool = any(bool), n = sum(n), .groups = "drop")
+  # # Duplicate values of regions are not univocal so are discarded:
+  # group_by(id, wbdi_region)                                    |>
+  # mutate(across(n:bool, ~ifelse(all(bool == first(bool)), ., NA)))             |>
+  # # Discard duplicate (i.e. ambiguous) cases:
+  # distinct(id, wbdi_region, bool, n)
 
-## Create dataset with existing information (with missing nº of countries where
-##   necessary):
-suppressWarnings( # Warning when converting countries in `region` to `continent`
-  tab1_missing_countries <- tab1_new              |>
-    select(id, region)                            |>
-    anti_join(tab1_regions, by = "id")            |>
-    drop_na()                                     |>
-    separate_rows(region, sep = ENUM_SEPS_REGEXP) |>
-    mutate(
-      region    = region |> str_replace("American?", "Americas"),
-      # Correct values
-      wbdi_region = region |>
-        countrycode(origin = "country.name", destination = "region"),
-      n         = region    |>
-        str_extract("\\d+") |>
-        as.integer()        |>
-        coalesce(wbdi_region |> is.na() |> if_else(NA_integer_, 1L)),
-      wbdi_region = wbdi_region |> coalesce(
-        region |> str_extract(
-          VECTOR_REGIONS |> glue_collapse(sep = '|') |> enclose('(')
-        )
-      ),
-      wbdi_region = (region == "Oceania") |> if_else(
-        true  = "East Asia & Pacific",
-        false = wbdi_region
-      ),
-      bool      = wbdi_region != TRUE # Turns all non-missing to `TRUE`
-    )                                             |>
-    select(-region)
-)
-
-## Complete non-present information with proper values, and overwrite the
-##   "known missings":
-tab1_missing_countries <- tab1_missing_countries |>
-  drop_na(wbdi_region)                           |>
-  mutate(wbdi_region = wbdi_region |> factor(levels = VECTOR_REGIONS))
-
-tab1_missing_countries <- tab1_missing_countries               |>
-  complete(id, wbdi_region, fill = list(n = 0L, bool = FALSE)) |>
-  rows_update(tab1_missing_countries, by = c("id", "wbdi_region"))
-
-tab1_regions <- tab1_regions        |>
-  bind_rows(tab1_missing_countries) |>
-  group_by(id)                      |>
+tab1_regions <- tab1_regions      |>
+  bind_rows(tab1_missing_regions) |>
+  group_by(id)                    |>
   add_count(wt = bool, name = "n_wbdi_regions")
 
 tab1_regions_wide <- tab1_regions |>
   ungroup()                             |>
   pivot_wider(names_from = wbdi_region, values_from = n:bool)
 
-tab1_new <- tab1_new |> left_join(tab1_regions_wide, by = "id")
+# tab1_new <- tab1_new |> left_join(tab1_regions_wide, by = "id")
 ```
 
 ```{r health-topic-derivate-vars}
