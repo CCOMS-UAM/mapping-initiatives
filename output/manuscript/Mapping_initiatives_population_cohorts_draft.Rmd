@@ -1060,9 +1060,10 @@ Very few of the initiatives were found to harmonize and integrate
 biological samples
 (although there was a high rate of missingness in this variable).
 Including them may help discover possible causal pathways from biology to
-behavioral, social, demographic, economic, and health outcomes (Hobcraft, 2009).
-Unfortunately, it is not always viable to incorporate bio-measures
-in cohort research.
+behavioral, social, demographic, economic, and health outcomes
+[@hobcraft_reflections_2009].
+Unfortunately, incorporating bio-measures in cohort research is not always
+feasible.
 
 Most of the initiatives were being conducted in Europe and America and,
 as would be expected, most of the integrated cohorts were collected in
@@ -1103,21 +1104,27 @@ where the most recent information available is continuously updated.
 
 ## Conclusions
 
-The promotion of interdisciplinary collaborations, with the aim of developing
-and enriching a "learning healthcare system", should be in the spotlight
-[@frohlich_hype_2018]. Synergies across a wide variety of existing
-cohort integration projects could yield considerable benefits for
-diverse scientific fields. In this sense, we expect the Synchros repository
-to be a valuable resource for emerging collaborative health research.
-Compared to undertaking new international mega-cohorts, integration of
-existing cohorts may be more cost-effective [@larsen_pregnancy_2013].
-One of the goals of Horizon Europe is to promote worldwide collaboration
-with countries with strong investments in science [@abbott_how_2019].
-The integration of cohort studies across these countries will certainly
-drive us towards the longed-for scenario where we will be able
-to highly improve the value of worldwide scientific data,
-with the ultimate goal of maximizing health outcomes.
- 
+Representative results require massive sample sizes to achieve the necessary
+statistical power, especially in restricted population fields like
+personalized medicine, rare diseases, or epigenetics.
+Moreover, this representativeness can only be achieved by addressing
+more diverse, non-*WEIRD* populations [@henrich_most_2010],
+from different ethnic, regional or/and socioeconomic settings.
+Synergies across a wide variety of existing cohort integration projects
+would help pursuing these goals, while being more cost-effective than
+undertaking new international mega-cohorts [@larsen_pregnancy_2013].
+
+However, there is still a shortfall of initiatives that integrate 
+worldwide population cohorts.
+Most of the currently available cohorts probably lack the necessary
+transparency and availability of information
+(variables, study designs, data access, etc.)
+to afford multi-study research.
+We expect the Synchros repository to be a valuable resource for
+emerging collaborative research,
+with a spotlight in developing and enriching a "learning healthcare system"
+[@frohlich_hype_2018].
+
 # References
 
 ::: {#refs}
