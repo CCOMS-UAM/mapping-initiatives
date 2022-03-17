@@ -1,11 +1,10 @@
 ---
 title: |
-  Mapping of initiatives that integrate european and
-  international population cohorts
+  Mapping of initiatives that integrate worldwide population cohorts
 output:
   officedown::rdocx_document:
     base_format:     bookdown::word_document2
-    reference_docx:  ../www/APA_6th_edition_template.docx
+    reference_docx:  ../../www/APA_6th_edition_template.docx
     fig_width:       6.73
     fig_asp:          .75
     number_sections: no
@@ -13,9 +12,9 @@ output:
       layout:        autofit
       caption:
         sep: '. '
-    keep_md:         no
-bibliography:        ../www/Mapping_initiatives.bib
-csl:                 ../www/apa-old-doi-prefix.csl
+    keep_md:         yes
+bibliography:        ../../www/Mapping_initiatives.bib
+csl:                 ../../www/apa-old-doi-prefix.csl
 editor_options:
   chunk_output_type: console
 ---
@@ -41,7 +40,7 @@ library(scales)
 
 # Constants:
 DOC_DIR      <- getwd()
-ROOT_DIR     <- ".."
+ROOT_DIR     <- "../.."
 SRC_DIR      <- "src"
 SRC_FILEPATH <- file.path(SRC_DIR, "<TODO: Complete when necessary>.R")
 
@@ -73,9 +72,9 @@ set_flextable_defaults(
 )
 ```
 
-```{r includes}
+```{r includes, cache=FALSE}
 source("R/Constants.R", encoding = 'UTF-8')
-source("R/Output.R", encoding = 'UTF-8')
+source("R/Output.R",    encoding = 'UTF-8')
 ```
 
 ```{r load-chunks, cache=FALSE}
@@ -85,61 +84,59 @@ source("R/Output.R", encoding = 'UTF-8')
 
 # Introduction
 
-The amount of scientific data is rapidly increasing [@shilo_axes_2020].
-In the healthcare domain, about 500 petabytes (10^15^ bytes)
-were produced in 2012,
-while the estimate for 2020 was between 25,000 petabytes and
-16 zettabytes [16 trillion GB, @cavanillas_new_2016; @roski_creating_2014].
-Other sectors also parallel such increase
---finance and insurance, energy and transportation, media and entertainment,
-or the public sector [@hulsen_big_2019].
-This massive amount of available information,
-occasionally referred to as "the new oil" [@cavanillas_new_2016],
-provides great opportunities to improve decision-making, reduce costs,
-and extract meaningful information.
-These in turn would help develop further the different pathways
-of personalized medicine.
+There has been a recent surge of scientific data collection
+in the healthcare domain [@cavanillas_new_2016; @roski_creating_2014].
+<!-- # TODO: Review references. -->
+Several large-scale cohort studies have recently been or are being
+conducted nowadays around the globe:
+the Millennium Cohort Study [@connelly_cohort_2014],
+the Environmental Health Risks in European Birth Cohorts
+[@nieuwenhuijsen_environmental_2011],
+the Collaborative Research on Ageing in Europe
+[@leonardi_collaborative_2013],
+or the English Longitudinal Study of Ageing [@steptoe_cohort_2013]
+are popular examples.
+Integrating these individual cohorts is the next step to get
+the most valuable information out of them.
+Cohort integration studies may increase sample sizes drastically,
+allowing to study important but infrequent phenomena
+[e.g. rare diseases, @thompson_thinking_2009] while avoiding publication bias.
+The pressure is rapidly building up to keep up-to-date with
+integrating and capitalizing on this information,
+and several initiatives have joint forces for integrating cohorts
+from different studies
+[e.g. ATHLOS, @sanchez-niubo_data_2017; BioSHaRE, @kaye_consent_2016;
+CHICOS, @strandberg-larsen_association_2017; HELIX, @maitre_human_2018].
+However, methodological and infrastructure issues [@panahiazar_empowering_2014],
+as well as concerns about legal (i.e., data protection) and ethical aspects
+impose constraints that may hinder the potential benefits of
+these integration studies.
+An overview of what is being done to overcome these challenges is still missing
+in the scientific landscape.
+Systematizing this knowledge may help further integrate existing cohorts,
+as well as streamline the design and integration of future cohorts.
 
-The pressure to develop new strategies to integrate and organize
-all this information is rapidly building up,
-in order to get the most out of such a valuable resource.
-However, the potential benefits have not been optimally exploited
-due to methodological and infrastructure issues
-when integrating these data [@panahiazar_empowering_2014].
-Also, concerns about data protection as well as legal and ethical aspects
-are changing the landscape, adding new constraints that cannot be overlooked.
+In an attempt to expand and make these efforts more systematic,
+the European Union established a sustainable strategy for developing
+an agenda for a better, global coordination of cohorts. The project
+*SYNergies for Cohorts in Health: integrating the ROle of all Stakeholders*
+(SYNCHROS) was funded by the Horizon 2020 Research Program with
+the aim of informing this strategy using
+consensus-based implementation science tools<!-- # TODO: Ref. needed?. -->.
+Among others, one of its first actions was the mapping of
+the cohort integration initiatives landscape,
+across the world, and especially in Europe.
+The objective was to obtain first-hand information about
+the methodologies and solutions implemented for integrating patient,
+clinical-trial and population cohorts.
 
-Europe is one of the largest providers of research
-[@noauthor_2019_nodate],
-with several country members involved in large-scale cohort studies
-(e.g., Millennium Cohort Study;
-Environmental Health Risks in European Birth Cohorts,
-Collaborative Research on Ageing in Europe,
-English Longitudinal Study of Ageing).
-SYNCHROS (SYNergies for Cohorts in Health:
-integrating the Role of all Stakeholders),
-a Europe-wide project funded by the Horizon 2020 Research Program,
-has been created with these challenges in mind (https://synchros.eu).
-The main objective of its coordination and support action
-is to establish a sustainable European strategy for the development of
-the next generation of integrated cohorts,
-using consensus-based implementation science tools.
-Subsequently, it aims to contributing to an international strategic agenda for
-a global, enhanced coordination of cohorts, in order to address the practical,
-ethical, legal, and methodological challenges of optimizing
-the exploitation of past and future cohort data.
-In order to pursue its aim, the SYNCHROS partners are
-(i) mapping the cohort landscape in Europe and world-wide international cohort
-integration initiatives;
-(ii) compiling the different methodologies for integrating cohort data;
-(iii) recognizing solutions for practical, ethical, and legal challenges in
-harmonizing information from patients, clinical trial, and population cohorts;
-and (iv) assessing new data collection technologies and new types of data.
-With the first of these goals in mind, our objective here is to report
-the state of the art in the integration of population cohorts.
-We do so by gathering a collection of initiatives that have integrated
-such cohorts in the last twenty years,
-internationally and in Europe in particular.
+The patient cohort landscape mapping has already been reported elsewhere
+[@rodriguez-laso_map_2021].
+This paper focuses on the state of the art in
+the integration of population cohorts.
+We present the methodology for gathering a collection of initiatives
+that have integrated such cohorts in the last twenty years,
+as well as the results and conclusions of this mapping exercise.
 
 # Methods
 
@@ -147,17 +144,18 @@ internationally and in Europe in particular.
 
 In order to find initiatives that integrate population cohorts,
 three different methods were used.
-The first was a systematic search in the MEDLINE database.
-The second were candidate initiatives suggested by the SYNCHROS
-consortium partners.
-The third was a descendent search using the information
+The first one was a systematic search in the MEDLINE database.
+The second one consisted of the candidate initiatives suggested by the SYNCHROS
+consortium partners and scientific officers of the European Commission.
+The third was a descendant search using the information
 (references, descriptions, and links) from the two previous sources.
 
 ## Database search in MEDLINE
 
-The search terms applied tried to cover the objectives of the SYNCHROS project
-and produce a representative, rather than exhaustive, list of initiatives.
-These terms were selected and agreed upon by a consensus among
+The search terms covered the objectives of the SYNCHROS project
+and was intended to produce a representative, albeit non-exhaustive,
+list of initiatives.
+These terms were selected and agreed upon by consensus among
 the consortium partners.
 The terms that provided less than 500 hits were kept. New terms for use in
 follow-up searches were then extracted from their abstracts.
@@ -166,7 +164,8 @@ in order to limit the number of hits.
 The final search query was:
 
 ```
-(cohort OR “prospective study” OR
+(cohort OR
+  “prospective study” OR
   “longitudinal study” OR
   "individual meta-analysis"[All Fields] OR
   "individual participant data meta-analysis"[All Fields] OR
@@ -216,79 +215,122 @@ were included if they integrated health population cohorts of any age
 (birth, adolescents, adults, elderly, oldest old),
 and included sociodemographic, lifestyle, biological, genetic, omics
 (genomics, proteomics, metabolomics), imaging, or environment factors data.
-Face-to-face, online, or ICT assessments were included.
-Additionally, at least one cohort included in the initiative had to
-have information about the sample at two or more time points.
-
+Face-to-face, online, or ICT assessments were considered.
+Additionally, at least one of the integrated cohorts had to
+have information about the sample at two or more time points.  
+  
 **Exclusion criteria.** Initiatives without available data about (or access to)
-their descriptive information (webpage, a main report describing the main aim(s)
-in detail) were excluded.
-Initiatives that integrated clinical trial cohorts and/or patient cohorts were
+their descriptive information
+(webpage, a main report describing the main aim(s) in detail) were excluded.
+Initiatives that integrated clinical trial cohorts and/or patient cohorts
 are the subject of another publication [@rodriguez-laso_map_2021]
 and thus were also excluded.
 
-For all the initiatives found, a double-check was performed by
+For all the initiatives found, a double check was performed by
 two different researchers in order to carry out an objective evaluation and
-reducing the risk of bias.
+reduce the risk of bias.
 In case of discrepancy between the two reviewers, a third person was consulted.
 
 ## Data extraction and analysis
 
 The following technical information was extracted from the initiatives:
 name, principal investigator (PI), initiative partners,
-region(s)/country/ies included,
-name of the institution responsible for the initiative, funding resources,
-contact person, information source, whether the research team of
-the initiative was active at the time of consultation, main objectives,
+name of the institution responsible for the initiative,
+contact person, information source, whether the research team
+was active at the time of consultation, main objectives,
 criteria for the cohorts to be included,
-type of harmonization (prospective/retrospective),
-number of cohorts included (total number and number of harmonized cohorts),
-whether more cohorts were foreseen to be harmonized,
-number of participants (total number, and number of participants with
-harmonized data), age range of the sample,
-maximum number of variables that had been harmonized
-(including those where harmonization was not possible for all the cohorts),
-setting of the harmonized cohorts (local-regional/national/international),
-countries and research topics addressed,
-and a brief description of the population addressed. When the information
-was not available through the website or published articles,
+funding resources (public / private / mixed),
+and a brief description of the population addressed.
+When the information was not available through the website or
+published articles,
 the principal investigator and/or the contact person of the project
 was consulted, by email first and, if no reply was received,
-by telephone or postal mail. Descriptive statistics were computed for this
-information (absolute frequencies and proportions for the categorical variables,
-and median, minimum, and maximum for the quantitative ones).
+by telephone or postal mail.
+
+Some variables were collected in order to describe the harmonization process,
+namely: harmonization strategy
+(prospective/retrospective ex-ante/retrospective ex-post),
+number of harmonized cohorts,
+whether more cohorts were foreseen to be harmonized,
+number of participants with harmonized data,
+maximum number of harmonized variables
+(including those where harmonization was not possible for all the cohorts),
+setting of the harmonized cohorts (local-regional/national/international),
+The following variables were deemed relevant for the integration effort and
+thus were also collected for each initiative:
+total number of cohorts, total number of participants, age range of the sample,
+country/ies included, whether metadata and individual data were accessible to
+other researchers, whether biological (omics) samples had been collected,
+research topics and socio-environmental contexts addressed,
+and type(s) of aggregated analyses performed on the integrated cohorts
+(pooled, federated, or meta-analysis).
+
+The country were the responsible institution was based and the countries
+included in the integrated cohorts were recoded into continents.
+For all the variables, descriptive statistics were computed when appropriate:
+absolute frequencies and proportions (over number of non-missing values)
+for the categorical variables;
+median, minimum and maximum for the quantitative ones.
 In the case of the number of participants with harmonized data and
-the maximum number of harmonized variables, the descriptives were computed
-only using the initiatives that had harmonized cohorts.
+the maximum number of harmonized variables, the statistics were computed
+using only the initiatives with harmonized cohorts.
 
 # Results
 
 ```{r load-data}
 # N.B.: Correspondence with the generating dataset
-#   (see `notebook/Update_initiatives.Rmd`, result is stored in object
-#   `mica_data_complete`) has been checked. The differences are due to trailing
-#   whitespaces and end of line (\n) characters, which are trimmed off when
+#   (see `notebooks/Update_initiatives.Rmd` and
+#   `notebooks/Complete_initiatives_additional`, result is stored in object
+#   `mica_data_complete` and `initiatives_complete`, respectively)
+#   has been checked. The differences are due to trailing whitespaces and
+#   end of line (\n) characters, which are trimmed off when
 #   reading with `readxl::read_excel()`.
 
-tab1_new <- read_excel(INITIATIVES_FILEPATH, sheet = UPDATED_TABLE_SHEET)
+tab1_new <- read_excel(INITIATIVES_FILEPATH, sheet = COMPLETE_TABLE_SHEET)
 
-# Cast to proper vector types (easier than specifying all column types above):
-tab1_new <- tab1_new |> mutate(
-  across(
-    methodology.moreCohortsToBeHarmonized,
-    factor,
-    levels = c("FALSE", "TRUE"),
-    labels = c("No", "Yes")
-  )
+FACTOR_VARS <- c( # Without stripped-off prefixes when appropriate
+  "setting",
+  "access.metadata",
+  "access.individualdata",
+  "harmonizationstrategy",
+  "omics",
+  "team_activity",
+  "funding"
 )
 
-# Simplify variable names
+# Simplify variable names:
 tab1_new <- tab1_new |>
   rename_with(str_remove, pattern = "methodology.") |>
   rename_with(str_remove, pattern = "nb")           |>
   rename_with(tolower)
 
-# Reorder variables (the ones to the output first, then the rest)
+tab1_new <- tab1_new |> mutate(
+  # Cast to proper vector types (easier than specifying all column types above):
+  across(
+    morecohortstobeharmonized,
+    factor,
+    levels = c("FALSE", "TRUE"),
+    labels = c("No", "Yes")
+  ),
+  across(
+    harmonizationstrategy,
+    str_replace, pattern = "ex_", replacement = "ex-"
+  ),
+  across(setting, str_replace, pattern = UNDERSCORE, replacement = SLASH),
+  across(
+    all_of(FACTOR_VARS),
+    str_replace, pattern = UNDERSCORE, replacement = SPACE
+  ),
+  across(all_of(FACTOR_VARS), str_to_sentence),
+  across(all_of(FACTOR_VARS), factor),
+  # Compute continent of institution responsible:
+  across(country_institution, recode, Southafrica = "South Africa"),
+  continent_institution = country_institution                       |>
+    countrycode(origin = "country.name", destination = "continent") |>
+    factor()
+)
+
+# Reorder variables (the ones to the output first, then the rest):
 tab1_new <- tab1_new |> select(
   initiative,
   region_countries,
@@ -302,14 +344,18 @@ tab1_new <- tab1_new |> select(
 
 ```{r country-derivate-vars}
 # Create variable counts derivated from the countries variable
-tab1_continents <- tab1_new                    |>
-  separate_rows(countries, sep = COMMA)        |>
-  select(id, countries)                        |>
-  drop_na()                                    |>
+tab1_countries <- tab1_new                  |>
+  separate_rows(countries, sep = COMMA_SEP) |>
+  select(id, countries)                     |>
+  drop_na()                                 |>
   mutate(
     continent   = countries |>
-      countrycode(origin = "country.name", destination = "continent")
-  )                                            |>
+      countrycode(origin = "country.name", destination = "continent"),
+    wbdi_region = countries |>
+      countrycode(origin = "country.name", destination = "region")
+  )
+
+tab1_continents <- tab1_countries              |>
   count(id, continent)                         |>
   complete(id, continent, fill = list(n = 0L)) |>
   mutate(bool = n |> as.logical())
@@ -340,19 +386,28 @@ suppressWarnings( # Warning when converting countries in `region` to `continent`
       ),
       bool      = continent != TRUE # Turns all non-missing to `TRUE`
     )                                             |>
-    select(-region)
+    ## Complete non-present information with proper values:
+    complete(id, continent, fill = list(n = 0L, bool = FALSE), explicit = FALSE)
 )
 
-## Complete non-present information with proper values, and overwrite the
-##   "known missings":
-tab1_missing_countries <- tab1_missing_countries             |>
-  complete(id, continent, fill = list(n = 0L, bool = FALSE)) |>
-  rows_update(tab1_missing_countries, by = c("id", "continent"))
-
-tab1_continents <- tab1_continents  |>
-  bind_rows(tab1_missing_countries) |>
-  group_by(id)                      |>
+tab1_continents <- tab1_continents                     |>
+  bind_rows(tab1_missing_countries |> select(-region)) |>
+  group_by(id)                                         |>
   add_count(wt = bool, name = "n_continents")
+
+## Create headers:
+tab1_continent_headers <- tab1_continents                |>
+  ungroup()                                              |>
+  distinct(continent)                                    |>
+  drop_na()                                              |>
+  expand_grid(type = c("n", "bool"))                     |>
+  unite(col = var_name, type, continent, remove = FALSE) |>
+  arrange(desc(type))                                    |>
+  transmute(
+    var_name,
+    header    = if_else(type == "n", "Nº of countries", "Continent"),
+    subheader = continent
+  )
 
 tab1_continents_wide <- tab1_continents |>
   ungroup()                             |>
@@ -363,76 +418,70 @@ tab1_new <- tab1_new |> left_join(tab1_continents_wide, by = "id")
 
 ```{r wbdi-regions, eval=FALSE}
 # Create variable counts derivated from the countries variable
-tab1_regions <- tab1_new                         |>
-  separate_rows(countries, sep = COMMA)          |>
-  select(id, countries)                          |>
-  drop_na()                                      |>
-  mutate(
-    wbdi_region = countries |>
-      countrycode(origin = "country.name", destination = "region")
-  )                                              |>
+tab1_regions <- tab1_countries                   |>
   count(id, wbdi_region)                         |>
   complete(id, wbdi_region, fill = list(n = 0L)) |>
   mutate(bool = n |> as.logical())
 
 # Complete missing values with available information in `region`:
+tab1_missing_regions <- tab1_missing_countries                 |>
+  select(everything(), -n, country = region)                   |>
+  group_by(id, continent)                                      |>
+  mutate(
+    country = country       |>
+      str_detect(continent) |>
+      if_else(NA_character_, country),
+    n       = country |>
+      is.na()         %>%
+      { if_else(all(.) & bool, NA_integer_, not(.) |> sum()) }
+  )                                                            |>
+  ungroup()                                                    |>
+  left_join(CONTINENT_REGION_CORRESPONDENCE, by = "continent") |>
+  # When possible, get the wbdi_region from the country name in `region`:
+  mutate(
+    wbdi_region = country                   |>
+      countrycode("country.name", "region") |>
+      factor()                              |>
+      coalesce(wbdi_region)
+  )                                                            |>
+  # Complete the missing regions when they are known to not be considered:
+  complete(
+    id, wbdi_region,
+    fill     = list(n = 0L, bool = FALSE),
+    explicit = FALSE
+  )                                                            |>
+  # Discard duplicate cases when `wbdi_region` is univocally identified:
+  distinct()                                                   |>
+  # Duplicate `TRUE` values of continents do not univocally map to regions:
+  group_by(id, continent)                                      |>
+  mutate(bool = if_else(bool & n() > 1L, NA, bool))            |>
+  # Discard duplicates
+  ungroup()                                                    |>
+  distinct(id, wbdi_region, bool, n)                           |>
+  # Collapse values from the same region:
+  group_by(id, wbdi_region)                                    |>
+  summarize(bool = any(bool), n = sum(n), .groups = "drop")
+  # # Duplicate values of regions are not univocal so are discarded:
+  # group_by(id, wbdi_region)                                    |>
+  # mutate(across(n:bool, ~ifelse(all(bool == first(bool)), ., NA)))             |>
+  # # Discard duplicate (i.e. ambiguous) cases:
+  # distinct(id, wbdi_region, bool, n)
 
-## Create dataset with existing information (with missing nº of countries where
-##   necessary):
-suppressWarnings( # Warning when converting countries in `region` to `continent`
-  tab1_missing_countries <- tab1_new              |>
-    select(id, region)                            |>
-    anti_join(tab1_regions, by = "id")            |>
-    drop_na()                                     |>
-    separate_rows(region, sep = ENUM_SEPS_REGEXP) |>
-    mutate(
-      region    = region |> str_replace("American?", "Americas"),
-      # Correct values
-      wbdi_region = region |>
-        countrycode(origin = "country.name", destination = "region"),
-      n         = region    |>
-        str_extract("\\d+") |>
-        as.integer()        |>
-        coalesce(wbdi_region |> is.na() |> if_else(NA_integer_, 1L)),
-      wbdi_region = wbdi_region |> coalesce(
-        region |> str_extract(
-          VECTOR_REGIONS |> glue_collapse(sep = '|') |> enclose('(')
-        )
-      ),
-      wbdi_region = (region == "Oceania") |> if_else(
-        true  = "East Asia & Pacific",
-        false = wbdi_region
-      ),
-      bool      = wbdi_region != TRUE # Turns all non-missing to `TRUE`
-    )                                             |>
-    select(-region)
-)
-
-## Complete non-present information with proper values, and overwrite the
-##   "known missings":
-tab1_missing_countries <- tab1_missing_countries |>
-  drop_na(wbdi_region)                           |>
-  mutate(wbdi_region = wbdi_region |> factor(levels = VECTOR_REGIONS))
-
-tab1_missing_countries <- tab1_missing_countries               |>
-  complete(id, wbdi_region, fill = list(n = 0L, bool = FALSE)) |>
-  rows_update(tab1_missing_countries, by = c("id", "wbdi_region"))
-
-tab1_regions <- tab1_regions        |>
-  bind_rows(tab1_missing_countries) |>
-  group_by(id)                      |>
+tab1_regions <- tab1_regions      |>
+  bind_rows(tab1_missing_regions) |>
+  group_by(id)                    |>
   add_count(wt = bool, name = "n_wbdi_regions")
 
 tab1_regions_wide <- tab1_regions |>
   ungroup()                             |>
   pivot_wider(names_from = wbdi_region, values_from = n:bool)
 
-tab1_new <- tab1_new |> left_join(tab1_regions_wide, by = "id")
+# tab1_new <- tab1_new |> left_join(tab1_regions_wide, by = "id")
 ```
 
 ```{r health-topic-derivate-vars}
-tab1_topics <- tab1_new                   |>
-  separate_rows(healthtopic, sep = '\\|') |>
+tab1_topics <- tab1_new                         |>
+  separate_rows(healthtopic, sep = PIPE_REGEXP) |>
   select(id, healthtopic)
 
 tab1_topic_headers <- tab1_topics |>
@@ -440,13 +489,13 @@ tab1_topic_headers <- tab1_topics |>
   distinct(healthtopic)           |>
   transmute(
     var_name  = healthtopic,
-    header      = "Topic",
-    subheader = healthtopic                             |>
+    header    = "Topic",
+    subheader = healthtopic                                      |>
       str_replace(
         pattern     = "birth_infancy_childhood_health",
         replacement = "Birth, infancy & childhood health"
-      )                                                 |>
-      str_replace_all(pattern = '_', replacement = ' ') |>
+      )                                                          |>
+      str_replace_all(pattern = UNDERSCORE, replacement = SPACE) |>
       str_to_sentence()
   )
 
@@ -455,6 +504,79 @@ tab1_topics <- tab1_topics                              |>
   complete(id, healthtopic, fill = list(value = FALSE)) |>
   drop_na()                                             |>
   pivot_wider(names_from  = healthtopic, values_from = value)
+
+tab1_new <- tab1_new |> left_join(tab1_topics, by = "id")
+```
+
+```{r socioenvcontext-derivate-vars}
+tab1_context <- tab1_new                            |>
+  separate_rows(socioenvcontext, sep = PIPE_REGEXP) |>
+  select(id, socioenvcontext)
+
+tab1_context_headers <- tab1_context |>
+  drop_na()                          |>
+  distinct(socioenvcontext)          |>
+  transmute(
+    var_name  = socioenvcontext,
+    header    = "Socio-environmental context",
+    subheader = socioenvcontext                                  |>
+      str_replace(
+        pattern     = "work_",
+        replacement = "work-"
+      )                                                          |>
+      str_replace(
+        pattern     = "short_half_",
+        replacement = "short-half-"
+      )                                                          |>
+      str_replace_all(pattern = UNDERSCORE, replacement = SPACE) |>
+      str_to_sentence()
+  )
+
+tab1_context <- tab1_context                                |>
+  mutate(value = TRUE)                                      |>
+  complete(id, socioenvcontext, fill = list(value = FALSE)) |>
+  drop_na()                                                 |>
+  pivot_wider(names_from = socioenvcontext, values_from = value)
+
+
+tab1_new <- tab1_new |> left_join(tab1_context, by = "id")
+```
+
+```{r socioenvcontext-other-values}
+tab1_socioenvcontext_other <- tab1_new |>
+  separate_rows(
+    socioenvcontextother,
+    sep = glue("({COMMA_SEP}|{SEMICOLON_SEP})")
+  )                                    |>
+  distinct(id, socioenvcontextother)   |>
+  drop_na()                            |>
+  count(socioenvcontextother)          |>
+  arrange(desc(n))                     |>
+  mutate(socioenvcontextother = socioenvcontextother |> str_to_sentence())
+```
+
+```{r analyses-derivate-vars}
+tab1_analysis <- tab1_new                    |>
+  separate_rows(analyses, sep = PIPE_REGEXP) |>
+  select(id, analyses)                       |>
+  filter(analyses != "na") # Missing values that appear in the listed values
+
+tab1_analysis_headers <- tab1_analysis |>
+  drop_na()                            |>
+  distinct(analyses)                   |>
+  transmute(
+    var_name  = analyses,
+    header    = "Analysis",
+    subheader = analyses |> str_to_sentence()
+  )
+
+tab1_analysis <- tab1_analysis                       |>
+  mutate(value = TRUE)                               |>
+  complete(id, analyses, fill = list(value = FALSE)) |>
+  drop_na()                                          |>
+  pivot_wider(names_from = analyses, values_from = value)
+
+tab1_new <- tab1_new |> left_join(tab1_analysis, by = "id")
 ```
 
 ```{r create-output-dataset}
@@ -510,28 +632,44 @@ suppressMessages( # Message when reading empty column names
         header    = c(
           "Age"             |> rep(2),
           "Nº of countries",# n_countries
-          "Nº of regions",  # n_continents
-          "Nº of countries" |> rep(5),
-          "Region"          |> rep(5)
+          "Setting",
+          "Access to" |> rep(2),
+          "Harmonization strategy",
+          "With omics data",
+          "Team active (at consultation)",
+          "Funding",
+          "Continent of responsible institution",
+          "Nº of continents" # n_continents
         ),
         subheader = c(
-          "Minimum", "Maximum",
-          NA_character_     |> rep(2), # Total countries and continents
-          VECTOR_CONTINENTS |> rep(2) # Continents (nº countries and boolean)
-        )
+          "Minimum", "Maximum",          # Age
+          NA_character_ |> rep(2),       # Nº of countries and seting
+          "Metadata", "Individual data", # Access to data
+          NA_character_ |> rep(6) # Harmonization strategy to continent of ...
+        )                         #   responsible institution.
       )
     )                                                                        |>
     add_column( # Add variable names column
-      var_name = colnames(
-        tab1_new |> select(-(id:region), -countries, -healthtopic)
-      )
+      var_name = tab1_new |>
+        select(
+          -(id:region),
+          -(socioenvcontext:analysesother),
+          -healthtopic,
+          -countries,
+          -country_institution,
+          -(n_Africa:pooled)
+        )                 |>
+        colnames()
     )
 )
 
-# Add health topic variables and headers/labels
-tab1_new <- tab1_new |> left_join(tab1_topics, by = "id")
-
-tab1_headers <- tab1_headers |> bind_rows(tab1_topic_headers)
+# Add headers/labels
+tab1_headers <- tab1_headers |> bind_rows(
+  tab1_continent_headers,
+  tab1_topic_headers,
+  tab1_context_headers,
+  tab1_analysis_headers
+)
 
 # Create labels and format subheaders:
 tab1_headers <- tab1_headers |>
@@ -590,14 +728,14 @@ tab1_new_describe <- tab1_new |> select(
 )
 
 descriptives_table_output <- tab1_new_describe |> tbl_summary(
-  statistic    = list(all_continuous() ~ "{median} ({min} - {max})"),
+  statistic    = list(all_continuous()  ~ "{median} ({min} - {max})"),
   digits       = list(all_categorical() ~ c(0, 1)),
   missing_text = "(Missing)"
   # sort = # TODO: Does not seem to work
 )
 ```
 
-```{r descriptive-values, cache=FALSE}
+```{r compute-descriptive-values}
 # Total nº of initiatives:
 total_N_out <- descriptives_table_output |> extract2("N") |> as.english()
 
@@ -610,6 +748,70 @@ max_missing_out <- tab1_new_out                |>
   pull()                                       |>
   percent(accuracy = .1)
 
+# Active projects:
+active_projects_prop_out <- descriptives_table_output |>
+  inline_text(variable = "team_activity", pattern = "{p}%")
+
+# Countries of responsible institutions:
+
+country_institutions <- tab1_new |>
+  count(country_institution)     |>
+  drop_na()                      |>
+  mutate(out = country_institution |> paste0(" (n = ", n, ')'))
+
+country_institution_max_freq <- country_institutions |> filter(n == max(n))
+
+country_institution_max_freq_out <- country_institution_max_freq |> pull()
+
+country_institution_ranking_next <- country_institutions                      |>
+  anti_join(country_institution_max_freq, by = c("country_institution", "n")) |>
+  arrange(desc(n))                                                            |>
+  slice(1:3)
+
+country_institution_ranking_next_out <- country_institution_ranking_next |>
+  pull()                                                                 |>
+  glue_collapse(sep = ", ", last = ", and ")
+
+
+# Funding sources:
+funding_public_out <- descriptives_table_output |> inline_text(
+  variable = "funding",
+  level    = "Public institution",
+  pattern  = "{p}%"
+)
+funding_mixed_out  <- descriptives_table_output |> inline_text(
+  variable = "funding",
+  level    = "Mix",
+  pattern  = "{p}%"
+)
+
+# Harmonization strategy:
+harmo_strategies_count <- tab1_new |>
+  count(harmonizationstrategy)     |>
+  drop_na()
+
+harmo_strategy_max_out <- harmo_strategies_count |>
+  filter(n == max(n))                            |>
+  pull(harmonizationstrategy)
+
+harmo_max_prop_out <- descriptives_table_output |> inline_text(
+  variable = "harmonizationstrategy",
+  level    = all_of(harmo_strategy_max_out),
+  pattern  = "{p}%"
+)
+
+# Analysis:
+analysis_pooled_out    <- descriptives_table_output |>
+  inline_text(variable = "pooled",    pattern = "{p}%")
+analysis_meta_out      <- descriptives_table_output |>
+  inline_text(variable = "meta",      pattern = "{p}%")
+analysis_federated_out <- descriptives_table_output |>
+  inline_text(variable = "federated", pattern = "{p}%")
+
+# Omics:
+omics_out <- descriptives_table_output |>
+  inline_text(variable = "omics", pattern = "{p}% (n = {n})")
+
 # Total nº of cohorts:
 total_cohorts_range_out  <- descriptives_table_output |>
   inline_text(variable = "cohorts.total", pattern = "{min} and {max}")
@@ -621,7 +823,7 @@ harm_cohorts_max_out <- descriptives_table_output |>
   inline_text(variable = "cohorts.harmonized", pattern = "{max}")
 
 # More cohorts to be harmonized:
-more_cohorts_expected_out <- descriptives_table_output |>
+more_cohorts_expected_n_out <- descriptives_table_output |>
   inline_text(variable = "morecohortstobeharmonized", pattern = "{n}")
 
 # Harmonized variables:
@@ -641,7 +843,7 @@ max_age_max_out  <- descriptives_table_output |>
   inline_text(variable = "age.max", pattern = "{max}")
 
 # Topics:
-prop_Ageing_out <- descriptives_table_output |>
+prop_ageing_out <- descriptives_table_output |>
   inline_text(variable = "ageing", pattern = "{p}%")
 
 # Nº of countries:
@@ -672,6 +874,78 @@ prop_Africa_out <- descriptives_table_output |>
   inline_text(variable = "bool_Africa", pattern = "{p}%")
 ```
 
+```{r uncache-descriptive-values, cache=FALSE, include=FALSE}
+# Total nº of initiatives:
+total_N_out
+
+# Maximum number of missing values in one descriptive variable:
+max_missing_out
+
+############################### NEW ############################################
+
+# Active projects:
+active_projects_prop_out <- descriptives_table_output |>
+  inline_text(variable = "team_activity", pattern = "{p}%")
+
+# Countries of responsible institutions:
+country_institution_max_freq_out
+country_institution_ranking_next_out
+
+# Funding sources:
+funding_public_out
+funding_mixed_out
+
+# Harmonization strategy:
+harmo_strategy_max_out
+harmo_max_prop_out
+
+# Analysis:
+analysis_pooled_out
+analysis_meta_out
+analysis_federated_out
+
+# Omics:
+omics_out
+
+# Total nº of cohorts:
+total_cohorts_range_out
+total_cohorts_median_out
+
+# Harmonized cohorts:
+harm_cohorts_max_out
+
+# More cohorts to be harmonized:
+more_cohorts_expected_n_out
+
+# Harmonized variables:
+harm_vars_range_out
+harm_vars_median_out
+
+# Harmonized participants:
+harm_participants_max_out
+harm_participants_median_out
+
+# Particinats' ages across included cohorts:
+max_age_max_out
+
+# Topics:
+prop_ageing_out
+
+# Nº of countries:
+max_n_countries_out
+min_n_countries_out
+
+# Nº of continents
+prop_1_continent_out
+prop_5_continents_out
+
+# Nº of initiatives per region
+prop_Europe_out
+
+n_Africa_out
+prop_Africa_out
+```
+
 The flowchart diagram in Figure 1 summarizes the initiatives
 included and excluded using the three methods.
 The MEDLINE search identified 843 articles that describe initiatives
@@ -685,46 +959,58 @@ cross-sectional harmonization only, multisite cohorts/harmonization of waves,
 meta-analyses, reviews, case control studies, patients' cohorts,
 clinical trial cohorts, and others.
 In total, 11 articles were retrieved from the systematic review.
-Additionally, from the partners’ suggestions and the descendent searches,
+Additionally, from the partners’ and officers' suggestions and
+the descendant searches,
 189 potential initiatives were obtained. After screening for eligibility,
 141 projects were excluded for one or more of the following reasons:
 initiatives published before the year 2000,
 projects that did not integrate cohorts,
 and one initiative with only cross-sectional cohorts.
-Forty-eight initiatives that integrate population cohorts were finally included.
+Forty-eight initiatives that integrate population cohorts were finally included,
+for a total of `r total_N_out` initiatives identified.
 
-
-<!-- A total of `r total_N_out` initiatives that integrate population cohorts
-were identified. -->
-
-The initiatives are presented in \@ref(tab:initiatives),
+The initiatives are presented in Table \@ref(tab:initiatives),
 along with a subset of their most representative information.
 It is worth noting that in a large amount of cases the contact person was
 unreachable throughout the whole mapping process,
 so the proportion of missing data was as large as
-`r max_missing_out` for some properties.
-The complete descriptive information of each initiative can be consulted
-in the repository of the SYNCHROS project (www.synchros.eu).
+`r max_missing_out` for some variables.
+At the time of consultation, `r active_projects_prop_out` of
+the research teams that had carried out the projects remained active.
+The majority of the responsible institutions were based in
+`r country_institution_max_freq_out`, followed by institutions
+from `r country_institution_ranking_next_out`.
+`r funding_public_out` of the initiatives were funded by public institutions,
+while `r funding_mixed_out` received funding from
+both private and public institutions.
 
-The number of harmonized cohorts ranged between `r total_cohorts_range_out`
+The total number of cohorts ranged between `r total_cohorts_range_out`
 (median = `r total_cohorts_median_out`).
 Some initiatives had as much as `r harm_cohorts_max_out` harmonized cohorts,
-while others had harmonized cohorts at all.
-However, at least `r more_cohorts_expected_out` initiatives expected
+while others had no harmonized cohorts at all.
+However, at least `r more_cohorts_expected_n_out` initiatives expected
 to harmonize more cohorts in the future.
 The harmonized cohorts had a large variability in the maximum number of
 harmonized variables, ranging from `r harm_vars_range_out`
 (median = `r harm_vars_median_out`).
 They would comprise as much as `r harm_participants_max_out` participants,
 although the median value was around `r harm_participants_median_out`.
-
-<br>
+`r harmo_strategy_max_out` (retrospective) harmonization was
+by far the most prevalent strategy,
+used by `r harmo_max_prop_out` of the initiatives.
+The majority of initiatives (`r analysis_pooled_out`) used pooled analysis
+to perform integrated analysis on the cohorts. Meta-analysis and federated
+analysis were more uncommon, being used only by `r analysis_meta_out` and
+`r analysis_federated_out` of the initiatives
+(note that some initiatives used more than one type of integrated analysis).
 
 The targeted populations ranged in age from childbirth to as much as
-`r max_age_max_out` (although this probably refers to an unbounded upper limit).
+`r max_age_max_out` years old
+(although this probably refers to an unbounded upper limit).
 Ageing was the most prevalent topic,
-addressed by a `r prop_Ageing_out` of the initiatives.
-The cohorts comprised as much as `r max_n_countries_out`,
+addressed by a `r prop_ageing_out` of the initiatives, and
+`r omics_out` of the initiatives had omics data (i.e. biological samples).
+The cohorts were collected in as much as `r max_n_countries_out` countries,
 although there were also initiatives with cohorts from
 only `r min_n_countries_out` country.
 Most of them (`r prop_1_continent_out`) were circumscribed
@@ -735,69 +1021,100 @@ the five continents.
 Africa was the most underrepresented continent,
 with only `r n_Africa_out` initiatives (`r prop_Africa_out`) including cohorts
 from it.
-The complete descriptive information of the initiatives can be found in
+The complete descriptive information of the initiatives can be found in Table
 \@ref(tab:descriptives).
+Also, the most up-to-date information of each initiative can be consulted
+in the repository of the SYNCHROS project (https://repository.synchros.eu).
 
 # Discussion
 
 The purpose of this mapping was to gather knowledge about the state of art of
 the initiatives that integrate population cohorts.
 The landscape of these initiatives has revealed to be quite disparate,
-with a high variability of populations and variables as well as topics and
-regions addressed by the integrated cohorts.
+with a high variability of populations and variables,
+as well as topics and regions addressed by the integrated cohorts.
+Still, the number of integration initiatives seems rather low,
+compared to the overall and increasing number of very large cohort datasets
+worldwide.<!-- # TODO: Reference needed? -->
 
+Most of the initiatives found were funded by public entities
+(and mainly from the European Union).
+We found a scarcity of private funding,
+with only a few initiatives being partially funded by private institutions.
+One might think that e.g. pharmaceutical companies would be highly interested in
+integrating evidence across cohorts and thrive towards personalized medicine.
+However, private entities may be more interested in investing in patient cohorts
+or clinical trials rather than population cohorts.
+
+Very few of the initiatives were found to harmonize and integrate
+biological samples
+(although there was a high rate of missingness in this variable).
+Including them may help discover possible causal pathways from biology to
+behavioral, social, demographic, economic, and health outcomes
+[@hobcraft_reflections_2009].
+Unfortunately, incorporating bio-measures in cohort research is not always
+feasible.
+
+Most of the initiatives were being conducted in Europe and America and,
+as would be expected, most of the integrated cohorts were collected in
+these two continents.
 Interestingly, very few of the initiatives included cohorts focused on Africa.
 Previous studies emphasize the relative lack of health studies conducted in
 low- and middle-income countries [LMICs, @lawlor_birth_2009].
-For instance, the most part of birth cohort studies [@victora_cohorts_2012]
-are conducted in high-income countries, where annual births only amount to a 10%
-of the births in LMICs. Among other factors, this may be due to
-the relative less number of health investigators in LMICs
-(40 times less on average; One Year on, Global Observatory on Health R&D
-Identifies Striking Gaps and Inequalities, 2018).
-Limitations in their national health and surveillance systems may also
-hinder their capacity to reliably process health information
-[@cash-gibson_inequalities_2018+. Whatever the reason, more representativeness
-of LMICs will be necessary to grant the external validity of
-the cohort studies that inform global health policy recommendations.
+More representativeness of LMICs would be necessary to grant
+the external validity of the cohort studies that inform
+global health policy recommendations.
 
 ## Strengths and weaknesses
 
 To our knowledge, this is the first effort to map and describe in detail all
-the initiatives integrating population cohorts. Given the difficulties reported
-by authors when integrating cohorts [@gatz_data_2015],
-we expect that our results are helpful in three ways:
-Firstly, identifying the barriers researches find when integrating
-the different cohort studies.
-Secondly, guiding the search for existing projects with harmonized cohorts.
-And thirdly, providing guidelines for future projects aimed at integrating and
-harmonizing cohorts.
+the initiatives integrating population cohorts.
+Given the difficulties reported by authors when integrating cohorts
+[@gatz_data_2015],
+we expect positive outcomes of our results in three main aspects.
+First, the SYNCHROS repository is a resource where interested researchers can
+find integrated population cohort data or contribute their population cohorts.
+Second, several PIs and project managers have provided first-hand information
+on the barriers and solutions they have found when integrating cohorts.
+Finally, we expect all this information to be extremely relevant to design
+a European strategy for cohort integration,
+such as is the aim of the SYNCHROS project.
 
-Nevertheless, we must raise awareness on the non exhaustive nature of
+Nevertheless, we must raise awareness on the non-exhaustive nature of
 this mapping. Given the big amount of population cohort studies published,
 this manuscript aims at representativeness rather than exhaustiveness.
+It should be noted though that, given the huge amount of work involved in
+integrating population cohorts, we deem it unlikely that we have missed
+any initiatives that have published results.
 Also, as the response rate of the principal investigators was rather low,
-relevant information of some initiatives is still missing.
-However, the Synchros repository is an evolving project,
+relevant information of some initiatives is still missing
+at the time of submission of this manuscript.
+However, the SYNCHROS repository is an evolving project,
 where the most recent information available is continuously updated.
 
 ## Conclusions
 
-The promotion of interdisciplinary collaborations, with the aim of developing
-and enriching a "learning healthcare system", should be in the spotlight
-[@frohlich_hype_2018]. Synergies across a wide variety of existing
-cohort integration projects could yield considerable benefits for
-diverse scientific fields. In this sense, we expect the Synchros repository
-to be a valuable resource for emerging collaborative health research.
-Compared to undertaking new international mega-cohorts, integration of
-existing cohorts may be more cost-effective [@larsen_pregnancy_2013].
-One of the goals of Horizon Europe is to promote worldwide collaboration
-with countries with strong investments in science [@abbott_how_2019].
-The integration of cohort studies across these countries will certainly
-drive us towards the longed-for scenario where we will be able
-to highly improve the value of worldwide scientific data,
-with the ultimate goal of maximizing health outcomes.
- 
+Representative results require massive sample sizes to achieve the necessary
+statistical power, especially in restricted population fields like
+personalized medicine, rare diseases, or epigenetics.
+Moreover, this representativeness can only be achieved by addressing
+more diverse, non-*WEIRD* populations [@henrich_most_2010]
+from different ethnic, regional or/and socioeconomic settings.
+Synergies across a wide variety of existing cohort integration projects
+would help pursuing these goals, while being more cost-effective than
+undertaking new international mega-cohorts [@larsen_pregnancy_2013].
+
+However, there is still a shortfall of initiatives that integrate 
+worldwide population cohorts.
+Most of the currently available cohorts probably lack the necessary
+transparency and availability of information
+(variables, study designs, data access, etc.)
+to afford multi-study research.
+We expect the SYNCHROS repository to be a valuable resource for
+emerging collaborative research,
+with a spotlight in developing and enriching a "learning healthcare system"
+[@frohlich_hype_2018].
+
 # References
 
 ::: {#refs}
@@ -809,7 +1126,7 @@ with the ultimate goal of maximizing health outcomes.
 
 # Tables
 
-```{r initiatives, tab.id="initiatives", tab.cap="Descriptive information of the initiatives included in the mapping.", results='asis', cache=FALSE}
+```{r initiatives, tab.id="initiatives", tab.cap="Descriptive information of the initiatives included in the mapping.", results='asis'}
 initiatives_table_output
 ```
 
@@ -817,7 +1134,7 @@ initiatives_table_output
 
 \newpage
 
-```{r descriptives, tab.id="descriptives", tab.cap="Descriptive statistics of the initiatives mapped.", results='asis', cache=FALSE}
+```{r descriptives, tab.id="descriptives", tab.cap="Descriptive statistics of the initiatives mapped.", results='asis'}
 descriptives_table_output
 ```
 

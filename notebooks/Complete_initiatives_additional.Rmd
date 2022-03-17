@@ -8,6 +8,8 @@ output:
     df_print:      paged
     code_folding:  hide
     code_download: yes
+params:
+  write_file: no
 ---
 
 ```{r setup, message=FALSE, warning=FALSE}
@@ -356,9 +358,9 @@ In order to make them match, we recode its values first.
 tab1_update_subset <- tab1_update_subset |> mutate(
   across(
     -c(id, initiative, acronym, ends_with("Other")),
-    ~str_to_lower(.)                                           |>
-      str_remove_all(ANALYSES_SUFFIX_REGEXP)                   |>
-      str_replace_all(pattern = SEMICOLON, replacement = PIPE) |>
+    ~str_to_lower(.)                                               |>
+      str_remove_all(ANALYSES_SUFFIX_REGEXP)                       |>
+      str_replace_all(pattern = SEMICOLON_SEP, replacement = PIPE) |>
       str_replace_all(
         pattern     = UPDATE_VARS_CHARCLASS_REGEXP,
         replacement = UNDERSCORE
@@ -401,9 +403,10 @@ dataset with the updates.
 
 ```{r complete-table-mica-initiatives}
 tab1_update_new_initiatives <- tab1_update_subset |>
-  anti_join(mica_subset, by = "id")
+  anti_join(mica_subset_completed, by = "id")
 
-initiatives_complete <- mica_subset |> bind_rows(tab1_update_new_initiatives)
+initiatives_complete <- mica_subset_completed |>
+  bind_rows(tab1_update_new_initiatives)
 ```
 
 ## Variables in the dataset with extra information
@@ -426,8 +429,9 @@ initiatives_complete <- initiatives_complete |>
 Finally, the original dataset with the previous process of collapsing and
 updating the variables is joined with this one.
 
-```{r}
-initiatives_complete <- tab1_init |> left_join(initiatives_complete, by = "id")
+```{r collapse-table-init}
+initiatives_complete <- tab1_init |>
+  full_join(initiatives_complete |> select(-acronym, -initiative), by = "id")
 ```
 
 
@@ -436,9 +440,20 @@ initiatives_complete <- tab1_init |> left_join(initiatives_complete, by = "id")
 This throughput dataset is saved again in Excel format in order to
 use it in the next steps.
 
-```{r save-dataset, eval=FALSE}
+```{r save-dataset, eval=params$write_file}
 # Set to `eval=FALSE` to avoid overwriting the result when executing
-#   automatically (change if necesssary)
+#   automatically (if necesssary, "Knit with Parameters...")
+
+# Try to remove sheet (if exists):
+excel_file <- loadWorkbook(INITIATIVES_FILEPATH)
+sheets     <- getSheets(excel_file) |> names()
+
+if (COMPLETE_TABLE_SHEET %in% sheets) {
+  
+  excel_file |> removeSheet(sheetName = COMPLETE_TABLE_SHEET)
+}
+excel_file |> saveWorkbook(file = INITIATIVES_FILEPATH)
+
 initiatives_complete |>
   as.data.frame()    |> # Necessary to avoid an error when writting a tibble
   write.xlsx(

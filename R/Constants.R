@@ -51,7 +51,8 @@ SYNCHROS_URL <- "https://repository.synchros.eu"
 ## Text strings:
 EMPTY_STRING        <- ''
 SPACE               <- ' '
-COMMA               <- ', '
+COMMA               <- ','
+COMMA_SEP           <- glue('{COMMA}{SPACE}')
 DASH                <- '-'
 UNDERSCORE          <- '_'
 PIPE                <- '|'
@@ -60,7 +61,8 @@ SLASH               <- '/'
 LINE_FEED           <- "\n"
 CARRIAGE_RETURN     <- "\r"
 COLON               <- ': '
-SEMICOLON           <- '; '
+SEMICOLON           <- ';'
+SEMICOLON_SEP       <- glue('{SEMICOLON}{SPACE}')
 AND_CONJUNCTION     <- " and "
 ASTERISK            <- '*'
 COL_PREFFIX         <- "col_"
@@ -70,13 +72,14 @@ AUTO_VARNAME_PREFIX <- ELLIPSIS
 ## Regular expressions:
 AUTO_VARNAME_PREFIX_REGEXP     <- r"(^\.\.\.)"
 NO_INFO_REGEXP                 <- "No information obtained(\\s*)"# whitespace(s)
-REPLACE_SEPS_REGEXP            <- glue("({SEMICOLON}|{AND_CONJUNCTION})")
-ENUM_SEPS_REGEXP               <- glue("({COMMA}|{AND_CONJUNCTION})")
+REPLACE_SEPS_REGEXP            <- glue("({SEMICOLON_SEP}|{AND_CONJUNCTION})")
+ENUM_SEPS_REGEXP               <- glue("({COMMA_SEP}|{AND_CONJUNCTION})")
 NUMBER_REGEXP                  <- r"(\d+)"
 ASTERISK_REGEXP                <- glue("\\{ASTERISK}")
 UPPERCASE_LETTERS_BEGIN_REGEXP <- "^[A-Z]+"
 UPDATE_VARS_CHARCLASS_REGEXP   <- glue("[{SPACE}{SLASH}{DASH}]")
 ANALYSES_SUFFIX_REGEXP         <- glue("[{SPACE}{DASH}]analyses")
+PIPE_REGEXP                    <- glue("\\{PIPE}")
 
 ## Country processing objects:
 VECTOR_CONTINENTS <- codelist |>
@@ -90,3 +93,8 @@ VECTOR_REGIONS <- codelist |>
   arrange(region)          |>
   drop_na()                |>
   pull()
+
+CONTINENT_REGION_CORRESPONDENCE <- codelist |>
+  distinct(continent, wbdi_region = region) |>
+  drop_na(continent, wbdi_region)           |>
+  mutate(wbdi_region = wbdi_region |> factor())

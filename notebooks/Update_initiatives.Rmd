@@ -8,6 +8,8 @@ output:
     df_print:      paged
     code_folding:  hide
     code_download: yes
+params:
+  write_file: no
 ---
 
 ```{r setup, message=FALSE, warning=FALSE}
@@ -416,7 +418,7 @@ mica_data_tab1 <- mica_data_tab1 |>
   )                              |>
   group_by(across(-countries))   |>
   summarize(
-    countries   = countries |> glue_collapse(sep = COMMA),
+    countries   = countries |> glue_collapse(sep = COMMA_SEP),
     n_countries = n(), # Nº of countries per initiative, for descriptive stats
     .groups     = "drop"
   )
@@ -448,11 +450,11 @@ tab1_countries <- tab1_countries_regions |>
     countries = Region..Country |>
       str_replace(
         pattern     = REPLACE_SEPS_REGEXP,
-        replacement = COMMA
+        replacement = COMMA_SEP
       ) |>
       str_replace(
         pattern     = ',, ',# (delete also double commas)
-        replacement = COMMA
+        replacement = COMMA_SEP
       )
   )                                      |>
   separate_rows(countries, sep = ',')    |>
@@ -464,7 +466,7 @@ tab1_countries <- tab1_countries_regions |>
   drop_na(countries)                     |>
   group_by(id)                           |>
   summarize(
-    countries   = countries |> glue_collapse(sep = COMMA),
+    countries   = countries |> glue_collapse(sep = COMMA_SEP),
     # Nº of countries per initiative, for descriptive stats:
     n_countries = n(),
     .groups     = "drop"
@@ -769,9 +771,20 @@ mica_data_complete <- mica_data_complete |>
 The throughput dataset resulting from this data wrangling process is saved
 in Excel format in order to share it and use it in the next steps.
 
-```{r save-dataset, eval=FALSE}
+```{r save-dataset, eval=params$write_file}
 # Set to `eval=FALSE` to avoid overwriting the result when executing
-#   automatically (change if necesssary)
+#   automatically (if necesssary, "Knit with Parameters...")
+
+# Try to remove sheet (if exists):
+excel_file <- loadWorkbook(INITIATIVES_FILEPATH)
+sheets     <- getSheets(excel_file) |> names()
+
+if (UPDATED_TABLE_SHEET %in% sheets) {
+  
+  excel_file |> removeSheet(sheetName = UPDATED_TABLE_SHEET)
+}
+excel_file |> saveWorkbook(file = INITIATIVES_FILEPATH)
+
 mica_data_complete |>
   as.data.frame()  |> # Necessary to avoid an error when writting a tibble
   write.xlsx(
