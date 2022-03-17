@@ -1136,7 +1136,7 @@ with a spotlight in developing and enriching a "learning healthcare system"
 
 # Tables
 
-```{r initiatives, tab.id="initiatives", tab.cap="Descriptive information of the initiatives included in the mapping.", results='asis', cache=FALSE}
+```{r initiatives, tab.id="initiatives", tab.cap="Descriptive information of the initiatives included in the mapping.", results='asis'}
 initiatives_table_output
 ```
 
@@ -1144,7 +1144,7 @@ initiatives_table_output
 
 \newpage
 
-```{r descriptives, tab.id="descriptives", tab.cap="Descriptive statistics of the initiatives mapped.", results='asis', cache=FALSE}
+```{r descriptives, tab.id="descriptives", tab.cap="Descriptive statistics of the initiatives mapped.", results='asis'}
 descriptives_table_output
 ```
 
