@@ -147,7 +147,7 @@ three different methods were used.
 The first one was a systematic search in the MEDLINE database.
 The second one consisted of the candidate initiatives suggested by the SYNCHROS
 consortium partners and scientific officers of the European Commission.
-The third was a descendant search using the information
+The third was a descendent search using the information
 (references, descriptions, and links) from the two previous sources.
 
 ## Database search in MEDLINE
@@ -946,7 +946,7 @@ n_Africa_out
 prop_Africa_out
 ```
 
-The flowchart diagram in Figure 1 summarizes the initiatives
+The flowchart diagram in Figure \@ref(fig:flowchart) summarizes the initiatives
 included and excluded using the three methods.
 The MEDLINE search identified 843 articles that describe initiatives
 to be potentially included. After screening the titles and abstracts,
@@ -960,13 +960,15 @@ meta-analyses, reviews, case control studies, patients' cohorts,
 clinical trial cohorts, and others.
 In total, 11 articles were retrieved from the systematic review.
 Additionally, from the partners’ and officers' suggestions and
-the descendant searches,
+the descendent searches,
 189 potential initiatives were obtained. After screening for eligibility,
 141 projects were excluded for one or more of the following reasons:
 initiatives published before the year 2000,
 projects that did not integrate cohorts,
-and one initiative with only cross-sectional cohorts.
-Forty-eight initiatives that integrate population cohorts were finally included,
+one initiative with only cross-sectional cohorts,
+and one initiative that interated patient and clinical trial cohorts.
+Forty-seven initiatives that integrate population cohorts were finally included
+with this method,
 for a total of `r total_N_out` initiatives identified.
 
 The initiatives are presented in Table \@ref(tab:initiatives),
@@ -1124,8 +1126,6 @@ with a spotlight in developing and enriching a "learning healthcare system"
 
 <!---BLOCK_LANDSCAPE_START--->
 
-# Tables
-
 ```{r initiatives, tab.id="initiatives", tab.cap="Descriptive information of the initiatives included in the mapping.", results='asis'}
 initiatives_table_output
 ```
@@ -1136,6 +1136,12 @@ initiatives_table_output
 
 ```{r descriptives, tab.id="descriptives", tab.cap="Descriptive statistics of the initiatives mapped.", results='asis'}
 descriptives_table_output
+```
+
+\newpage
+
+```{r flowchart, fig.cap="Flowchart diagram detailing the initiatives included and excluded.", results='asis'}
+include_graphics("../../www/Figure_1.png", dpi = NA)
 ```
 
 ```{r reset-root-dir, cache=FALSE}
