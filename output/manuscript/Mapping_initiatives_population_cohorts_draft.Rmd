@@ -82,6 +82,47 @@ source("R/Output.R",    encoding = 'UTF-8')
 # SRC_FILEPATH %>% read_chunk()
 ```
 
+# Abstract
+
+*Introduction:* Medical research increasingly requires the analysis of
+data across different cohorts, i.e. of data collected under different
+study designs and legal/ethical constraints.
+The integration of such cohorts is often difficult,
+but some have proven themselves to better support multi-study research.
+The "SYNergies for Cohorts in Health: integrating the ROle of all Stakeholders"
+-- SYNCHROS -- project carried out mappings of
+patient, clinical trial, and population cohorts.
+The aim of this paper is to lay out the methodology and results of
+the mapping focusing on initiatives that integrate population cohorts.
+
+*Methods:* Three different sources were used to include the initiatives in
+the mapping: 1) A systematic search carried out in the MEDLINE database;
+2) Suggestions of potential initiatives to be included in the mapping
+provided by partners of the SYNCHROS consortium and
+European Commission scientific officers; and
+3) Descendent searches in the references and links of the initiatives obtained
+from the two previous sources.
+
+*Results:* Fifty-eight initiatives that integrate population cohorts were found,
+although a significant proportion of the leading teams
+were inactive or unresponsive.
+Topics, socio-environmental contexts, and populations addressed were
+rather disparate, and there were high volumes of integrated data.
+Most of the initiatives were lead by European and American institutions,
+coming the integrated cohorts from these two continents as well.
+
+*Conclusion:* The number of cohort integration initiatives is still low,
+compared with massive cohort studies being carried out worldwide.
+The existing initiatives and cohort studies should strive towards improving
+transparency and availability of information.
+We expect the Synchros repository to contribute to these goals,
+enabling researchers to integrate cohorts and
+find venues for collaborative research.
+
+*Keywords:* mapping; population cohorts; harmonization; integration
+
+\newpage
+
 # Introduction
 
 There has been a recent surge of scientific data collection
