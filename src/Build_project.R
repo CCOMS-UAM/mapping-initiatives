@@ -54,7 +54,7 @@ render(
 
 # File verification: ----
 
-# Runs the notebook in the current sesson without writng the Excel file:
+# Runs the notebook in the current session without writng the Excel file:
 source("notebooks/Complete_initiatives_additional.Rmd", echo=TRUE)
 
 read_table <- read_excel(INITIATIVES_FILEPATH, sheet = COMPLETE_TABLE_SHEET)

@@ -36,6 +36,7 @@ library(countrycode)
 library(english)
 library(magrittr)
 library(scales)
+library(janitor)
 
 # Constants:
 DOC_DIR      <- getwd()
@@ -117,8 +118,7 @@ find venues for collaborative research.
 # Introduction
 
 There has been a recent surge of scientific data collection
-in the healthcare domain [@cavanillas_new_2016; @roski_creating_2014].
-<!-- # TODO: Review references. -->
+in the healthcare domain [@roski_creating_2014].
 Several large-scale cohort studies have recently been or are being
 conducted nowadays around the globe:
 the Millennium Cohort Study [@connelly_cohort_2014],
@@ -153,7 +153,7 @@ the European Commission called for a sustainable, strategic agenda for
 a better, global coordination of cohorts.
 The project
 *SYNergies for Cohorts in Health: integrating the ROle of all Stakeholders*
-(SYNCHROS) was funded by the Horizon 2020 Research And Innovation Program with
+(SYNCHROS) was funded by the Horizon 2020 Research and Innovation Program with
 the aim of formulating this strategy,
 through intensive stakeholder collaboration<!-- # TODO: Ref. needed?. -->.
 Among others, one of its first actions was the mapping of
@@ -185,9 +185,9 @@ The third was a descendent search using the information
 
 ## Database search in MEDLINE
 
-The search terms was intended to produce a representative,
-albeit non-exhaustive, list of initiatives.
-These terms were selected and agreed upon by consensus among
+The search was intended to produce a representative,
+albeit non-exhaustive, list of cohort integration initiatives.
+The search terms were selected and agreed upon by consensus among
 the consortium partners.
 The terms that provided less than 500 hits were kept. New terms for use in
 follow-up searches were then extracted from their abstracts.
@@ -245,7 +245,7 @@ Humans[MeSH]
 
 ## Selection of initiatives
 
-**Inclusion criteria.** Initiatives published in English from 2000 to july 2019
+**Inclusion criteria.** Initiatives published in English from 2000 to July 2019
 were included if they integrated health population cohorts of any age
 (birth, adolescents, adults, elderly, oldest old),
 and included sociodemographic, lifestyle, biological, genetic, omics
@@ -774,7 +774,7 @@ descriptives_table_output <- tab1_new_describe |> tbl_summary(
 total_N_out <- descriptives_table_output |> extract2("N") |> as.english()
 
 # Maximum number of missing values in one descriptive variable:
-max_missing_out <- tab1_new_out                |>
+max_missing_out <- tab1_new_describe           |>
   summarize(across(.fns = ~sum(is.na(.))/n())) |>
   pivot_longer(everything())                   |>
   filter(value == max(value))                  |>
@@ -783,8 +783,13 @@ max_missing_out <- tab1_new_out                |>
   percent(accuracy = .1)
 
 # Active projects:
-active_projects_prop_out <- descriptives_table_output |>
-  inline_text(variable = "team_activity", pattern = "{p}%")
+active_projects_prop_out <- descriptives_table_output |>    # Over non-missing
+  inline_text(variable = "team_activity", pattern = "{p}%") # Over total
+active_projects_prop_total_out <- tab1_new_describe |>
+  tabyl(team_activity)                              |>
+  filter(team_activity == "Yes")                    |>
+  pull(percent)                                     |>
+  percent(accuracy = .1)
 
 # Countries of responsible institutions:
 
@@ -895,7 +900,8 @@ max_n_countries_out <- descriptives_table_output           |>
 min_n_countries_out <- descriptives_table_output           |>
   inline_text(variable = "n_countries", pattern = "{min}") |>
   as.integer()                                             |>
-  as.english()
+  as.english()                                             |>
+  as.character()
 
 # Nº of continents
 prop_1_continent_out  <- descriptives_table_output |>
@@ -922,11 +928,9 @@ total_N_out
 # Maximum number of missing values in one descriptive variable:
 max_missing_out
 
-############################### NEW ############################################
-
 # Active projects:
-active_projects_prop_out <- descriptives_table_output |>
-  inline_text(variable = "team_activity", pattern = "{p}%")
+active_projects_prop_out
+active_projects_prop_total_out
 
 # Countries of responsible institutions:
 country_institution_max_freq_out
@@ -1007,10 +1011,10 @@ the descendent searches,
 initiatives published before the year 2000,
 projects that did not integrate cohorts,
 one initiative with only cross-sectional cohorts,
-and one initiative that interated patient and clinical trial cohorts.
+and one initiative that integrated patient and clinical trial cohorts.
 This resulted in the inclusion of another 48 initiatives that integrate
 population cohorts.
-Thus, a total of `r total_N_out` initiatives included.
+Thus, a total of `r total_N_out` initiatives were included.
 
 The initiatives are presented in Table \@ref(tab:initiatives),
 along with a subset of their most representative information.
@@ -1019,9 +1023,9 @@ unreachable throughout the whole mapping process,
 so the proportion of missing data was as large as
 `r max_missing_out` for some variables.
 At the time of consultation, `r active_projects_prop_out` of
-the research teams that had carried out the projects remained active;
-under the assumption that those which did not provide information about their
-activity were inactive, that percentage would drop to 69%.<!-- # TODO: Reivew sentence and compute -->
+the research teams that had carried out the projects remained active
+(although this percentage drops to `r active_projects_prop_total_out` if
+we assume that those which did not respond were inactive).
 The majority of the responsible institutions were based in
 `r country_institution_max_freq_out`, followed by institutions
 from `r country_institution_ranking_next_out`.
@@ -1045,7 +1049,7 @@ by far the most prevalent strategy,
 used by `r harmo_max_prop_out` of the initiatives.
 The majority of initiatives (`r analysis_pooled_out`) used pooled analysis
 to perform integrated analysis on the cohorts. Meta-analysis and federated
-analysis were more uncommon, being used only by `r analysis_meta_out` and
+analysis were less common, being used only by `r analysis_meta_out` and
 `r analysis_federated_out` of the initiatives
 (note that some initiatives used more than one type of integrated analysis).
 
@@ -1091,7 +1095,7 @@ It is also worth stressing that a large proportion of the initiatives found are
 inactive nowadays, limiting the possibilities of data access and sharing.
 
 Most of the initiatives found were funded by public entities
-(and mainly from the European Union).
+(and mainly from the European Commission).
 We found a scarcity of private funding,
 with only a few initiatives being partially funded by private institutions.
 One might think that e.g. pharmaceutical companies would be highly interested in
@@ -1151,7 +1155,7 @@ where the most recent information available is continuously updated.
 
 ## Conclusions
 
-Knowledge about restricted populations
+Knowledge about restricted populations and phenomena
 (e.g. personalized medicine, rare diseases, epigenetics)
 require massive sample sizes to achieve the necessary
 statistical power.
