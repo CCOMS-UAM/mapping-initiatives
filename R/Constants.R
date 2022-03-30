@@ -98,3 +98,6 @@ CONTINENT_REGION_CORRESPONDENCE <- codelist |>
   distinct(continent, wbdi_region = region) |>
   drop_na(continent, wbdi_region)           |>
   mutate(wbdi_region = wbdi_region |> factor())
+
+# (Necessary to process these names for literal output)
+COUNTRYNAME_ACRONYMS <- c("UK", "USA")
