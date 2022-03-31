@@ -65,13 +65,11 @@ read_table <- read_excel(INITIATIVES_FILEPATH, sheet = COMPLETE_TABLE_SHEET)
 
 # This checks that the table written in the excel file and the result after
 #   reading it are coincident:
-initiatives_complete |> select(-id) |> iwalk(
+coincidence_check <- initiatives_complete |> select(-id) |> imap_dfr(
   ~{
-    comp <- initiatives_complete |> select(id, old = !!sym(.y))  |>
-      full_join(read_table |> select(id, new = !!sym(.y))) |>
+    comp <- initiatives_complete |> select(id, old = !!sym(.y))       |>
+      full_join(read_table |> select(id, new = !!sym(.y)), by = "id") |>
       mutate(eq = (old == new) | (is.na(old) == is.na(new)))
-    comp |> count(eq) |> print()
-    comp |> filter(is.na(eq)) |> count(old, new) |> print()
+    bind_cols(column = .y, comp |> count(eq))
   }
 )
-
