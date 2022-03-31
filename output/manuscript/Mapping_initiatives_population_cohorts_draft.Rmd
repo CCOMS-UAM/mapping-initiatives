@@ -1,6 +1,6 @@
 ---
 title: |
-  Mapping of initiatives that integrate worldwide population cohorts
+  Worldwide mapping of initiatives that integrate population cohorts
 output:
   officedown::rdocx_document:
     base_format:     bookdown::word_document2
@@ -96,8 +96,8 @@ provided by partners of the SYNCHROS consortium and
 European Commission scientific officers, and
 3) descendent searches in the references and links of the initiatives obtained
 from the two previous sources.  
-**Results:** Fifty-eight initiatives that integrate population cohorts were found,
-although a significant proportion of the leading teams
+**Results:** Fifty-eight initiatives that integrate population cohorts
+were found, although a significant proportion of the leading teams
 were inactive or unresponsive.
 Topics, socio-environmental contexts, and populations addressed were
 rather disparate, and there were high volumes of integrated data.
@@ -270,7 +270,7 @@ In case of discrepancy between the two reviewers, a third person was consulted.
 
 The following technical information was extracted from the initiatives:
 name, principal investigator (PI), initiative partners,
-name of the institution responsible for the initiative,
+name of the leading institution,
 contact person, information source, whether the research team
 was active at the time of consultation, main objectives,
 criteria for the cohorts to be included,
@@ -300,7 +300,7 @@ research topics and socio-environmental contexts addressed,
 and type(s) of aggregated analyses performed on the integrated cohorts
 (pooled, federated, or meta-analysis).
 
-The country where the responsible institution was based and the countries
+The country where the leading institution was based and the countries
 included in the integrated cohorts were recoded into continents.
 For all the variables, descriptive statistics were computed when appropriate:
 absolute frequencies and proportions (over number of non-missing values)
@@ -358,7 +358,7 @@ tab1_new <- tab1_new |> mutate(
   ),
   across(all_of(FACTOR_VARS), str_to_sentence),
   across(all_of(FACTOR_VARS), factor),
-  # Compute continent of institution responsible:
+  # Compute continent of leading institution:
   across(country_institution, recode, Southafrica = "South Africa"),
   continent_institution = country_institution                       |>
     countrycode(origin = "country.name", destination = "continent") |>
@@ -673,7 +673,7 @@ suppressMessages( # Message when reading empty column names
           "With omics data",
           "Team active (at consultation)",
           "Funding",
-          "Continent of responsible institution",
+          "Continent of leading institution",
           "Nº of continents" # n_continents
         ),
         subheader = c(
@@ -681,7 +681,7 @@ suppressMessages( # Message when reading empty column names
           NA_character_ |> rep(2),       # Nº of countries and seting
           "Metadata", "Individual data", # Access to data
           NA_character_ |> rep(6) # Harmonization strategy to continent of ...
-        )                         #   responsible institution.
+        )                         #   leading institution.
       )
     )                                                                        |>
     add_column( # Add variable names column
@@ -792,7 +792,7 @@ active_projects_prop_total_out <- tab1_new_describe |>
   pull(percent)                                     |>
   percent(accuracy = .1)
 
-# Countries of responsible institutions:
+# Countries of leading institutions:
 
 country_institutions <- tab1_new |>
   count(country_institution)     |>
@@ -933,7 +933,7 @@ max_missing_out
 active_projects_prop_out
 active_projects_prop_total_out
 
-# Countries of responsible institutions:
+# Countries of leading institutions:
 country_institution_max_freq_out
 country_institution_ranking_next_out
 
@@ -1027,7 +1027,7 @@ At the time of consultation, `r active_projects_prop_out` of
 the research teams that had carried out the projects remained active
 (although this percentage drops to `r active_projects_prop_total_out` if
 we assume that those which did not respond were inactive).
-The majority of the responsible institutions were based in
+The majority of the leading institutions were based in
 `r country_institution_max_freq_out`, followed by institutions
 from `r country_institution_ranking_next_out`.
 `r funding_public_out` of the initiatives were funded by public institutions,
