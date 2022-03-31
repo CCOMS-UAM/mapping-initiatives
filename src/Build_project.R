@@ -23,14 +23,15 @@ library(rmarkdown)
 library(readxl)
 library(tidyverse)
 library(knitr)
+library(xfun)
 
 source("R/Constants.R", encoding = 'UTF-8')
 
 
 ## ---- CONSTANTS: -------------------------------------------------------------
 
-WRITE_TABLES <- FALSE # This can be changed to `FALSE` if ones doesn't want
-                      #   to write again the tables from the source Excel files.
+WRITE_TABLES <- TRUE # This can be changed to `FALSE` if ones doesn't want
+                     #   to write again the tables from the source Excel files.
 TEMP_FILE    <- "tmp.R"
 
 
@@ -72,4 +73,13 @@ coincidence_check <- initiatives_complete |> select(-id) |> imap_dfr(
       mutate(eq = (old == new) | (is.na(old) == is.na(new)))
     bind_cols(column = .y, comp |> count(eq))
   }
+)
+
+# Notebook that generates the version of the table for manual edition:
+Rscript_call(
+  render,
+  list(
+    input  = "notebooks/Manual_editing_table.Rmd",
+    params = list(write_file = WRITE_TABLES)
+  )
 )

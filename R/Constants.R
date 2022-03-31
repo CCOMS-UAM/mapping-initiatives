@@ -23,6 +23,7 @@ library(countrycode)
 
 ### File names:
 INITIATIVES_FILENAME <- "synchros-initiatives.xlsx"
+INIT_FILENAME_MANUAL <- "synchros-initiatives-short-free-text.xlsx"
 VAR_CORRESP_FILENAME <- "variable_correspondence.xlsx"
 MICA_DATA_FILENAME   <- "mica-export.csv"
 EXTRAS_FILENAME      <- "PORCENTAJES_template_3_population_.03.07.20.xls"
@@ -31,6 +32,7 @@ UPDATES_FILENAME     <- "SYNCHROS_REPOSITORY_ INITIATIVES_20200617.xlsx"
 ### File paths:
 DATA_DIR <- "dat"
 INITIATIVES_FILEPATH <- file.path(DATA_DIR, INITIATIVES_FILENAME)
+INIT_MANUAL_FILEPATH <- file.path(DATA_DIR, INIT_FILENAME_MANUAL)
 MICA_DATA_FILEPATH   <- file.path(DATA_DIR, MICA_DATA_FILENAME)
 VAR_CORRESP_FILEPATH <- file.path(DATA_DIR, VAR_CORRESP_FILENAME)
 EXTRAS_FILEPATH      <- file.path(DATA_DIR, EXTRAS_FILENAME)
@@ -49,7 +51,10 @@ EXCEL_COL_POSITIONS <- c(LETTERS, paste0('A', LETTERS))
 ## URLs:
 SYNCHROS_URL <- "https://repository.synchros.eu"
 
-## Text strings:
+
+## Data variables and values:
+
+### Text strings:
 EMPTY_STRING        <- ''
 SPACE               <- ' '
 COMMA               <- ','
@@ -60,6 +65,7 @@ PIPE                <- '|'
 BULLET_PREFIX       <- DASH
 SLASH               <- '/'
 LINE_FEED           <- "\n"
+MD_NEW_PARAGRAPH    <- LINE_FEED |> rep(2) |> paste(collapse = EMPTY_STRING)
 CARRIAGE_RETURN     <- "\r"
 COLON               <- ': '
 SEMICOLON           <- ';'
@@ -70,7 +76,7 @@ COL_PREFFIX         <- "col_"
 ELLIPSIS            <- "..."
 AUTO_VARNAME_PREFIX <- ELLIPSIS
 
-## Regular expressions:
+### Regular expressions:
 AUTO_VARNAME_PREFIX_REGEXP     <- r"(^\.\.\.)"
 NO_INFO_REGEXP                 <- "No information obtained(\\s*)"# whitespace(s)
 REPLACE_SEPS_REGEXP            <- glue("({SEMICOLON_SEP}|{AND_CONJUNCTION})")
@@ -82,7 +88,8 @@ UPDATE_VARS_CHARCLASS_REGEXP   <- glue("[{SPACE}{SLASH}{DASH}]")
 ANALYSES_SUFFIX_REGEXP         <- glue("[{SPACE}{DASH}]analyses")
 PIPE_REGEXP                    <- glue("\\{PIPE}")
 
-## Country processing objects:
+### Country processing objects:
+
 VECTOR_CONTINENTS <- codelist |>
   distinct(continent)         |>
   arrange(continent)          |>
@@ -100,5 +107,10 @@ CONTINENT_REGION_CORRESPONDENCE <- codelist |>
   drop_na(continent, wbdi_region)           |>
   mutate(wbdi_region = wbdi_region |> factor())
 
+
 # (Necessary to process these names for literal output)
 COUNTRYNAME_ACRONYMS <- c("UK", "USA")
+
+## Columns that need to be converted to free text:
+FREE_TEXT_COLS      <- c("description", "cohortCriteria")
+FT_CONDENSED_SUFFIX <- "short"

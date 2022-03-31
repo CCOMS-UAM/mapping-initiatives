@@ -1,0 +1,67 @@
+---
+title: "Initiatives free text fields"
+output:
+  officedown::rdocx_document:
+    base_format:     bookdown::word_document2
+    reference_docx:  ../www/Initiatives_free_text_fields_template.docx
+    number_sections: no
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+# Environment setup:
+gc()
+
+# Libraries:
+library(knitr)
+library(tidyverse)
+library(readxl)
+
+# Constants:
+DOC_DIR      <- getwd()
+ROOT_DIR     <- ".."
+SRC_DIR      <- "src"
+
+# Knitr configuration:
+opts_knit$set(root.dir = ROOT_DIR) # Interferes with officedown!
+opts_chunk$set(
+  echo       = FALSE,
+  results    = 'asis',
+  message    = FALSE,
+  warning    = FALSE,
+  cache      = FALSE,
+  autodep    = TRUE
+)
+```
+
+```{r includes, cache=FALSE}
+source("R/Constants.R", encoding = 'UTF-8')
+source("R/Output.R",    encoding = 'UTF-8')
+```
+
+```{r load-data}
+initiatives <- read_excel(INIT_MANUAL_FILEPATH, sheet = TABLE_1_SHEET)
+```
+
+```{r select-columns}
+free_text_cols_out <- FREE_TEXT_COLS |>
+  paste(FT_CONDENSED_SUFFIX, sep = UNDERSCORE) |>
+  set_names(FREE_TEXT_COLS)
+
+free_text_out_fields <- initiatives |> select(id, !!!free_text_cols_out)
+```
+
+```{r write-initiatives}
+free_text_out_fields |> pwalk(
+  \(id, description, cohortCriteria) {
+    
+    cat('# ', id, MD_NEW_PARAGRAPH)
+    cat('## Description:', MD_NEW_PARAGRAPH)
+    cat(description, MD_NEW_PARAGRAPH)
+    cat('## Cohort criteria:', MD_NEW_PARAGRAPH)
+    cat(cohortCriteria, MD_NEW_PARAGRAPH)
+  }
+)
+```
+

@@ -1,0 +1,131 @@
+---
+title: "Edition of the 'initiatives of population cohorts' dataset for manual processing"
+date:  "10/12/2021"
+output:
+  html_document:
+    toc:           yes
+    toc_float:     yes
+    df_print:      paged
+    code_folding:  hide
+    code_download: yes
+params:
+  write_file: no
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+# Libraries:
+
+library(knitr)
+library(tidyverse)
+library(readxl)
+library(xlsx)
+library(xfun)
+library(rmarkdown)
+
+
+# Constants:
+ROOT_DIR <- ".."
+
+# Output configuration:
+
+opts_knit$set(root.dir = ROOT_DIR)
+opts_chunk$set(message = FALSE)
+```
+
+```{r includes, cache=FALSE}
+source("R/Constants.R", encoding = 'UTF-8')
+```
+
+# Introduction
+
+The complete initiatives dataset requires some manual processing,
+as it was agreed to strip down the free text fields in the table of initiatives
+in order to reduce its contents and length (see
+[minutes of 31/03/2022 meeting](output/meetings/2022-03-31_SYNCHROS_Mapping_initiatives_paper_editorial_meeting.md)
+).
+Some manual processing needs to be done to produce a shorter version of those
+fields.
+The table is re-written with duplicate columns for the fields to rewrite.
+
+# Dataset loading
+
+## Dataset with the table of initiatives
+
+The table in the sheet ``r COMPLETE_TABLE_SHEET`` of file
+``r INITIATIVES_FILENAME`` is first loaded.
+
+```{r load-table, message=FALSE}
+initiatives <- read_excel(INITIATIVES_FILEPATH, sheet = COMPLETE_TABLE_SHEET)
+```
+
+# Data processing
+
+## Column addition
+
+```{r free-text-cols}
+free_text_cols_out <- paste(BULLET_PREFIX, FREE_TEXT_COLS, collapse = LINE_FEED)
+```
+
+
+The following are free text columns that are printed in the output,
+and thus need to be stripped down, creating a shorter version:
+
+`r free_text_cols_out`
+
+We duplicate these columns, adding the duplicate versions to "strip down":
+
+```{r}
+initiatives <- initiatives |> mutate(
+  across(
+    all_of(FREE_TEXT_COLS),
+    list(~.) |> set_names(FT_CONDENSED_SUFFIX)
+  )
+)
+```
+
+# Output
+
+## Dataset saving
+
+This throughput dataset is saved again in Excel format in order to send it to
+the coauthors for the manual processing, and then use it in the next steps.
+
+```{r save-dataset, eval=params$write_file}
+# Set to `eval=FALSE` to avoid overwriting the result when executing
+#   automatically (if necesssary, "Knit with Parameters...")
+
+# Try to remove sheet (if exists):
+if (file.exists(INIT_MANUAL_FILEPATH)) {
+  
+  excel_file <- loadWorkbook(INIT_MANUAL_FILEPATH)
+  sheets     <- getSheets(excel_file) |> names()
+  
+  if (TABLE_1_SHEET %in% sheets) {
+    
+    excel_file |> removeSheet(sheetName = TABLE_1_SHEET)
+  }
+  excel_file |> saveWorkbook(file = INIT_MANUAL_FILEPATH)
+}
+
+initiatives       |>
+  as.data.frame() |> # Necessary to avoid an error when writting a tibble
+  write.xlsx(
+    INIT_MANUAL_FILEPATH,
+    sheet     = TABLE_1_SHEET,
+    row.names = FALSE,
+    showNA    = FALSE,
+    append    = TRUE
+  )
+```
+
+## Document writing
+
+The output is also written into a .docx document, in order to facilitate
+the edition.
+
+```{r write-document, results='hide'}
+Rscript_call(
+  render,
+  list(input = "throughput/Initiatives_free_text_fields.Rmd")
+)
+```

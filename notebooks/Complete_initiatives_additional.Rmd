@@ -434,6 +434,13 @@ initiatives_complete <- tab1_init |>
   full_join(initiatives_complete |> select(-acronym, -initiative), by = "id")
 ```
 
+## Alphabetical ordering
+
+The initiatives are ordered alphabetically, according to their acronym
+
+```{r order-table-init}
+initiatives_complete <- initiatives_complete |> arrange(acronym)
+```
 
 # Dataset saving
 
