@@ -43,15 +43,21 @@ TEMP_FILE    <- "tmp.R"
 # Write notebooks: ----
 
 # Notebook that generates the first version of the updated table:
-render(
-  "notebooks/Update_initiatives.Rmd",
-  params = list(write_file = WRITE_TABLES)
+Rscript_call(
+  render,
+  list(
+    input  = "notebooks/Update_initiatives.Rmd",
+    params = list(write_file = WRITE_TABLES)
+  )
 )
 
 # Notebook that generates the complete version of the updated table:
-render(
-  "notebooks/Complete_initiatives_additional.Rmd",
-  params = list(write_file = WRITE_TABLES)
+Rscript_call(
+  render,
+  list(
+    input  = "notebooks/Complete_initiatives_additional.Rmd",
+    params = list(write_file = WRITE_TABLES)
+  )
 )
 
 
