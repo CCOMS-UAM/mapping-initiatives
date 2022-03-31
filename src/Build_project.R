@@ -22,14 +22,16 @@ rm(list = ls())
 library(rmarkdown)
 library(readxl)
 library(tidyverse)
+library(knitr)
 
 source("R/Constants.R", encoding = 'UTF-8')
 
 
 ## ---- CONSTANTS: -------------------------------------------------------------
 
-WRITE_TABLES <- TRUE # This can be changed to `FALSE` if ones doesn't want
-                     #   to write again the tables from the source Excel files.
+WRITE_TABLES <- FALSE # This can be changed to `FALSE` if ones doesn't want
+                      #   to write again the tables from the source Excel files.
+TEMP_FILE    <- "tmp.R"
 
 
 ## ---- FUNCTIONS: -------------------------------------------------------------
@@ -54,8 +56,10 @@ render(
 
 # File verification: ----
 
-# Runs the notebook in the current session without writng the Excel file:
-source("notebooks/Complete_initiatives_additional.Rmd", echo=TRUE)
+# Runs the notebook in the current session without writing the Excel file:
+purl("notebooks/Complete_initiatives_additional.Rmd", output = TEMP_FILE)
+source(TEMP_FILE, encoding = 'UTF-8')
+unlink(TEMP_FILE)
 
 read_table <- read_excel(INITIATIVES_FILEPATH, sheet = COMPLETE_TABLE_SHEET)
 
@@ -65,7 +69,7 @@ initiatives_complete |> select(-id) |> iwalk(
   ~{
     comp <- initiatives_complete |> select(id, old = !!sym(.y))  |>
       full_join(read_table |> select(id, new = !!sym(.y))) |>
-      mutate(eq = old == new)
+      mutate(eq = (old == new) | (is.na(old) == is.na(new)))
     comp |> count(eq) |> print()
     comp |> filter(is.na(eq)) |> count(old, new) |> print()
   }
