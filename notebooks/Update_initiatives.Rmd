@@ -412,10 +412,6 @@ and the country names standardized appropriately.
 # Turn ISO3 codes into country names and collapse them
 mica_data_tab1 <- mica_data_tab1 |>
   separate_rows(countries)       |>
-  mutate(
-    countries = countries |>
-      countrycode(origin = 'iso3c', destination = 'country.name')
-  )                              |>
   group_by(across(-countries))   |>
   summarize(
     countries   = countries |> glue_collapse(sep = COMMA_SEP),
@@ -444,8 +440,8 @@ CORRECT_COUNTRIES %$% walk2(
 )
 
 
-tab1_countries <- tab1_countries_regions |>
-  filter(!id %in% REGION_INITIATIVES)    |>
+tab1_countries <- tab1_countries_regions                              |>
+  filter(!id %in% REGION_INITIATIVES)                                 |>
   mutate(# Standardize separating countries/regions by commas
     countries = Region..Country |>
       str_replace(
@@ -456,15 +452,12 @@ tab1_countries <- tab1_countries_regions |>
         pattern     = ',, ',# (delete also double commas)
         replacement = COMMA_SEP
       )
-  )                                      |>
-  separate_rows(countries, sep = ',')    |>
-  mutate(# Standardize country names by using their ISO3 codes:
-    countries = countries                |>
-      countryname(destination = "iso3c") |>
-      countrycode(origin = 'iso3c', destination = "country.name")
-  )                                      |>
-  drop_na(countries)                     |>
-  group_by(id)                           |>
+  )                                                                   |>
+  separate_rows(countries, sep = ',')                                 |>
+  # Standardize country names by using their ISO3 codes:
+  mutate(countries = countries |> countryname(destination = "iso3c")) |>
+  drop_na(countries)                                                  |>
+  group_by(id)                                                        |>
   summarize(
     countries   = countries |> glue_collapse(sep = COMMA_SEP),
     # Nº of countries per initiative, for descriptive stats:

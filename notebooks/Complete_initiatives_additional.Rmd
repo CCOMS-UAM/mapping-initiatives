@@ -1,5 +1,5 @@
 ---
-title: "Update of the 'initiatives of population cohorts' dataset"
+title: "Edition of the 'initiatives of population cohorts' dataset for manual processing"
 date:  "10/12/2021"
 output:
   html_document:
@@ -18,15 +18,7 @@ params:
 library(knitr)
 library(tidyverse)
 library(readxl)
-library(vctrs)
-library(micar)
-library(stringr)
-library(rlang)
-library(glue)
-library(countrycode)
-library(magrittr)
 library(xlsx)
-library(htm2txt)
 
 
 # Constants:
