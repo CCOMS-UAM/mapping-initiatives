@@ -86,15 +86,15 @@ The integration of such cohorts is often difficult,
 but some have proven themselves to better support multi-study research.
 The "SYNergies for Cohorts in Health: integrating the ROle of all Stakeholders"
 -- SYNCHROS -- project carried out mappings of
-patient, clinical trial, and population cohorts.
-The aim of this paper is to lay out the methodology and results of
+patient, clinical-trial, and population cohorts.
+This paper aims to lay out the methodology and results of
 the mapping focusing on initiatives that integrate population cohorts.  
 **Methods:** Three different sources were used to include the initiatives in
-the mapping: 1) A systematic search carried out in the MEDLINE database;
-2) Suggestions of potential initiatives to be included in the mapping
+the mapping: 1) A systematic search carried out in the MEDLINE database,
+2) suggestions of potential initiatives to be included in the mapping
 provided by partners of the SYNCHROS consortium and
-European Commission scientific officers; and
-3) Descendent searches in the references and links of the initiatives obtained
+European Commission scientific officers, and
+3) descendent searches in the references and links of the initiatives obtained
 from the two previous sources.  
 **Results:** Fifty-eight initiatives that integrate population cohorts were found,
 although a significant proportion of the leading teams
@@ -102,10 +102,10 @@ were inactive or unresponsive.
 Topics, socio-environmental contexts, and populations addressed were
 rather disparate, and there were high volumes of integrated data.
 Most of the initiatives were led by European and American institutions,
-coming the integrated cohorts from these two continents as well.  
+most of the integrated cohorts coming from these two continents as well.  
 **Conclusion:** The number of cohort integration initiatives is still low,
 compared with massive cohort studies being carried out worldwide.
-The existing initiatives and cohort studies should strive towards improving
+The existing initiatives and cohort studies should strive toward improving
 transparency and availability of information.
 We expect the Synchros repository to contribute to these goals,
 enabling researchers to integrate cohorts and
@@ -117,7 +117,7 @@ find venues for collaborative research.
 
 # Introduction
 
-There has been a recent surge of scientific data collection
+There has been a recent surge in scientific data collection
 in the healthcare domain [@roski_creating_2014].
 Several large-scale cohort studies have recently been or are being
 conducted nowadays around the globe:
@@ -128,10 +128,10 @@ the Collaborative Research on Ageing in Europe
 [@leonardi_collaborative_2013],
 or the English Longitudinal Study of Ageing [@steptoe_cohort_2013]
 are popular examples.
-Integrating these individual cohorts is the next step to get
+Integrating these individual cohorts is the next step to getting
 the most valuable information out of them.
 Cohort integration studies may increase sample sizes drastically,
-allowing to study important but infrequent phenomena
+allowing the study of important but infrequent phenomena
 [e.g. rare diseases, @thompson_thinking_2009] while avoiding publication bias.
 The pressure is rapidly building up to keep up-to-date with
 integrating and capitalizing on this information,
@@ -154,14 +154,14 @@ a better, global coordination of cohorts.
 The project
 *SYNergies for Cohorts in Health: integrating the ROle of all Stakeholders*
 (SYNCHROS) was funded by the Horizon 2020 Research and Innovation Program with
-the aim of formulating this strategy,
+the goal of formulating this strategy,
 through intensive stakeholder collaboration<!-- # TODO: Ref. needed?. -->.
 Among others, one of its first actions was the mapping of
-the cohort integration initiatives landscape,
-across the world, and especially in Europe.
+the cohort integration initiatives landscape
+across the world and in Europe especially.
 The objective was to obtain first-hand information about
 the methodologies and solutions implemented for integrating patient,
-clinical-trial and population cohorts.
+clinical-trial, and population cohorts.
 
 The patient cohort landscape mapping has already been reported elsewhere
 [@rodriguez-laso_map_2021].
@@ -175,8 +175,8 @@ as well as the results and conclusions of this mapping exercise.
 
 ## Identification of initiatives
 
-In order to find initiatives that integrate population cohorts,
-three different methods were used.
+Three different methods were used
+to find initiatives that integrate population cohorts,
 The first one was a systematic search in the MEDLINE database.
 The second one consisted of asking the SYNCHROS consortium and
 scientific officers of the European Commission for suggestions on initiatives.
@@ -187,12 +187,13 @@ The third was a descendent search using the information
 
 The search was intended to produce a representative,
 albeit non-exhaustive, list of cohort integration initiatives.
-The search terms were selected and agreed upon by consensus among
-the consortium partners.
-The terms that provided less than 500 hits were kept. New terms for use in
-follow-up searches were then extracted from their abstracts.
-The term "cohort" was included in some searches,
-in order to limit the number of hits.
+An initial set of search terms were agreed upon by the consortium partners.
+In order to accomplish a manageable number of hits, these terms were tested and
+the ones that yielded more than 500 hits were discarded.
+(To reduce the number of hits, the term "cohort" was added
+to some searches before the discarding.)
+New terms were extracted from abstracts of relevant retrieved papers
+and tested again.
 To obtain the most recent scientific evidence,
 the search was limited to studies published in 2000 or later.
 The search was conducted in July 2019.
@@ -260,7 +261,7 @@ Initiatives that integrated clinical trial cohorts and/or patient cohorts
 are the subject of another publication [@rodriguez-laso_map_2021]
 and thus were also excluded.
 
-For all the initiatives found, a double check was performed by
+For all the initiatives found, a double-check was performed by
 two different researchers in order to carry out an objective evaluation and
 reduce the risk of bias.
 In case of discrepancy between the two reviewers, a third person was consulted.
@@ -273,7 +274,7 @@ name of the institution responsible for the initiative,
 contact person, information source, whether the research team
 was active at the time of consultation, main objectives,
 criteria for the cohorts to be included,
-funding resources (public / private / mixed),
+funding resources (public/private/mixed),
 and a brief description of the population addressed.
 When the information was not available through the website or
 published articles,
@@ -1001,7 +1002,7 @@ the following reasons: one-time efforts (articles where the merging of data
 was done only for carrying out the research presented in the paper),
 initiatives already submitted by partners, articles with
 cross-sectional harmonization only, multisite cohorts/harmonization of waves,
-meta-analyses, reviews, case control studies, patients' cohorts,
+meta-analyses, reviews, case-control studies, patients' cohorts,
 clinical trial cohorts, and others.
 From the systematic review, 11 articles were included.
 Additionally, from the partners’ and officers' suggestions and
@@ -1036,9 +1037,10 @@ both private and public institutions.
 The total number of cohorts ranged between `r total_cohorts_range_out`
 (median = `r total_cohorts_median_out`).
 Some initiatives had up to `r harm_cohorts_max_out` harmonized cohorts,
-while others had not started to harmonize cohorts yet.
-At least `r more_cohorts_expected_n_out` initiatives expected
-to harmonize more cohorts in the future.
+while others only had collected the participating cohorts
+(but had not started harmonizing them yet).
+At least `r more_cohorts_expected_n_out` initiatives planned
+to obtain and harmonize more cohorts in the future.
 The harmonized cohorts had a large variability in the maximum number of
 harmonized variables, ranging from `r harm_vars_range_out`
 (median = `r harm_vars_median_out`).
@@ -1058,29 +1060,29 @@ The targeted populations ranged in age from childbirth to
 (although this probably refers to an unbounded upper limit).
 Ageing and air pollution were the most prevalent topic and
 socio-environmental context, respectively,
-addressed by `r prop_ageing_out` of the initiatives each, and
+each one addressed by `r prop_ageing_out` of the initiatives, and
 `r omics_out` of the initiatives included omics data (i.e. biological samples).
-The cohorts were collected in as much as `r max_n_countries_out` countries,
+The cohorts were collected in as many as `r max_n_countries_out` countries,
 although there were also initiatives with cohorts from
 only `r min_n_countries_out` country.
 Most of them (`r prop_1_continent_out`) were circumscribed
 to just one continent,
 being Europe the most frequent (`r prop_Europe_out`),
-while only a `r prop_5_continents_out` comprised cohorts from all
-the five continents.
+while only `r prop_5_continents_out` comprised cohorts from all
+five continents.
 Africa was the most underrepresented continent,
 with only `r n_Africa_out` initiatives (`r prop_Africa_out`) including cohorts
 from it.
 The complete descriptive information of the initiatives can be found in Table
 \@ref(tab:descriptives).
-Also, the most up-to-date information of each initiative can be consulted
+Also, the most up-to-date information on each initiative can be consulted
 in the repository of the SYNCHROS project (https://repository.synchros.eu).
 
 # Discussion
 
-The purpose of this mapping was to gather knowledge about the state of art of
-the initiatives that integrate population cohorts.
-The landscape of these initiatives has revealed to be quite disparate,
+The purpose of this mapping was to gather knowledge about
+the state of the art of the initiatives that integrate population cohorts.
+The landscape of these initiatives has been revealed to be quite disparate,
 with a high variability of populations and variables,
 as well as topics and regions addressed by the integrated cohorts.
 As foreseeable, the number of participants and variables integrated is larger
@@ -1095,7 +1097,7 @@ It is also worth stressing that a large proportion of the initiatives found are
 inactive nowadays, limiting the possibilities of data access and sharing.
 
 Most of the initiatives found were funded by public entities
-(and mainly from the European Commission).
+(and mainly by the European Commission).
 We found a scarcity of private funding,
 with only a few initiatives being partially funded by private institutions.
 One might think that e.g. pharmaceutical companies would be highly interested in
@@ -1106,7 +1108,7 @@ even lower [@rodriguez-laso_map_2021].
 
 Focus on environmental exposures was more prevalent than
 genetic and biological factors.
-In fact, very few of the initiatives were found to harmonize and integrate
+Very few of the initiatives were actually found to harmonize and integrate
 biological samples
 (although there was a high rate of missingness in this variable).
 Including them may help discover possible causal pathways among biological,
@@ -1137,18 +1139,18 @@ First, the SYNCHROS repository is a resource where interested researchers can
 find integrated population cohort data or contribute their population cohorts.
 Second, several PIs and project managers have provided first-hand information
 on the barriers and solutions they have found when integrating cohorts.
-Finally, we expect all this information to be extremely relevant to design
+Finally, we expect all this information to be extremely relevant to designing
 a European strategy for cohort integration,
 such as is the aim of the SYNCHROS project.
 
-Nevertheless, we must raise awareness on the non-exhaustive nature of
-this mapping. Given the big amount of population cohort studies published,
-this manuscript aims at representativeness rather than exhaustiveness.
+Although we must raise awareness of the non-exhaustive nature of this mapping,
+we should stress that this manuscript aims at representativeness
+rather than exhaustiveness.
 It should be noted though that, given the huge amount of work involved in
 integrating population cohorts, we deem it unlikely that we have missed
 any initiatives that have published results.
 Also, as the response rate of the principal investigators was rather low,
-relevant information of some initiatives is still missing
+relevant information on some initiatives is still missing
 at the time of submission of this manuscript.
 However, the SYNCHROS repository is an evolving project,
 where the most recent information available is continuously updated.
