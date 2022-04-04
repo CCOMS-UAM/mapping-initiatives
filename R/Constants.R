@@ -24,6 +24,7 @@ library(countrycode)
 ### File names:
 INITIATIVES_FILENAME <- "synchros-initiatives.xlsx"
 INIT_FILENAME_MANUAL <- "synchros-initiatives-short-free-text.xlsx"
+INIT_FILENAME_EDITED <- "synchros-initiatives-short-free-text_edited.xlsx"
 VAR_CORRESP_FILENAME <- "variable_correspondence.xlsx"
 MICA_DATA_FILENAME   <- "mica-export.csv"
 EXTRAS_FILENAME      <- "PORCENTAJES_template_3_population_.03.07.20.xls"
@@ -33,6 +34,7 @@ UPDATES_FILENAME     <- "SYNCHROS_REPOSITORY_ INITIATIVES_20200617.xlsx"
 DATA_DIR <- "dat"
 INITIATIVES_FILEPATH <- file.path(DATA_DIR, INITIATIVES_FILENAME)
 INIT_MANUAL_FILEPATH <- file.path(DATA_DIR, INIT_FILENAME_MANUAL)
+INIT_EDITED_FILEPATH <- file.path(DATA_DIR, INIT_FILENAME_EDITED)
 MICA_DATA_FILEPATH   <- file.path(DATA_DIR, MICA_DATA_FILENAME)
 VAR_CORRESP_FILEPATH <- file.path(DATA_DIR, VAR_CORRESP_FILENAME)
 EXTRAS_FILEPATH      <- file.path(DATA_DIR, EXTRAS_FILENAME)
@@ -71,10 +73,13 @@ COLON               <- ': '
 SEMICOLON           <- ';'
 SEMICOLON_SEP       <- glue('{SEMICOLON}{SPACE}')
 AND_CONJUNCTION     <- " and "
+OXFORD_COMMA        <- glue("{COMMA}{AND_CONJUNCTION}")
 ASTERISK            <- '*'
 COL_PREFFIX         <- "col_"
 ELLIPSIS            <- "..."
 AUTO_VARNAME_PREFIX <- ELLIPSIS
+MISSING_STR         <- "(NA)"
+
 
 ### Regular expressions:
 AUTO_VARNAME_PREFIX_REGEXP     <- r"(^\.\.\.)"
@@ -107,6 +112,12 @@ CONTINENT_REGION_CORRESPONDENCE <- codelist |>
   drop_na(continent, wbdi_region)           |>
   mutate(wbdi_region = wbdi_region |> factor())
 
+VECTOR_CONTINENTS_AMERICAS_SEP <- VECTOR_CONTINENTS |>
+  setdiff("Americas")                               |>
+  append(VECTOR_REGIONS |> str_subset("America"))
+
+VECTOR_CONTINENTS_AMERICAS_SEP_PRINT <- VECTOR_CONTINENTS_AMERICAS_SEP |>
+  glue_collapse(sep = COMMA_SEP, last = OXFORD_COMMA)
 
 # (Necessary to process these names for literal output)
 COUNTRYNAME_ACRONYMS <- c("UK", "USA")

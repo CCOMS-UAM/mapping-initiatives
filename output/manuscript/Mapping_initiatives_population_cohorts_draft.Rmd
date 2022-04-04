@@ -300,7 +300,8 @@ and type(s) of aggregated analyses performed on the integrated cohorts
 (pooled, federated, or meta-analysis).
 
 The country where the leading institution was based and the countries
-included in the integrated cohorts were recoded into continents.
+included in the integrated cohorts were recoded into continents
+(`r VECTOR_CONTINENTS_AMERICAS_SEP_PRINT`).
 For all the variables, descriptive statistics were computed when appropriate:
 absolute frequencies and proportions (over number of non-missing values)
 for the categorical variables;
@@ -320,7 +321,7 @@ using only the initiatives with harmonized cohorts.
 #   end of line (\n) characters, which are trimmed off when
 #   reading with `readxl::read_excel()`.
 
-tab1_new <- read_excel(INITIATIVES_FILEPATH, sheet = COMPLETE_TABLE_SHEET)
+tab1_new <- read_excel(INIT_EDITED_FILEPATH, sheet = TABLE_1_SHEET)
 
 FACTOR_VARS <- c( # Without stripped-off prefixes when appropriate
   "setting",
@@ -359,19 +360,28 @@ tab1_new <- tab1_new |> mutate(
   across(all_of(FACTOR_VARS), factor),
   # Compute continent of leading institution:
   across(country_institution, recode, Southafrica = "South Africa"),
-  continent_institution = country_institution                |>
-    countrycode(origin = "iso3c", destination = "continent") |>
-    factor()
+  continent_institution = country_institution                       |>
+    countrycode(origin = "country.name", destination = "continent") %>%
+    {
+      if_else( # subdivide in North / Latin America & Caribbean
+        condition = . == "Americas",
+        true      = country_institution |>
+          countrycode(origin = "country.name", destination = "region"),
+        false     = .
+      )
+    }                                                               |>
+    factor(levels = VECTOR_CONTINENTS_AMERICAS_SEP)
 )
 
 # Reorder variables (the ones to the output first, then the rest):
 tab1_new <- tab1_new |> select(
   initiative,
   region_countries,
-  description:participants.harmonized,
+  description_short,
+  cohorts.total:participants.harmonized,
   age_range,
   harmonizedvariables,
-  cohortcriteria,
+  cohortcriteria_short,
   everything()
 )
 ```
@@ -399,7 +409,7 @@ tab1_continents <- tab1_countries              |>
 ## Create dataset with existing information (with missing nº of countries where
 ##   necessary):
 suppressWarnings( # Warning when converting countries in `region` to `continent`
-  tab1_missing_countries <- tab1_new              |>
+  tab1_missing_continents <- tab1_new             |>
     select(id, region)                            |>
     anti_join(tab1_continents, by = "id")         |>
     drop_na()                                     |>
@@ -408,7 +418,7 @@ suppressWarnings( # Warning when converting countries in `region` to `continent`
       region    = region |> str_replace("American?", "Americas"),
       # Correct values
       continent = region |>
-        countrycode(origin = "iso3c", destination = "continent"),
+        countrycode(origin = "country.name", destination = "continent"),
       n         = region    |>
         str_extract("\\d+") |>
         as.integer()        |>
@@ -424,41 +434,20 @@ suppressWarnings( # Warning when converting countries in `region` to `continent`
     complete(id, continent, fill = list(n = 0L, bool = FALSE), explicit = FALSE)
 )
 
-tab1_continents <- tab1_continents                     |>
-  bind_rows(tab1_missing_countries |> select(-region)) |>
-  group_by(id)                                         |>
-  add_count(wt = bool, name = "n_continents")
+tab1_continents <- tab1_continents |>
+  bind_rows(tab1_missing_continents |> select(-region))
 
-## Create headers:
-tab1_continent_headers <- tab1_continents                |>
-  ungroup()                                              |>
-  distinct(continent)                                    |>
-  drop_na()                                              |>
-  expand_grid(type = c("n", "bool"))                     |>
-  unite(col = var_name, type, continent, remove = FALSE) |>
-  arrange(desc(type))                                    |>
-  transmute(
-    var_name,
-    header    = if_else(type == "n", "Nº of countries", "Continent"),
-    subheader = continent
-  )
 
-tab1_continents_wide <- tab1_continents |>
-  ungroup()                             |>
-  pivot_wider(names_from = continent, values_from = n:bool)
+# Subdivide "Americas" in "North America" and "Latin America & Caribbean"
 
-tab1_new <- tab1_new |> left_join(tab1_continents_wide, by = "id")
-```
-
-```{r wbdi-regions, eval=FALSE}
-# Create variable counts derivated from the countries variable
+## Create variable counts derivated from the countries variable:
 tab1_regions <- tab1_countries                   |>
   count(id, wbdi_region)                         |>
   complete(id, wbdi_region, fill = list(n = 0L)) |>
   mutate(bool = n |> as.logical())
 
-# Complete missing values with available information in `region`:
-tab1_missing_regions <- tab1_missing_countries                 |>
+## Complete missing values with available information in `region`:
+tab1_missing_regions <- tab1_missing_continents                |>
   select(everything(), -n, country = region)                   |>
   group_by(id, continent)                                      |>
   mutate(
@@ -473,9 +462,9 @@ tab1_missing_regions <- tab1_missing_countries                 |>
   left_join(CONTINENT_REGION_CORRESPONDENCE, by = "continent") |>
   # When possible, get the wbdi_region from the country name in `region`:
   mutate(
-    wbdi_region = country            |>
-      countrycode("iso3c", "region") |>
-      factor()                       |>
+    wbdi_region = country                   |>
+      countrycode("country.name", "region") |>
+      factor()                              |>
       coalesce(wbdi_region)
   )                                                            |>
   # Complete the missing regions when they are known to not be considered:
@@ -486,7 +475,7 @@ tab1_missing_regions <- tab1_missing_countries                 |>
   )                                                            |>
   # Discard duplicate cases when `wbdi_region` is univocally identified:
   distinct()                                                   |>
-  # Duplicate `TRUE` values of continents do not univocally map to regions:
+  # Duplicate `TRUE` values of continents that do not univocally map to regions:
   group_by(id, continent)                                      |>
   mutate(bool = if_else(bool & n() > 1L, NA, bool))            |>
   # Discard duplicates
@@ -495,22 +484,45 @@ tab1_missing_regions <- tab1_missing_countries                 |>
   # Collapse values from the same region:
   group_by(id, wbdi_region)                                    |>
   summarize(bool = any(bool), n = sum(n), .groups = "drop")
-  # # Duplicate values of regions are not univocal so are discarded:
-  # group_by(id, wbdi_region)                                    |>
-  # mutate(across(n:bool, ~ifelse(all(bool == first(bool)), ., NA)))             |>
-  # # Discard duplicate (i.e. ambiguous) cases:
-  # distinct(id, wbdi_region, bool, n)
 
-tab1_regions <- tab1_regions      |>
-  bind_rows(tab1_missing_regions) |>
-  group_by(id)                    |>
-  add_count(wt = bool, name = "n_wbdi_regions")
+tab1_regions <- tab1_regions |> bind_rows(tab1_missing_regions)
 
-tab1_regions_wide <- tab1_regions |>
+tab1_american_regions <- tab1_regions          |>
+  filter(wbdi_region |> str_detect("America")) |>
+  rename(continent = wbdi_region)
+
+## Collapse selected continents and regions:
+tab1_continents <- tab1_continents |>
+  filter(continent != "Americas")  |>
+  bind_rows(tab1_american_regions)
+
+
+# Add count of continents:
+tab1_continents <- tab1_continents |>
+  group_by(id)                     |>
+  add_count(wt = bool, name = "n_continents")
+
+# Create headers:
+tab1_continent_headers <- tab1_continents                |>
+  ungroup()                                              |>
+  distinct(continent)                                    |>
+  drop_na()                                              |>
+  expand_grid(type = c("n", "bool"))                     |>
+  unite(col = var_name, type, continent, remove = FALSE) |>
+  arrange(desc(type))                                    |>
+  transmute(
+    var_name,
+    header    = if_else(type == "n", "Nº of countries", "Continent"),
+    subheader = continent
+  )
+
+# Join with main table:
+
+tab1_continents_wide <- tab1_continents |>
   ungroup()                             |>
-  pivot_wider(names_from = wbdi_region, values_from = n:bool)
+  pivot_wider(names_from = continent, values_from = n:bool)
 
-# tab1_new <- tab1_new |> left_join(tab1_regions_wide, by = "id")
+tab1_new <- tab1_new |> left_join(tab1_continents_wide, by = "id")
 ```
 
 ```{r health-topic-derivate-vars}
@@ -615,7 +627,7 @@ tab1_new <- tab1_new |> left_join(tab1_analysis, by = "id")
 
 ```{r create-output-dataset}
 # Create formatted output table for the initiatives table:
-tab1_new_out <- tab1_new |> select(initiative:cohortcriteria)
+tab1_new_out <- tab1_new |> select(initiative:cohortcriteria_short)
 ```
 
 ```{r preprocess-descriptives}
@@ -686,7 +698,8 @@ suppressMessages( # Message when reading empty column names
     add_column( # Add variable names column
       var_name = tab1_new |>
         select(
-          -(id:region),
+          -(id:description),
+          -cohortcriteria,
           -(socioenvcontext:analysesother),
           -healthtopic,
           -countries,
@@ -751,7 +764,8 @@ initiatives_table_output <- tab1_new_out                  |>
   )                                                       |>
   merge_h(part = "header")                                |>
   merge_v(part = "header")                                |>
-  colformat_md(description)                               |>
+  colformat_num( na_str = MISSING_STR)                    |>
+  colformat_char(na_str = MISSING_STR)                    |>
   set_table_properties(layout = "autofit")
 ```
 
@@ -771,7 +785,10 @@ descriptives_table_output <- tab1_new_describe |> tbl_summary(
 
 ```{r compute-descriptive-values}
 # Total nº of initiatives:
-total_N_out <- descriptives_table_output |> extract2("N") |> as.english()
+total_N_out <- descriptives_table_output |>
+  extract2("N")                          |>
+  as.english()                           |>
+  as.character()
 
 # Maximum number of missing values in one descriptive variable:
 max_missing_out <- tab1_new_describe           |>
@@ -896,7 +913,8 @@ prop_ageing_out <- descriptives_table_output |>
 max_n_countries_out <- descriptives_table_output           |>
   inline_text(variable = "n_countries", pattern = "{max}") |>
   as.integer()                                             |>
-  as.english()
+  as.english()                                             |>
+  as.character()
 min_n_countries_out <- descriptives_table_output           |>
   inline_text(variable = "n_countries", pattern = "{min}") |>
   as.integer()                                             |>
@@ -916,9 +934,18 @@ prop_Europe_out <- descriptives_table_output |>
 n_Africa_out    <- descriptives_table_output             |>
   inline_text(variable = "bool_Africa", pattern = "{n}") |>
   as.integer()                                           |>
-  as.english()
+  as.english()                                           |>
+  as.character()
 prop_Africa_out <- descriptives_table_output |>
   inline_text(variable = "bool_Africa", pattern = "{p}%")
+
+n_Latam_out    <- descriptives_table_output                                 |>
+  inline_text(variable = "bool_Latin America & Caribbean", pattern = "{n}") |>
+  as.integer()                                                              |>
+  as.english()                                                              |>
+  as.character()
+prop_Latam_out <- descriptives_table_output |>
+  inline_text(variable = "bool_Latin America & Caribbean", pattern = "{p}%")
 ```
 
 ```{r uncache-descriptive-values, cache=FALSE, include=FALSE}
@@ -1069,9 +1096,10 @@ to just one continent,
 being Europe the most frequent (`r prop_Europe_out`),
 while only `r prop_5_continents_out` comprised cohorts from all
 five continents.
-Africa was the most underrepresented continent,
-with only `r n_Africa_out` initiatives (`r prop_Africa_out`) including cohorts
-from it.
+Latin America and Africa were the most underrepresented continents,
+with only `r n_Latam_out` (`r prop_Latam_out`)
+and `r n_Africa_out` (`r prop_Africa_out`)
+initiatives including cohorts from them.
 The complete descriptive information of the initiatives can be found in Table
 \@ref(tab:descriptives).
 Also, the most up-to-date information on each initiative can be consulted
@@ -1119,8 +1147,8 @@ feasible.
 Most of the initiatives were led by European and American institutions;
 as would be expected, most of the integrated cohorts were also collected in
 these two continents.
-Interestingly, very few of the initiatives included cohorts focused on Africa.
-<!-- # TODO: Include Latin America here after recoding continents? -->
+Interestingly, very few of the initiatives included cohorts focused
+on African and Latin American & Caribbean countries.
 Previous studies emphasize the relative lack of health studies conducted in
 low- and middle-income countries [LMICs, @lawlor_birth_2009].
 More representativeness of LMICs would be necessary to grant
