@@ -77,241 +77,6 @@ source("R/Output.R",    encoding = 'UTF-8')
 # SRC_FILEPATH %>% read_chunk()
 ```
 
-# Abstract
-
-**Introduction:** Health research increasingly requires the analysis of
-data across different cohorts;
-statistical power and representativeness are paramount to study
-infrequent conditions or specific groups of patients.
-Although the integration of cohorts is often difficult,
-several initiatives have done so.
-A map portraying a complete overview of this effort is missing.
-This paper aims to lay out the methodology and results of
-this mapping focusing on initiatives that integrate population cohorts.  
-**Methods:** Three different sources were used to search for the initiatives:
-1) A systematic search carried out in the MEDLINE database;
-2) suggestions of potential initiatives to be included in the mapping
-provided by partners of the SYNCHROS consortium who devised the mapping,
-and European Commission scientific officers; and
-3) descendent searches in the references and links of the initiatives obtained
-from the two previous sources.  
-**Results:** Fifty-eight initiatives that integrate population cohorts
-were found, although a significant proportion of their leading teams
-were inactive or unresponsive.
-Topics, socio-environmental contexts, and populations addressed were
-rather disparate, with high volumes of integrated data.
-Most of the initiatives were led by European and North American institutions,
-most of the integrated cohorts coming from these two areas as well.  
-**Conclusion:** The number of cohort integration initiatives is still low,
-especially compared with the large amount of cohort studies
-being carried out worldwide.
-The existing and new initiatives and cohort studies should strive toward
-improving transparency and availability of information.
-We expect that this mapping exercise enables researchers
-to integrate cohorts and find venues for collaborative research.
-
-**Keywords:** mapping; population cohorts; harmonization; integration
-
-\newpage
-
-# Introduction
-
-There has been a recent surge in scientific data collection
-in the healthcare domain [@roski_creating_2014].
-Several large-scale cohort studies have recently been or are being
-conducted nowadays around the globe:
-the Millennium Cohort Study [@connelly_cohort_2014],
-the Environmental Health Risks in European Birth Cohorts
-[@nieuwenhuijsen_environmental_2011],
-the Collaborative Research on Ageing in Europe
-[@leonardi_collaborative_2013],
-or the English Longitudinal Study of Ageing [@steptoe_cohort_2013]
-are popular examples.
-Integrating these individual cohorts is the next step to getting
-the most valuable information out of them.
-Cohort integration studies may increase sample sizes drastically,
-allowing the study of important but infrequent phenomena
-[e.g. rare diseases, @thompson_thinking_2009] while avoiding publication bias.
-The pressure is rapidly building up to keep up-to-date with
-integrating and capitalizing on this information,
-and several initiatives have joint forces for integrating cohorts
-from different studies
-[e.g. ATHLOS, @sanchez-niubo_data_2017; BioSHaRE, @kaye_consent_2016;
-CHICOS, @strandberg-larsen_association_2017; HELIX, @maitre_human_2018].
-However, methodological and infrastructure issues [@panahiazar_empowering_2014],
-as well as concerns about legal (i.e., data protection) and ethical aspects
-impose constraints that may hinder the potential benefits of
-these integration studies.
-An overview of what is being done to overcome these challenges is still missing
-in the scientific landscape.
-Systematizing this knowledge may help further integrate existing cohorts,
-as well as streamline the design and integration of future cohorts.
-
-In an attempt to expand and make these efforts more systematic,
-the European Commission called for a sustainable, strategic agenda for
-a better, global coordination of cohorts.
-The project
-*SYNergies for Cohorts in Health: integrating the ROle of all Stakeholders*
-(SYNCHROS) was funded by the Horizon 2020 Research and Innovation Program with
-the goal of formulating this strategy,
-through intensive stakeholder collaboration<!-- # TODO: Ref. needed?. -->.
-Among others, one of its first actions was the mapping of
-the cohort integration initiatives landscape
-across the world and in Europe especially.
-The objective was to obtain first-hand information about
-the methodologies and solutions implemented for integrating patient,
-clinical-trial, and population cohorts.
-
-The patient cohort landscape mapping has already been reported elsewhere
-[@rodriguez-laso_map_2021].
-This paper focuses on the state of the art in
-the integration of population cohorts.
-We present the methodology for gathering a collection of initiatives
-that have integrated such cohorts in the last twenty years,
-as well as the results and conclusions of this mapping exercise.
-
-# Methods
-
-## Identification of initiatives
-
-Three different methods were used
-to find initiatives that integrate population cohorts,
-The first one was a systematic search in the MEDLINE database.
-The second one consisted of asking the SYNCHROS consortium and
-scientific officers of the European Commission for suggestions on initiatives.
-The third was a descendent search using the information
-(references, descriptions, and links) from the two previous sources.
-
-## Database search in MEDLINE
-
-The search was intended to produce a representative,
-albeit non-exhaustive, list of cohort integration initiatives.
-An initial set of search terms were agreed upon by the consortium partners.
-In order to accomplish a manageable number of hits, these terms were tested and
-the ones that yielded more than 500 hits were discarded.
-(To reduce the number of hits, the term "cohort" was added
-to some searches before the discarding.)
-New terms were extracted from abstracts of relevant retrieved papers
-and tested again.
-To obtain the most recent scientific evidence,
-the search was limited to studies published in 2000 or later.
-The search was conducted in July 2019.
-The final search query was:
-
-```
-(cohort OR
-  “prospective study” OR
-  “longitudinal study” OR
-  "individual meta-analysis"[All Fields] OR
-  "individual participant data meta-analysis"[All Fields] OR
-  "individual patient data meta-analysis"[All Fields] OR
-  "individual meta analysis"[All Fields] OR
-  "individual participant data meta analysis"[All Fields] OR
-  "individual patient data meta analysis"[All Fields] OR
-  "meta analysis using individual"[All Fields] OR
-  "meta-analysis using individual"[All Fields] OR
-  "meta analysis of individual"[All Fields] OR
-  "meta-analysis of individual"[All Fields] OR
-  "mega-analysis"[All Fields] OR
-  "mega analysis"[All Fields])  
-AND  
-("harmonization study" OR
-  "integration study" OR
-  "integration initiative" OR
-  "integrated study" OR
-  "merged cohort" OR
-  "data pooling" OR
-  "pooled sample" OR
-  "combined data" OR
-  "combining data" OR
-  "harmonized data" OR
-  "harmonised data" OR
-  "harmonizing data" OR
-  "data harmonization" OR
-  "data harmonisation" OR
-  "data sharing" OR
-  "common database" OR
-  "multiple cohorts" OR
-  "multiple longitudinal studies" OR
-  "international consortium" OR
-  "collaborative effort").  
-AND  
-("2000/01/01"[Date - Publication] : "2019/07/31"[Date - Publication])  
-AND  
-English[Language]  
-AND  
-Humans[MeSH]
-```
-
-## Selection of initiatives
-
-**Inclusion criteria.** Initiatives published in English from 2000 to July 2019
-were included if they integrated health population cohorts of any age
-(birth, adolescents, adults, elderly, oldest old),
-and included sociodemographic, lifestyle, biological, genetic, omics
-(genomics, proteomics, metabolomics), imaging, or environment factors data.
-Additionally, at least one of the integrated cohorts had to
-have information about the sample at two or more time points.  
-  
-**Exclusion criteria.** Initiatives without available data about (or access to)
-their descriptive information
-(webpage, a main report describing the main aim(s) in detail) were excluded.
-Initiatives that integrated clinical trial cohorts and/or patient cohorts
-are the subject of another publication [@rodriguez-laso_map_2021]
-and thus were also excluded.
-
-For all the initiatives found, a double-check was performed by
-two different researchers in order to carry out an objective evaluation and
-reduce the risk of bias.
-In case of discrepancy between the two reviewers, a third person was consulted.
-
-## Data extraction and analysis
-
-The following technical information was extracted from the initiatives:
-name, principal investigator (PI), initiative partners,
-name of the leading institution,
-contact person, information source, whether the research team
-was active at the time of consultation, main objectives,
-criteria for the cohorts to be included,
-funding resources (public/private/mixed),
-and a brief description of the population addressed.
-When the information was not available through the website or
-published articles,
-the principal investigator and/or the contact person of the project
-was consulted, by email first and, if no reply was received,
-by telephone or postal mail.
-
-Some variables were collected in order to describe the harmonization process,
-namely: harmonization strategy
-(prospective/retrospective ex-ante/retrospective ex-post),
-number of harmonized cohorts,
-whether more cohorts were foreseen to be harmonized,
-number of participants with harmonized data,
-maximum number of harmonized variables
-(including those where harmonization was not possible for all the cohorts),
-setting of the harmonized cohorts (local-regional/national/international),
-The following variables were deemed relevant for the integration effort and
-thus were also collected for each initiative:
-total number of cohorts, total number of participants, age range of the sample,
-country/ies included, whether metadata and individual data were accessible to
-other researchers, whether biological (omics) samples had been collected,
-research topics and socio-environmental contexts addressed,
-and type(s) of aggregated analyses performed on the integrated cohorts
-(pooled, federated, or meta-analysis).
-
-The country where the leading institution was based and the countries
-included in the integrated cohorts were recoded into continents
-(`r VECTOR_CONTINENTS_AMERICAS_SEP_PRINT`).
-For all the variables, descriptive statistics were computed when appropriate:
-absolute frequencies and proportions (over number of non-missing values)
-for the categorical variables;
-median, minimum and maximum for the quantitative ones.
-In the case of the number of participants with harmonized data and
-the maximum number of harmonized variables, the statistics were computed
-using only the initiatives with harmonized cohorts.
-
-# Results
-
 ```{r load-data}
 # N.B.: Correspondence with the generating dataset
 #   (see `notebooks/Update_initiatives.Rmd` and
@@ -1016,7 +781,245 @@ prop_Europe_out
 
 n_Africa_out
 prop_Africa_out
+
+n_Latam_out
+prop_Latam_out
 ```
+
+# Abstract
+
+**Introduction:** Health research increasingly requires the analysis of
+data across different cohorts;
+statistical power and representativeness are paramount to study
+infrequent conditions or specific groups of patients.
+Although the integration of cohorts is often difficult,
+several initiatives have done so.
+A map portraying a complete overview of this effort is missing.
+This paper aims to lay out the methodology and results of
+this mapping focusing on initiatives that integrate population cohorts.  
+**Methods:** Three different sources were used to search for the initiatives:
+1) A systematic search carried out in the MEDLINE database;
+2) suggestions of potential initiatives to be included in the mapping
+provided by partners of the SYNCHROS consortium who devised the mapping,
+and European Commission scientific officers; and
+3) descendent searches in the references and links of the initiatives obtained
+from the two previous sources.  
+**Results:** `r total_N_out` initiatives that integrate population cohorts
+were found, although a significant proportion of their leading teams
+were inactive or unresponsive.
+Topics, socio-environmental contexts, and populations addressed were
+rather disparate, with high volumes of integrated data.
+Most of the initiatives were led by European and North American institutions,
+most of the integrated cohorts coming from these two areas as well.  
+**Conclusion:** The number of cohort integration initiatives is still low,
+especially compared with the large amount of cohort studies
+being carried out worldwide.
+The existing and new initiatives and cohort studies should strive toward
+improving transparency and availability of information.
+We expect that this mapping exercise enables researchers
+to integrate cohorts and find venues for collaborative research.
+
+**Keywords:** mapping; population cohorts; harmonization; integration
+
+\newpage
+
+# Introduction
+
+There has been a recent surge in scientific data collection
+in the healthcare domain [@roski_creating_2014].
+Several large-scale cohort studies have recently been or are being
+conducted nowadays around the globe:
+the Millennium Cohort Study [@connelly_cohort_2014],
+the Environmental Health Risks in European Birth Cohorts
+[@nieuwenhuijsen_environmental_2011],
+the Collaborative Research on Ageing in Europe
+[@leonardi_collaborative_2013],
+or the English Longitudinal Study of Ageing [@steptoe_cohort_2013]
+are popular examples.
+Integrating these individual cohorts is the next step to getting
+the most valuable information out of them.
+Cohort integration studies may increase sample sizes drastically,
+allowing the study of important but infrequent phenomena
+[e.g. rare diseases, @thompson_thinking_2009] while avoiding publication bias.
+The pressure is rapidly building up to keep up-to-date with
+integrating and capitalizing on this information,
+and several initiatives have joint forces for integrating cohorts
+from different studies
+[e.g. ATHLOS, @sanchez-niubo_data_2017; BioSHaRE, @kaye_consent_2016;
+CHICOS, @strandberg-larsen_association_2017; HELIX, @maitre_human_2018].
+However, methodological and infrastructure issues [@panahiazar_empowering_2014],
+as well as concerns about legal (i.e., data protection) and ethical aspects
+impose constraints that may hinder the potential benefits of
+these integration studies.
+An overview of what is being done to overcome these challenges is still missing
+in the scientific landscape.
+Systematizing this knowledge may help further integrate existing cohorts,
+as well as streamline the design and integration of future cohorts.
+
+In an attempt to expand and make these efforts more systematic,
+the European Commission called for a sustainable, strategic agenda for
+a better, global coordination of cohorts.
+The project
+*SYNergies for Cohorts in Health: integrating the ROle of all Stakeholders*
+(SYNCHROS) was funded by the Horizon 2020 Research and Innovation Program with
+the goal of formulating this strategy,
+through intensive stakeholder collaboration<!-- # TODO: Ref. needed?. -->.
+Among others, one of its first actions was the mapping of
+the cohort integration initiatives landscape
+across the world and in Europe especially.
+The objective was to obtain first-hand information about
+the methodologies and solutions implemented for integrating patient,
+clinical-trial, and population cohorts.
+
+The patient cohort landscape mapping has already been reported elsewhere
+[@rodriguez-laso_map_2021].
+This paper focuses on the state of the art in
+the integration of population cohorts.
+We present the methodology for gathering a collection of initiatives
+that have integrated such cohorts in the last twenty years,
+as well as the results and conclusions of this mapping exercise.
+
+# Methods
+
+## Identification of initiatives
+
+Three different methods were used
+to find initiatives that integrate population cohorts,
+The first one was a systematic search in the MEDLINE database.
+The second one consisted of asking the SYNCHROS consortium and
+scientific officers of the European Commission for suggestions on initiatives.
+The third was a descendent search using the information
+(references, descriptions, and links) from the two previous sources.
+
+## Database search in MEDLINE
+
+The search was intended to produce a representative,
+albeit non-exhaustive, list of cohort integration initiatives.
+An initial set of search terms were agreed upon by the consortium partners.
+In order to accomplish a manageable number of hits, these terms were tested and
+the ones that yielded more than 500 hits were discarded.
+(To reduce the number of hits, the term "cohort" was added
+to some searches before the discarding.)
+New terms were extracted from abstracts of relevant retrieved papers
+and tested again.
+To obtain the most recent scientific evidence,
+the search was limited to studies published in 2000 or later.
+The search was conducted in July 2019.
+The final search query was:
+
+```
+(cohort OR
+  “prospective study” OR
+  “longitudinal study” OR
+  "individual meta-analysis"[All Fields] OR
+  "individual participant data meta-analysis"[All Fields] OR
+  "individual patient data meta-analysis"[All Fields] OR
+  "individual meta analysis"[All Fields] OR
+  "individual participant data meta analysis"[All Fields] OR
+  "individual patient data meta analysis"[All Fields] OR
+  "meta analysis using individual"[All Fields] OR
+  "meta-analysis using individual"[All Fields] OR
+  "meta analysis of individual"[All Fields] OR
+  "meta-analysis of individual"[All Fields] OR
+  "mega-analysis"[All Fields] OR
+  "mega analysis"[All Fields])  
+AND  
+("harmonization study" OR
+  "integration study" OR
+  "integration initiative" OR
+  "integrated study" OR
+  "merged cohort" OR
+  "data pooling" OR
+  "pooled sample" OR
+  "combined data" OR
+  "combining data" OR
+  "harmonized data" OR
+  "harmonised data" OR
+  "harmonizing data" OR
+  "data harmonization" OR
+  "data harmonisation" OR
+  "data sharing" OR
+  "common database" OR
+  "multiple cohorts" OR
+  "multiple longitudinal studies" OR
+  "international consortium" OR
+  "collaborative effort").  
+AND  
+("2000/01/01"[Date - Publication] : "2019/07/31"[Date - Publication])  
+AND  
+English[Language]  
+AND  
+Humans[MeSH]
+```
+
+## Selection of initiatives
+
+**Inclusion criteria.** Initiatives published in English from 2000 to July 2019
+were included if they integrated health population cohorts of any age
+(birth, adolescents, adults, elderly, oldest old),
+and included sociodemographic, lifestyle, biological, genetic, omics
+(genomics, proteomics, metabolomics), imaging, or environment factors data.
+Additionally, at least one of the integrated cohorts had to
+have information about the sample at two or more time points.  
+  
+**Exclusion criteria.** Initiatives without available data about (or access to)
+their descriptive information
+(webpage, a main report describing the main aim(s) in detail) were excluded.
+Initiatives that integrated clinical trial cohorts and/or patient cohorts
+are the subject of another publication [@rodriguez-laso_map_2021]
+and thus were also excluded.
+
+For all the initiatives found, a double-check was performed by
+two different researchers in order to carry out an objective evaluation and
+reduce the risk of bias.
+In case of discrepancy between the two reviewers, a third person was consulted.
+
+## Data extraction and analysis
+
+The following technical information was extracted from the initiatives:
+name, principal investigator (PI), initiative partners,
+name of the leading institution,
+contact person, information source, whether the research team
+was active at the time of consultation, main objectives,
+criteria for the cohorts to be included,
+funding resources (public/private/mixed),
+and a brief description of the population addressed.
+When the information was not available through the website or
+published articles,
+the principal investigator and/or the contact person of the project
+was consulted, by email first and, if no reply was received,
+by telephone or postal mail.
+
+Some variables were collected in order to describe the harmonization process,
+namely: harmonization strategy
+(prospective/retrospective ex-ante/retrospective ex-post),
+number of harmonized cohorts,
+whether more cohorts were foreseen to be harmonized,
+number of participants with harmonized data,
+maximum number of harmonized variables
+(including those where harmonization was not possible for all the cohorts),
+setting of the harmonized cohorts (local-regional/national/international),
+The following variables were deemed relevant for the integration effort and
+thus were also collected for each initiative:
+total number of cohorts, total number of participants, age range of the sample,
+country/ies included, whether metadata and individual data were accessible to
+other researchers, whether biological (omics) samples had been collected,
+research topics and socio-environmental contexts addressed,
+and type(s) of aggregated analyses performed on the integrated cohorts
+(pooled, federated, or meta-analysis).
+
+The country where the leading institution was based and the countries
+included in the integrated cohorts were recoded into continents
+(`r VECTOR_CONTINENTS_AMERICAS_SEP_PRINT`).
+For all the variables, descriptive statistics were computed when appropriate:
+absolute frequencies and proportions (over number of non-missing values)
+for the categorical variables;
+median, minimum and maximum for the quantitative ones.
+In the case of the number of participants with harmonized data and
+the maximum number of harmonized variables, the statistics were computed
+using only the initiatives with harmonized cohorts.
+
+# Results
 
 The flowchart diagram in Figure \@ref(fig:flowchart) summarizes the initiatives
 included and excluded using the three methods.
