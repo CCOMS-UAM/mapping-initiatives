@@ -554,6 +554,7 @@ total_N_out <- descriptives_table_output |>
   extract2("N")                          |>
   as.english()                           |>
   as.character()
+total_N_out_sentence_case <- total_N_out |> str_to_sentence()
 
 # Maximum number of missing values in one descriptive variable:
 max_missing_out <- tab1_new_describe           |>
@@ -804,9 +805,9 @@ provided by partners of the SYNCHROS consortium who devised the mapping,
 and European Commission scientific officers; and
 3) descendent searches in the references and links of the initiatives obtained
 from the two previous sources.  
-**Results:** `r total_N_out` initiatives that integrate population cohorts
-were found, although a significant proportion of their leading teams
-were inactive or unresponsive.
+**Results:** `r total_N_out_sentence_case` initiatives that
+integrate population cohorts were found, although a significant proportion of
+their leading teams were inactive or unresponsive.
 Topics, socio-environmental contexts, and populations addressed were
 rather disparate, with high volumes of integrated data.
 Most of the initiatives were led by European and North American institutions,
