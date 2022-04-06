@@ -696,10 +696,16 @@ min_n_countries_out <- descriptives_table_output           |>
   as.character()
 
 # Nº of continents
-prop_1_continent_out  <- descriptives_table_output |>
+
+tab1_n_continents <- tab1_new |>
+  select(n_continents)        |>
+  tbl_summary()
+
+prop_1_continent_out  <- tab1_n_continents |>
   inline_text(variable = "n_continents", level = "1", pattern = "{p}%")
-prop_5_continents_out <- descriptives_table_output |>
-  inline_text(variable = "n_continents", level = "5", pattern = "{p}%")
+prop_6_continents_out <- tab1_n_continents |>
+  inline_text(variable = "n_continents", level = "6", pattern = "{p}%")
+
 
 # Nº of initiatives per region
 prop_Europe_out <- descriptives_table_output |>
@@ -783,7 +789,7 @@ min_n_countries_out
 
 # Nº of continents
 prop_1_continent_out
-prop_5_continents_out
+prop_6_continents_out
 
 # Nº of initiatives per region
 prop_Europe_out
@@ -1106,8 +1112,8 @@ only `r min_n_countries_out` country.
 Most of them (`r prop_1_continent_out`) were circumscribed
 to just one continent,
 being Europe the most frequent (`r prop_Europe_out`),
-while only `r prop_5_continents_out` comprised cohorts from all
-five continents.
+while only `r prop_6_continents_out` comprised cohorts from all
+six continents.
 Latin America and Africa were the most underrepresented continents,
 with only `r n_Latam_out` (`r prop_Latam_out`)
 and `r n_Africa_out` (`r prop_Africa_out`)
