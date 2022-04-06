@@ -58,7 +58,7 @@ set_flextable_defaults(
 ```
 
 ```{r load-chunks, cache=FALSE}
-SRC_FILEPATH %>% read_chunk()
+SRC_FILEPATH |> read_chunk()
 ```
 
 ```{r includes, cache=FALSE}

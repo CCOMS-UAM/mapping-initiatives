@@ -508,8 +508,57 @@ descriptives_table_output <- tab1_new_describe |> tbl_summary(
 ) |>
   modify_header(label ~ "**Variable**")
 
+descriptives_part_1 <- tab1_new_describe |> tbl_summary(
+  statistic    = list(
+    all_continuous()  ~ "{median}",
+    all_categorical() ~ "{n}"
+  ),
+  missing_text = "(Missing)"
+  # sort = # TODO: Does not seem to work
+)
+
+descriptives_part_2 <- tab1_new_describe |> tbl_summary(
+  statistic    = list(
+    all_continuous()  ~ "({min} - {max})",
+    all_categorical() ~ "({p}%)"
+  ),
+  digits       = list(all_categorical() ~ 1),
+  missing      = "no",
+  missing_text = "(Missing)"
+  # sort = # TODO: Does not seem to work
+)
+
+descriptives_total <- descriptives_part_1 |>
+  extract2("table_body")                  |>
+  full_join(
+    descriptives_part_2      |>
+      extract2("table_body") |>
+      select(stat_1 = stat_0, everything()),
+    by = c("variable", "var_type", "var_label", "row_type", "label")
+  )
+
 ## TODO: Possibly convert to "tibble"
-# descriptives_table_output
+descriptives_total <- descriptives_total |>
+  rename(var_name = variable, header = var_label, subheader = label)
+
+descriptive_labels <- tab1_headers |>
+  semi_join(descriptives_total, by = "var_name") |>
+  select(-label)
+
+descriptives_total |>
+  slice(-c(101, 103)) |> # Repeated "missings" in analysis
+  rows_update(descriptive_labels, by = c("var_name", "subheader")) |>
+  # rows_update(tab1_context_headers, by = c("var_name", "subheader")) |>
+  # rows_update(tab1_analysis_headers, by = c("var_name", "subheader")) |>
+  # rows_update(
+  #   tab1_continent_headers |> filter(var_name |> str_detect("^bool_")),
+  #   by = c("var_name", "subheader")
+  # ) |>
+  select(header:stat_1, -row_type) |>
+  filter(!is.na(stat_0)) |>
+  flextable() |>
+  merge_h() |>
+  merge_v(j = 1)
 
 
 ## ----compute-descriptive-values-----------------------------------------------
