@@ -73,13 +73,14 @@ COLON               <- ': '
 SEMICOLON           <- ';'
 SEMICOLON_SEP       <- glue('{SEMICOLON}{SPACE}')
 AND_CONJUNCTION     <- " and "
-OXFORD_COMMA        <- glue("{COMMA}{AND_CONJUNCTION}")
+OR_CONJUNCTION      <- " or "
+OXFORD_COMMA_AND    <- glue("{COMMA}{AND_CONJUNCTION}")
+OXFORD_COMMA_OR     <- glue("{COMMA}{OR_CONJUNCTION}")
 ASTERISK            <- '*'
 COL_PREFFIX         <- "col_"
 ELLIPSIS            <- "..."
 AUTO_VARNAME_PREFIX <- ELLIPSIS
 MISSING_STR         <- "(NA)"
-
 
 ### Regular expressions:
 AUTO_VARNAME_PREFIX_REGEXP     <- r"(^\.\.\.)"
@@ -92,6 +93,29 @@ UPPERCASE_LETTERS_BEGIN_REGEXP <- "^[A-Z]+"
 UPDATE_VARS_CHARCLASS_REGEXP   <- glue("[{SPACE}{SLASH}{DASH}]")
 ANALYSES_SUFFIX_REGEXP         <- glue("[{SPACE}{DASH}]analyses")
 PIPE_REGEXP                    <- glue("\\{PIPE}")
+
+
+### Factor labels:
+
+# Funding:
+PUBLIC_FUNDING       <- "Public"
+PRIVATE_FUNDING      <- "Private"
+MIXED_FUNDING        <- "Mixed public/private"
+FUNDING_LABELS       <- c(PUBLIC_FUNDING, PRIVATE_FUNDING, MIXED_FUNDING)
+FUNDING_LEVS_OLD     <- c("Public institution", "Private", "Mix") |>
+  set_names(FUNDING_LABELS)
+FUNDING_LABELS_PRINT <- FUNDING_LABELS |>
+  str_to_lower()                       |>
+  glue_collapse(sep = COMMA_SEP, last = OXFORD_COMMA_OR)
+
+# Access to data:
+ACCESS_LEVELS <- c("Yes", "No", "Under request")
+
+
+### Table headers:
+TOPIC_HEADER    <- "Topic"
+SOCENV_HEADER   <- "Socio-environmental context"
+ANALYSIS_HEADER <- "Analysis"
 
 ### Country processing objects:
 
@@ -117,11 +141,11 @@ VECTOR_CONTINENTS_AMERICAS_SEP <- VECTOR_CONTINENTS |>
   append(VECTOR_REGIONS |> str_subset("America"))
 
 VECTOR_CONTINENTS_AMERICAS_SEP_PRINT <- VECTOR_CONTINENTS_AMERICAS_SEP |>
-  glue_collapse(sep = COMMA_SEP, last = OXFORD_COMMA)
+  glue_collapse(sep = COMMA_SEP, last = )
 
 # (Necessary to process these names for literal output)
 COUNTRYNAME_ACRONYMS <- c("UK", "USA")
 
-## Columns that need to be converted to free text:
+### Columns that need to be converted to free text:
 FREE_TEXT_COLS      <- c("description", "cohortCriteria")
 FT_CONDENSED_SUFFIX <- "short"

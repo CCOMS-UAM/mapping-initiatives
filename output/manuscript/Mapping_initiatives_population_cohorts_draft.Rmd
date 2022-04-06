@@ -122,7 +122,13 @@ tab1_new <- tab1_new |> mutate(
     str_replace, pattern = UNDERSCORE, replacement = SPACE
   ),
   across(all_of(FACTOR_VARS), str_to_sentence),
+  # Preprocess factor variables:
   across(all_of(FACTOR_VARS), factor),
+  funding = funding                 |> # Funding recoding
+    fct_expand("Private")           |>
+    fct_recode(!!!FUNDING_LEVS_OLD) |>
+    fct_relevel(FUNDING_LABELS),
+  across(starts_with("access."), fct_relevel, ACCESS_LEVELS),
   # Compute continent of leading institution:
   across(country_institution, recode, Southafrica = "South Africa"),
   continent_institution = country_institution                       |>
@@ -328,8 +334,8 @@ tab1_context_headers <- tab1_context |>
   drop_na()                          |>
   distinct(socioenvcontext)          |>
   transmute(
-    var_name  = socioenvcontext,
-    header    = "Socio-environmental context",
+    var_name  = paste0("context_", socioenvcontext),
+    header    = SOCENV_HEADER,
     subheader = socioenvcontext                                  |>
       str_replace(
         pattern     = "work_",
@@ -343,14 +349,15 @@ tab1_context_headers <- tab1_context |>
       str_to_sentence()
   )
 
-tab1_context <- tab1_context                                |>
-  mutate(value = TRUE)                                      |>
-  complete(id, socioenvcontext, fill = list(value = FALSE)) |>
-  drop_na()                                                 |>
-  pivot_wider(names_from = socioenvcontext, values_from = value)
+tab1_context_wide <- tab1_context                                |>
+  mutate(value = TRUE)                                           |>
+  complete(id, socioenvcontext, fill = list(value = FALSE))      |>
+  drop_na()                                                      |>
+  pivot_wider(names_from = socioenvcontext, values_from = value) |>
+  select(id, everything(), -other, other)                        |>
+  rename_with(~paste0("context_", .), .cols = -id)
 
-
-tab1_new <- tab1_new |> left_join(tab1_context, by = "id")
+tab1_new <- tab1_new |> left_join(tab1_context_wide, by = "id")
 ```
 
 ```{r socioenvcontext-other-values}
@@ -376,18 +383,19 @@ tab1_analysis_headers <- tab1_analysis |>
   drop_na()                            |>
   distinct(analyses)                   |>
   transmute(
-    var_name  = analyses,
-    header    = "Analysis",
+    var_name  = paste0("analysis_", analyses),
+    header    = ANALYSIS_HEADER,
     subheader = analyses |> str_to_sentence()
   )
 
-tab1_analysis <- tab1_analysis                       |>
-  mutate(value = TRUE)                               |>
-  complete(id, analyses, fill = list(value = FALSE)) |>
-  drop_na()                                          |>
-  pivot_wider(names_from = analyses, values_from = value)
+tab1_analysis_wide <- tab1_analysis                       |>
+  mutate(value = TRUE)                                    |>
+  complete(id, analyses, fill = list(value = FALSE))      |>
+  drop_na()                                               |>
+  pivot_wider(names_from = analyses, values_from = value) |>
+  rename_with(~paste0("analysis_", .), .cols = -id)
 
-tab1_new <- tab1_new |> left_join(tab1_analysis, by = "id")
+tab1_new <- tab1_new |> left_join(tab1_analysis_wide, by = "id")
 ```
 
 ```{r create-output-dataset}
@@ -469,7 +477,7 @@ suppressMessages( # Message when reading empty column names
           -healthtopic,
           -countries,
           -country_institution,
-          -(n_Africa:pooled)
+          -(n_Africa:analysis_pooled)
         )                 |>
         colnames()
     )
@@ -605,12 +613,12 @@ country_institution_ranking_next_out <- country_institution_ranking_next |>
 # Funding sources:
 funding_public_out <- descriptives_table_output |> inline_text(
   variable = "funding",
-  level    = "Public institution",
+  level    = sym(PUBLIC_FUNDING),
   pattern  = "{p}%"
 )
 funding_mixed_out  <- descriptives_table_output |> inline_text(
   variable = "funding",
-  level    = "Mix",
+  level    = sym(MIXED_FUNDING),
   pattern  = "{p}%"
 )
 
@@ -631,11 +639,11 @@ harmo_max_prop_out <- descriptives_table_output |> inline_text(
 
 # Analysis:
 analysis_pooled_out    <- descriptives_table_output |>
-  inline_text(variable = "pooled",    pattern = "{p}%")
+  inline_text(variable = "analysis_pooled",    pattern = "{p}%")
 analysis_meta_out      <- descriptives_table_output |>
-  inline_text(variable = "meta",      pattern = "{p}%")
+  inline_text(variable = "analysis_meta",      pattern = "{p}%")
 analysis_federated_out <- descriptives_table_output |>
-  inline_text(variable = "federated", pattern = "{p}%")
+  inline_text(variable = "analysis_federated", pattern = "{p}%")
 
 # Omics:
 omics_out <- descriptives_table_output |>
@@ -673,7 +681,7 @@ max_age_max_out  <- descriptives_table_output |>
 
 # Topics:
 prop_ageing_out <- descriptives_table_output |>
-  inline_text(variable = "ageing", pattern = "{p}%")
+  inline_text(variable = "topic_ageing", pattern = "{p}%")
 
 # Nº of countries:
 max_n_countries_out <- descriptives_table_output           |>
@@ -983,7 +991,7 @@ name of the leading institution,
 contact person, information source, whether the research team
 was active at the time of consultation, main objectives,
 criteria for the cohorts to be included,
-funding resources (public/private/mixed),
+funding resources (`r FUNDING_LABELS_PRINT`),
 and a brief description of the population addressed.
 When the information was not available through the website or
 published articles,
