@@ -297,16 +297,16 @@ tab1_new <- tab1_new |> left_join(tab1_continents_wide, by = "id")
 ```
 
 ```{r health-topic-derivate-vars}
-tab1_topics <- tab1_new                         |>
-  separate_rows(healthtopic, sep = PIPE_REGEXP) |>
+tab1_topics <- tab1_new                             |>
+  separate_rows(healthtopic, sep = PIPE_REGEXP)     |>
   select(id, healthtopic)
 
 tab1_topic_headers <- tab1_topics |>
   drop_na()                       |>
   distinct(healthtopic)           |>
   transmute(
-    var_name  = healthtopic,
-    header    = "Topic",
+    var_name  = paste0("topic_", healthtopic),
+    header    = TOPIC_HEADER,
     subheader = healthtopic                                      |>
       str_replace(
         pattern     = "birth_infancy_childhood_health",
@@ -316,13 +316,25 @@ tab1_topic_headers <- tab1_topics |>
       str_to_sentence()
   )
 
-tab1_topics <- tab1_topics                              |>
-  mutate(value = TRUE)                                  |>
-  complete(id, healthtopic, fill = list(value = FALSE)) |>
-  drop_na()                                             |>
-  pivot_wider(names_from  = healthtopic, values_from = value)
+tab1_topics_wide <- tab1_topics                               |>
+  mutate(value = TRUE)                                        |>
+  complete(id, healthtopic, fill = list(value = FALSE))       |>
+  drop_na()                                                   |>
+  pivot_wider(names_from  = healthtopic, values_from = value) |>
+  # Reorder according to Angel's suggestion (email from 21/03/2022)
+  select(
+    chronic_diseases, non_communicable_diseases,
+    cancer,
+    ends_with("_diseases"), # All diseases
+    biomedicine, general_epidemiology, public_health,
+    ageing, ends_with("_health"),
+    social_environment,
+    medical_imaging,
+    everything()
+  )                                                           |>
+  rename_with(~paste0("topic_", .), .cols = -id)
 
-tab1_new <- tab1_new |> left_join(tab1_topics, by = "id")
+tab1_new <- tab1_new |> left_join(tab1_topics_wide, by = "id")
 ```
 
 ```{r socioenvcontext-derivate-vars}
