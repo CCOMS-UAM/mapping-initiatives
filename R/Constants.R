@@ -81,6 +81,7 @@ COL_PREFFIX         <- "col_"
 ELLIPSIS            <- "..."
 AUTO_VARNAME_PREFIX <- ELLIPSIS
 MISSING_STR         <- "(NA)"
+MISSING_LABEL       <- "(Missing)"
 
 ### Regular expressions:
 AUTO_VARNAME_PREFIX_REGEXP     <- r"(^\.\.\.)"

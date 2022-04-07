@@ -50,15 +50,16 @@ opts_chunk$set(
 )
 
 # Output formatting options:
-theme_gtsummary_compact()
 set_flextable_defaults(
-  font.family = "Times New Roman",
-  post_process_docx = theme_booktabs
+  font.family       = "Times New Roman",
+  font.size         = 8,
+  padding.top       = 1,
+  padding.bottom    = 0
 )
 ```
 
 ```{r load-chunks, cache=FALSE}
-SRC_FILEPATH |> read_chunk()
+SRC_FILEPATH %>% read_chunk()
 ```
 
 ```{r includes, cache=FALSE}
@@ -91,7 +92,7 @@ SRC_FILEPATH |> read_chunk()
 ```{r create-headers-labels}
 ```
 
-```{r descriptive-table}
+```{r descriptives-table}
 ```
 
 ```{r compute-descriptive-values}
@@ -345,7 +346,6 @@ and included sociodemographic, lifestyle, biological, genetic, omics
 (genomics, proteomics, metabolomics), imaging, or environment factors data.
 Additionally, at least one of the integrated cohorts had to
 have information about the sample at two or more time points.  
-  
 **Exclusion criteria.** Initiatives without available data about (or access to)
 their descriptive information
 (webpage, a main report describing the main aim(s) in detail) were excluded.
@@ -619,7 +619,7 @@ initiatives_table_output
 
 \newpage
 
-```{r descriptives, tab.id="descriptives", tab.cap="Descriptive statistics of the initiatives mapped.", results='asis'}
+```{r descriptives, cache=FALSE, tab.id="descriptives", tab.cap="Descriptive statistics of the initiatives mapped.", results='asis'}
 descriptives_table_output
 ```
 

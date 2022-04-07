@@ -13,6 +13,7 @@
 ## ---- MAIN: ------------------------------------------------------------------
 
 # Environment setup:
+rm(list = ls())
 gc()
 
 ## ----includes, cache=FALSE----------------------------------------------------
@@ -411,7 +412,8 @@ suppressMessages( # Message when reading empty column names
           "Age"             |> rep(2),
           "Nº of countries",# n_countries
           "Setting",
-          "Access to" |> rep(2),
+          "Access to metadata",
+          "Access to individual data",
           "Harmonization strategy",
           "With omics data",
           "Team active (at consultation)",
@@ -482,7 +484,7 @@ tab1_new <- tab1_new |> imap_dfc(# Labels to assign to the columns
 )
 
 
-## ----descriptive-table--------------------------------------------------------
+## ----descriptives-table-------------------------------------------------------
 # Select and order data for table of descriptives:
 tab1_new_describe <- tab1_new |> select(
   team_activity, continent_institution, funding,
@@ -500,21 +502,14 @@ tab1_new_describe <- tab1_new |> select(
   starts_with("analysis_")
 )
 
-descriptives_table_output <- tab1_new_describe |> tbl_summary(
-  statistic    = list(all_continuous()  ~ "{median} ({min} - {max})"),
-  digits       = list(all_categorical() ~ c(0, 1)),
-  missing_text = "(Missing)"
-  # sort = # TODO: Does not seem to work
-) |>
-  modify_header(label ~ "**Variable**")
-
+# `tbl_summary` does not provide all the necessary functionality,
+#   so the table of descriptives is composed piecewise.
 descriptives_part_1 <- tab1_new_describe |> tbl_summary(
   statistic    = list(
     all_continuous()  ~ "{median}",
     all_categorical() ~ "{n}"
   ),
-  missing_text = "(Missing)"
-  # sort = # TODO: Does not seem to work
+  missing_text = MISSING_LABEL
 )
 
 descriptives_part_2 <- tab1_new_describe |> tbl_summary(
@@ -524,48 +519,64 @@ descriptives_part_2 <- tab1_new_describe |> tbl_summary(
   ),
   digits       = list(all_categorical() ~ 1),
   missing      = "no",
-  missing_text = "(Missing)"
-  # sort = # TODO: Does not seem to work
+  missing_text = MISSING_LABEL
 )
 
-descriptives_total <- descriptives_part_1 |>
-  extract2("table_body")                  |>
+descriptives_total <- descriptives_part_1                                |>
+  extract2("table_body")                                                 |>
   full_join(
     descriptives_part_2      |>
       extract2("table_body") |>
       select(stat_1 = stat_0, everything()),
     by = c("variable", "var_type", "var_label", "row_type", "label")
-  )
+  )                                                                      |>
+  rename(var_name = variable)                                            |>
+  # Assign variable headers as variable labels:
+  left_join(tab1_headers |> select(-label, -subheader), by = "var_name") |>
+  # Group these types of variables into one variable:
+  mutate(
+    var_label = header %in% c("Analysis", "Continent", "Age") |>
+      if_else(true = header, false = var_label)
+  )                                                                      |>
+  # Discard repeated "missings" in analyses:
+  slice(-c(101, 103))                                                    |>
+  # Discards "variable" rows (unnecessary vertical space):
+  filter(!is.na(stat_0))
 
-## TODO: Possibly convert to "tibble"
-descriptives_total <- descriptives_total |>
-  rename(var_name = variable, header = var_label, subheader = label)
+var_groups <- descriptives_total |> pull(header)
 
-descriptive_labels <- tab1_headers |>
-  semi_join(descriptives_total, by = "var_name") |>
-  select(-label)
+descriptives_total <- descriptives_total                                 |>
+  # For formatting output purrposes:
+  group_by(var_label)                                                    |>
+  mutate(
+    header = (n() == 2 & label == MISSING_LABEL) |>
+      if_else(true = NA_character_, false = header)
+  )                                                                      |>
+  ungroup()                                                              |>
+  select(header, label:stat_1)
 
-descriptives_total |>
-  slice(-c(101, 103)) |> # Repeated "missings" in analysis
-  rows_update(descriptive_labels, by = c("var_name", "subheader")) |>
-  # rows_update(tab1_context_headers, by = c("var_name", "subheader")) |>
-  # rows_update(tab1_analysis_headers, by = c("var_name", "subheader")) |>
-  # rows_update(
-  #   tab1_continent_headers |> filter(var_name |> str_detect("^bool_")),
-  #   by = c("var_name", "subheader")
-  # ) |>
-  select(header:stat_1, -row_type) |>
-  filter(!is.na(stat_0)) |>
-  flextable() |>
-  merge_h() |>
-  merge_v(j = 1)
+descriptives_header <- tibble(
+  col_keys  = descriptives_total |> colnames(),
+  names     = c("Variable", "Level", "Median / n", "(Range / %)")
+)
+
+descriptives_table_output <- descriptives_total |>
+  flextable()                                   |>
+  set_header_df(descriptives_header)            |>
+  merge_h()                                     |>
+  merge_v("header")                             |>
+  theme_booktabs(bold_header = TRUE)            |>
+  hline(i = var_groups != lead(var_groups))     |>
+  align(j = "stat_0", align = "right", part = "all") |>
+  valign(valign = "top")                        |>
+  autofit()
 
 
 ## ----compute-descriptive-values-----------------------------------------------
 # Total nº of initiatives:
-total_N_out <- descriptives_table_output |>
-  extract2("N")                          |>
-  as.english()                           |>
+total_N_out <- descriptives_part_2 |>
+  extract2("N")                    |>
+  as.english()                     |>
   as.character()
 total_N_out_sentence_case <- total_N_out |> str_to_sentence()
 
@@ -579,7 +590,7 @@ max_missing_out <- tab1_new_describe           |>
   percent(accuracy = .1)
 
 # Active projects:
-active_projects_prop_out <- descriptives_table_output |>    # Over non-missing
+active_projects_prop_out <- descriptives_part_2 |>    # Over non-missing
   inline_text(variable = "team_activity", pattern = "{p}%") # Over total
 active_projects_prop_total_out <- tab1_new_describe |>
   tabyl(team_activity)                              |>
@@ -616,12 +627,12 @@ country_institution_ranking_next_out <- country_institution_ranking_next |>
 
 
 # Funding sources:
-funding_public_out <- descriptives_table_output |> inline_text(
+funding_public_out <- descriptives_part_2 |> inline_text(
   variable = "funding",
   level    = sym(PUBLIC_FUNDING),
   pattern  = "{p}%"
 )
-funding_mixed_out  <- descriptives_table_output |> inline_text(
+funding_mixed_out  <- descriptives_part_2 |> inline_text(
   variable = "funding",
   level    = sym(MIXED_FUNDING),
   pattern  = "{p}%"
@@ -636,65 +647,65 @@ harmo_strategy_max_out <- harmo_strategies_count |>
   filter(n == max(n))                            |>
   pull(harmonizationstrategy)
 
-harmo_max_prop_out <- descriptives_table_output |> inline_text(
+harmo_max_prop_out <- descriptives_part_2 |> inline_text(
   variable = "harmonizationstrategy",
   level    = all_of(harmo_strategy_max_out),
   pattern  = "{p}%"
 )
 
 # Analysis:
-analysis_pooled_out    <- descriptives_table_output |>
+analysis_pooled_out    <- descriptives_part_2 |>
   inline_text(variable = "analysis_pooled",    pattern = "{p}%")
-analysis_meta_out      <- descriptives_table_output |>
+analysis_meta_out      <- descriptives_part_2 |>
   inline_text(variable = "analysis_meta",      pattern = "{p}%")
-analysis_federated_out <- descriptives_table_output |>
+analysis_federated_out <- descriptives_part_2 |>
   inline_text(variable = "analysis_federated", pattern = "{p}%")
 
 # Omics:
-omics_out <- descriptives_table_output |>
+omics_out <- descriptives_part_2 |>
   inline_text(variable = "omics", pattern = "{p}% (n = {n})")
 
 # Total nº of cohorts:
-total_cohorts_range_out  <- descriptives_table_output |>
+total_cohorts_range_out  <- descriptives_part_2 |>
   inline_text(variable = "cohorts.total", pattern = "{min} and {max}")
-total_cohorts_median_out <- descriptives_table_output |>
+total_cohorts_median_out <- descriptives_part_1 |>
   inline_text(variable = "cohorts.total", pattern = "{median}")
 
 # Harmonized cohorts:
-harm_cohorts_max_out <- descriptives_table_output |>
+harm_cohorts_max_out <- descriptives_part_2 |>
   inline_text(variable = "cohorts.harmonized", pattern = "{max}")
 
 # More cohorts to be harmonized:
-more_cohorts_expected_n_out <- descriptives_table_output |>
+more_cohorts_expected_n_out <- descriptives_part_2 |>
   inline_text(variable = "morecohortstobeharmonized", pattern = "{n}")
 
 # Harmonized variables:
-harm_vars_range_out  <- descriptives_table_output |>
+harm_vars_range_out  <- descriptives_part_2 |>
   inline_text(variable = "harmonizedvariables", pattern = "{min} to {max}")
-harm_vars_median_out <- descriptives_table_output |>
+harm_vars_median_out <- descriptives_part_1 |>
   inline_text(variable = "harmonizedvariables", pattern = "{median}")
 
 # Harmonized participants:
-harm_participants_max_out    <- descriptives_table_output |>
+harm_participants_max_out    <- descriptives_part_2 |>
   inline_text(variable = "participants.harmonized", pattern = "{max}")
-harm_participants_median_out <- descriptives_table_output |>
+harm_participants_median_out <- descriptives_part_1 |>
   inline_text(variable = "participants.harmonized", pattern = "{median}")
 
 # Particinats' ages across included cohorts:
-max_age_max_out  <- descriptives_table_output |>
+max_age_max_out  <- descriptives_part_2 |>
   inline_text(variable = "age.max", pattern = "{max}")
 
 # Topics:
-prop_ageing_out <- descriptives_table_output |>
+prop_ageing_out <- descriptives_part_2 |>
   inline_text(variable = "topic_ageing", pattern = "{p}%")
 
 # Nº of countries:
-max_n_countries_out <- descriptives_table_output           |>
+max_n_countries_out <- descriptives_part_2                 |>
   inline_text(variable = "n_countries", pattern = "{max}") |>
   as.integer()                                             |>
   as.english()                                             |>
   as.character()
-min_n_countries_out <- descriptives_table_output           |>
+min_n_countries_out <- descriptives_part_2                 |>
   inline_text(variable = "n_countries", pattern = "{min}") |>
   as.integer()                                             |>
   as.english()                                             |>
@@ -713,35 +724,36 @@ prop_6_continents_out <- tab1_n_continents |>
 
 
 # Nº of initiatives per region
-prop_Europe_out <- descriptives_table_output |>
+prop_Europe_out <- descriptives_part_2 |>
   inline_text(variable = "bool_Europe", pattern = "{p}%")
 
-n_Africa_out    <- descriptives_table_output             |>
+n_Africa_out    <- descriptives_part_2                   |>
   inline_text(variable = "bool_Africa", pattern = "{n}") |>
   as.integer()                                           |>
   as.english()                                           |>
   as.character()
-prop_Africa_out <- descriptives_table_output |>
+prop_Africa_out <- descriptives_part_2 |>
   inline_text(variable = "bool_Africa", pattern = "{p}%")
 
-n_Latam_out    <- descriptives_table_output                                 |>
+n_Latam_out    <- descriptives_part_2                                       |>
   inline_text(variable = "bool_Latin America & Caribbean", pattern = "{n}") |>
   as.integer()                                                              |>
   as.english()                                                              |>
   as.character()
-prop_Latam_out <- descriptives_table_output |>
+prop_Latam_out <- descriptives_part_2 |>
   inline_text(variable = "bool_Latin America & Caribbean", pattern = "{p}%")
 
 
 ## ----initiatives-table-output-manuscript--------------------------------------
-initiatives_table_output <- tab1_new_out                  |>
-  flextable()                                             |>
+initiatives_table_output <- tab1_new_out |>
+  flextable()                            |>
   set_header_df(
     mapping = tab1_headers |> select(-label),
     key     = "var_name"
-  )                                                       |>
-  merge_h(part = "header")                                |>
-  merge_v(part = "header")                                |>
-  colformat_num( na_str = MISSING_STR)                    |>
-  colformat_char(na_str = MISSING_STR)                    |>
+  )                                      |>
+  merge_h(part = "header")               |>
+  merge_v(part = "header")               |>
+  colformat_num( na_str = MISSING_STR)   |>
+  colformat_char(na_str = MISSING_STR)   |>
+  theme_booktabs(bold_header = TRUE)     |>
   set_table_properties(layout = "autofit")
