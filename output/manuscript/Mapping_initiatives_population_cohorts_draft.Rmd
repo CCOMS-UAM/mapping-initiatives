@@ -431,7 +431,7 @@ This resulted in the inclusion of another 48 initiatives that integrate
 population cohorts.
 Thus, a total of `r total_N_out` initiatives were included.
 
-The initiatives are presented in Table \@ref(tab:initiatives),
+The initiatives are presented in the Online Supplementary Table,
 along with a subset of their most representative information.
 It is worth noting that in a large number of cases the contact person was
 unreachable throughout the whole mapping process,
@@ -605,19 +605,6 @@ with a spotlight in developing and enriching a "learning healthcare system"
 # Necessary for flextable to find the csl file:
 opts_knit$set(root.dir = DOC_DIR)
 ```
-
-<!---BLOCK_LANDSCAPE_START--->
-
-```{r initiatives-table-output-manuscript}
-```
-
-```{r initiatives, tab.id="initiatives", tab.cap="Descriptive information of the initiatives included in the mapping.", results='asis'}
-initiatives_table_output
-```
-
-<!---BLOCK_LANDSCAPE_STOP--->
-
-\newpage
 
 ```{r descriptives, cache=FALSE, tab.id="descriptives", tab.cap="Descriptive statistics of the initiatives mapped.", results='asis'}
 descriptives_table_output

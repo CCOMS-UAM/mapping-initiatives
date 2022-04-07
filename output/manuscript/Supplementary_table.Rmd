@@ -1,0 +1,79 @@
+---
+title: |
+  Supplementary table:
+  Descriptive information of the initiatives included in the mapping
+output: bookdown::html_document2
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+# Environment setup:
+gc()
+
+# Libraries:
+library(knitr)
+
+# Constants:
+DOC_DIR      <- getwd()
+ROOT_DIR     <- "../.."
+SRC_DIR      <- "src"
+SRC_FILEPATH <- file.path(SRC_DIR, "Analyses.R")
+
+# Knitr configuration:
+opts_knit$set(root.dir = ROOT_DIR) # Interferes with officedown!
+opts_chunk$set(
+  echo           = FALSE,
+  results        = 'hide',
+  message        = FALSE,
+  warning        = FALSE,
+  cache          = FALSE,
+  autodep        = TRUE,
+  tab.topcaption = TRUE
+)
+```
+
+```{r load-chunks, cache=FALSE}
+SRC_FILEPATH |> read_chunk()
+```
+
+```{r includes, cache=FALSE}
+```
+
+```{r load-data}
+```
+
+```{r country-derivate-vars}
+```
+
+```{r health-topic-derivate-vars}
+```
+
+```{r socioenvcontext-derivate-vars}
+```
+
+```{r socioenvcontext-other-values}
+```
+
+```{r analyses-derivate-vars}
+```
+
+```{r create-output-dataset}
+```
+
+```{r preprocess-descriptives}
+```
+
+```{r create-headers-labels}
+```
+
+```{r initiatives-table-output-supplementary, results='asis'}
+library(DT)
+
+tab1_new_out |> datatable(
+  filter = "top",
+  rownames = FALSE,
+  width = 400,
+  height = 1200
+)
+```
