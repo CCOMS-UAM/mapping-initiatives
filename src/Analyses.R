@@ -528,24 +528,37 @@ sample_initiative <- tab1_sample   |>
   filter(var_name == "initiative") |>
   pull()
 
-tab1_summary <- tab1_summary                                                |>
-  full_join(tab1_sample, by = "var_name")                                   |>
-  unite("collapsed_header", header, subheader, sep = COLON, remove = FALSE) |>
-  mutate(
-    collapsed_header = if_else(header == subheader, header, collapsed_header)
-  )                                                                         |>
-  select(-(header:var_name))
+tab1_summary <- tab1_summary              |>
+  full_join(tab1_sample, by = "var_name") |>
+  select(-var_name)
 
-initiatives_summary_output <- tab1_summary |>
-  flextable()                              |>
+countries_footnote <- tab1_sample           |>
+  filter(var_name == "region_countries")    |>
+  select(-var_name)                         |>
+  separate_rows(value)                      |>
+  mutate(
+    country = value                         |>
+      countrycode(origin = "iso3c", destination = "country.name")
+  )                                         |>
+  arrange(value)                            |>
+  unite("key", value, country, sep = ' = ') |>
+  pull()                                    |>
+  glue_collapse(sep = SEMICOLON_SEP)
+
+initiatives_summary_output <- tab1_summary              |>
+  flextable()                                           |>
   set_header_df(
     mapping = tibble(
-      label    = c("Column", "Description", "Example"),
+      label    = c("Column" |> rep(2), "Description", "Example"),
       col_keys = tab1_summary |> colnames()
     )
-  )                                        |>
-  theme_booktabs(bold_header = TRUE)       |>
-  fontsize(size = 12)                      |>
+  )                                                     |>
+  add_footer_lines(glue("Note. {countries_footnote}.")) |>
+  merge_h(part = "header")                              |>
+  merge_h()                                             |>
+  merge_v(j = "header")                                 |>
+  theme_booktabs(bold_header = TRUE)                    |>
+  fontsize(size = 12)                                   |>
   set_table_properties(layout = "autofit")
 
 
