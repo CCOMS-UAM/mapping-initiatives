@@ -525,6 +525,11 @@ integrating evidence across cohorts and thrive towards personalized medicine,
 especially in patient and clinical trial cohorts.
 However, the participation of private entities in funding patient cohorts was
 even lower [@rodriguez-laso_map_2021].
+Nevertheless, note that these funding sources refer only to the integration
+initiatives;
+this information does not take into account other possible funding sources for
+the individual cohort studies integrated into an initiative,
+so private interest in funding cohort research might be overlooked.
 
 Focus on environmental exposures was more prevalent than
 genetic and biological factors.
