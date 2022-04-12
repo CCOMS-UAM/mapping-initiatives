@@ -653,6 +653,7 @@ descriptives_table_output <- descriptives_total               |>
   merge_h()                                                   |>
   merge_v("header")                                           |>
   theme_booktabs(bold_header = TRUE)                          |>
+  fontsize(size = 8)                                          |>
   hline(i = var_groups != lead(var_groups))                   |>
   align(j = "stat_0", align = "right", part = "all")          |>
   padding(row_types == "missing", "label", padding.left = 20) |>
