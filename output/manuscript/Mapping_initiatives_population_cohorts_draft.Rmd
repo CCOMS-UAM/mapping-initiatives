@@ -52,7 +52,6 @@ opts_chunk$set(
 # Output formatting options:
 set_flextable_defaults(
   font.family       = "Times New Roman",
-  font.size         = 8,
   padding.top       = 1,
   padding.bottom    = 0
 )
@@ -90,6 +89,9 @@ SRC_FILEPATH %>% read_chunk()
 ```
 
 ```{r create-headers-labels}
+```
+
+```{r summary-table}
 ```
 
 ```{r descriptives-table}
@@ -184,8 +186,8 @@ This paper aims to lay out the methodology and results of
 this mapping focusing on initiatives that integrate population cohorts.  
 **Methods:** Three different sources were used to search for the initiatives:
 1) A systematic search carried out in the MEDLINE database;
-2) suggestions of potential initiatives to be included in the mapping
-provided by partners of the SYNCHROS consortium who devised the mapping,
+2) suggestions of potential initiatives to be included in the mapping,
+provided by the partners of the SYNCHROS consortium who devised the mapping
 and European Commission scientific officers; and
 3) descendent searches in the references and links of the initiatives obtained
 from the two previous sources.  
@@ -429,10 +431,12 @@ one initiative with only cross-sectional cohorts,
 and one initiative that integrated patient and clinical trial cohorts.
 This resulted in the inclusion of another 48 initiatives that integrate
 population cohorts.
-Thus, a total of `r total_N_out` initiatives were included.
-
-The initiatives are presented in Table \@ref(tab:initiatives),
+A total of `r total_N_out` initiatives were included;
+they are presented in the Online Supplementary Table,
 along with a subset of their most representative information.
+This information is detailed in Table \@ref(tab:summary),
+along with the data from *`r sample_initiative`* shown as an example.
+
 It is worth noting that in a large number of cases the contact person was
 unreachable throughout the whole mapping process,
 so the proportion of missing data was as large as
@@ -594,6 +598,24 @@ emerging collaborative research,
 with a spotlight in developing and enriching a "learning healthcare system"
 [@frohlich_hype_2018].
 
+# Acknowledgments
+
+We acknowledge and send our gratitude to the principal investigators and
+contacts of the projects that answered all our communications.
+We would also like to acknowledge Maelstrom Research for
+their active contribution to the development of the Mica repository engine.
+
+# Conflicts of interest
+
+The authors hereby declare no conflicts of interest.
+
+# Funding sources
+
+This project has received funding from the European Union’s
+Horizon 2020 research and innovation programme under grant agreement No. 825884.
+LR and DM are supported by the Network-based Biomedical Research Consortium,
+area of Mental Health (CIBERSAM), Instituto de Salud Carlos III.
+
 # References
 
 ::: {#refs}
@@ -606,16 +628,9 @@ with a spotlight in developing and enriching a "learning healthcare system"
 opts_knit$set(root.dir = DOC_DIR)
 ```
 
-<!---BLOCK_LANDSCAPE_START--->
-
-```{r initiatives-table-output-manuscript}
+```{r summary, cache=FALSE, tab.id="summary", tab.cap="Summary of the main information shown in the table of initiatives.", results='asis'}
+initiatives_summary_output
 ```
-
-```{r initiatives, tab.id="initiatives", tab.cap="Descriptive information of the initiatives included in the mapping.", results='asis'}
-initiatives_table_output
-```
-
-<!---BLOCK_LANDSCAPE_STOP--->
 
 \newpage
 

@@ -484,6 +484,71 @@ tab1_new <- tab1_new |> imap_dfc(# Labels to assign to the columns
 )
 
 
+## ----summary-table----
+tab1_summary <- tab1_headers |>
+  semi_join(
+    colnames(tab1_new_out) |> enframe(value = "var_name"),
+    by = "var_name"
+  )                          |>
+  select(-label)             |>
+  add_column(
+    description = c(
+      "Initiative acronym (when available) and name.",
+      "Region or countries where the integrated cohorts have been collected.",
+      "Free-text description of the initiative purpose and objectives.",
+      "Total number of cohorts integrated",
+      "Number of cohorts where at least some of the data have been harmonised.",
+      "Whether more cohorts are expected to be harmonised.",
+      "Total number of participants across cohorts.",
+      "Number of participants across the cohorts with harmonised data.",
+      "Age range (minimum and maximum, or description) of the total sample across cohorts.",
+      "Maximum number of harmonised variables in any harmonised cohort.",
+      "Criteria for selecting and integrating cohorts in the initiative."
+    )
+  )
+
+# In order to provide an example, we select the initiative with the shortest
+#   combined description and cohort criteria texts, without any of the output
+#   values missing.
+tab1_shortest <- tab1_new_out |>
+  drop_na()                   |>
+  transmute(
+    initiative,
+    across(c(description_short, cohortcriteria_short), nchar),
+    total = description_short + cohortcriteria_short
+  )                           |>
+  filter(total == min(total))
+
+tab1_sample <- tab1_new_out                   |>
+  semi_join(tab1_shortest, by = "initiative") |>
+  mutate(across(everything(), as.character))  |>
+  pivot_longer(everything(), names_to = "var_name")
+
+sample_initiative <- tab1_sample   |>
+  filter(var_name == "initiative") |>
+  pull()
+
+tab1_summary <- tab1_summary                                                |>
+  full_join(tab1_sample, by = "var_name")                                   |>
+  unite("collapsed_header", header, subheader, sep = COLON, remove = FALSE) |>
+  mutate(
+    collapsed_header = if_else(header == subheader, header, collapsed_header)
+  )                                                                         |>
+  select(-(header:var_name))
+
+initiatives_summary_output <- tab1_summary |>
+  flextable()                              |>
+  set_header_df(
+    mapping = tibble(
+      label    = c("Column", "Description", "Example"),
+      col_keys = tab1_summary |> colnames()
+    )
+  )                                        |>
+  theme_booktabs(bold_header = TRUE)       |>
+  fontsize(size = 12)                      |>
+  set_table_properties(layout = "autofit")
+
+
 ## ----descriptives-table-------------------------------------------------------
 # Select and order data for table of descriptives:
 tab1_new_describe <- tab1_new |> select(
@@ -753,7 +818,8 @@ initiatives_table_output <- tab1_new_out |>
   )                                      |>
   merge_h(part = "header")               |>
   merge_v(part = "header")               |>
-  colformat_num( na_str = MISSING_STR)   |>
+  colformat_num(na_str  = MISSING_STR)   |>
   colformat_char(na_str = MISSING_STR)   |>
   theme_booktabs(bold_header = TRUE)     |>
+  fontsize(size = 12)                    |>
   set_table_properties(layout = "autofit")
