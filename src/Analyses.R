@@ -454,7 +454,7 @@ tab1_headers <- tab1_headers |> bind_rows(
 
 # Create labels and format subheaders:
 tab1_headers <- tab1_headers |>
-  unite(# TODO; Use subheaders as labels (when adding headers to the desc. tab.)
+  unite(
     header, subheader,
     col    = "label",
     sep    = COLON,
@@ -474,9 +474,6 @@ tab1_new <- tab1_new |> imap_dfc(# Labels to assign to the columns
     properties <- tab1_headers |> filter(var_name == variable)
     
     column %@% "header"     <- properties |> pull(header)
-    # column %@% "label"      <- properties |> pull(label)
-    # column %@% "subheader"  <- properties |> pull(subheader)
-    # TODO: Substitute two previous lines by the follwing:
     column %@% "label"  <- properties |> pull(subheader)
     
     column
@@ -545,6 +542,7 @@ countries_footnote <- tab1_sample           |>
   pull()                                    |>
   glue_collapse(sep = SEMICOLON_SEP)
 
+## TODO; Formatting of millions?
 initiatives_summary_output <- tab1_summary              |>
   flextable()                                           |>
   set_header_df(
