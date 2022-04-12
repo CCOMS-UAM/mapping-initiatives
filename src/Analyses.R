@@ -608,6 +608,10 @@ descriptives_total <- descriptives_part_1                                |>
   # Discards "variable" rows (unnecessary vertical space):
   filter(!is.na(stat_0))
 
+row_types <- descriptives_total |> pull(row_type)
+
+total_N <- descriptives_part_2 |> extract2("N")
+
 var_groups <- descriptives_total |> pull(header)
 
 descriptives_total <- descriptives_total                                 |>
@@ -622,26 +626,31 @@ descriptives_total <- descriptives_total                                 |>
 
 descriptives_header <- tibble(
   col_keys  = descriptives_total |> colnames(),
-  names     = c("Variable", "Level", "Median / n", "(Range / %)")
+  names     = c(
+    "Variable",
+    "Level",
+    glue("Median / n (N = {total_N})"),
+    "(Range / %)"
+  )
 )
 
-descriptives_table_output <- descriptives_total |>
-  flextable()                                   |>
-  set_header_df(descriptives_header)            |>
-  merge_h()                                     |>
-  merge_v("header")                             |>
-  theme_booktabs(bold_header = TRUE)            |>
-  hline(i = var_groups != lead(var_groups))     |>
-  align(j = "stat_0", align = "right", part = "all") |>
-  valign(valign = "top")                        |>
+descriptives_table_output <- descriptives_total               |>
+  flextable()                                                 |>
+  set_header_df(descriptives_header)                          |>
+  merge_h()                                                   |>
+  merge_v("header")                                           |>
+  theme_booktabs(bold_header = TRUE)                          |>
+  hline(i = var_groups != lead(var_groups))                   |>
+  align(j = "stat_0", align = "right", part = "all")          |>
+  padding(row_types == "missing", "label", padding.left = 20) |>
+  valign(valign = "top")                                      |>
   autofit()
 
 
 ## ----compute-descriptive-values-----------------------------------------------
 # Total nº of initiatives:
-total_N_out <- descriptives_part_2 |>
-  extract2("N")                    |>
-  as.english()                     |>
+total_N_out <- total_N |>
+  as.english()         |>
   as.character()
 total_N_out_sentence_case <- total_N_out |> str_to_sentence()
 
