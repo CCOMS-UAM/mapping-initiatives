@@ -212,7 +212,7 @@ José Luis Ayuso-Mateos,
 Universidad Autónoma de Madrid, Department of Psychiatry.
 Arzobispo Morcillo 4, 28029 Madrid, Spain. E-mail: joseluis.ayuso@uam.es
 
-**Word count:** <!-- # TODO: Fill in -->
+**Word count:** <!-- # TODO: Fill in (CURRENT: 2708) -->
 
 \newpage
 
