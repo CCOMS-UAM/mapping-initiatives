@@ -661,12 +661,6 @@ descriptives_table_output <- descriptives_total               |>
 
 
 ## ----compute-descriptive-values-----------------------------------------------
-# Total nº of initiatives:
-total_N_out <- total_N |>
-  as.english()         |>
-  as.character()
-total_N_out_sentence_case <- total_N_out |> str_to_sentence()
-
 # Maximum number of missing values in one descriptive variable:
 max_missing_out <- tab1_new_describe           |>
   summarize(across(.fns = ~sum(is.na(.))/n())) |>
@@ -753,8 +747,14 @@ omics_out <- descriptives_part_2 |>
   inline_text(variable = "omics", pattern = "{p}% (n = {n})")
 
 # Total nº of cohorts:
-total_cohorts_range_out  <- descriptives_part_2 |>
-  inline_text(variable = "cohorts.total", pattern = "{min} and {max}")
+total_cohorts_min  <- descriptives_part_2                    |>
+  inline_text(variable = "cohorts.total", pattern = "{min}") |>
+  as.integer()                                               |>
+  as.english()                                               |>
+  as.character()
+total_cohorts_max  <- descriptives_part_2 |>
+  inline_text(variable = "cohorts.total", pattern = "{max}")
+total_cohorts_range_out  <- glue("{total_cohorts_min} and {total_cohorts_max}")
 total_cohorts_median_out <- descriptives_part_1 |>
   inline_text(variable = "cohorts.total", pattern = "{median}")
 
