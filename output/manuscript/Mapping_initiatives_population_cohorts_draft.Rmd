@@ -249,8 +249,8 @@ The project
 *SYNergies for Cohorts in Health: integrating the ROle of all Stakeholders*
 (SYNCHROS) was funded by the Horizon 2020 Research and Innovation Program with
 the goal of formulating this strategy,
-through intensive stakeholder collaboration (www.synchros.eu)
-<!-- # TODO: Ref. needed?. -->.
+through intensive stakeholder collaboration (www.synchros.eu).
+<!-- # TODO: Ref. needed?. -->
 Among others, one of its first actions was the mapping of
 the cohort integration initiatives landscape
 across the world and in Europe especially.
@@ -271,7 +271,7 @@ as well as the results and conclusions of this mapping exercise.
 ## Identification of initiatives
 
 Three different methods were used
-to find initiatives that integrate population cohorts,
+to find initiatives that integrate population cohorts.
 The first one was a systematic search in the MEDLINE database.
 The second one consisted of asking the SYNCHROS consortium and
 scientific officers of the European Commission for suggestions on initiatives.
@@ -376,15 +376,15 @@ the principal investigator and/or the contact person of the project
 was consulted, by email first and, if no reply was received,
 by telephone or postal mail.
 
-Some variables were collected in order to describe the harmonization process,
-namely: harmonization strategy
+Some variables were collected in order to describe the harmonisation process,
+namely: harmonisation strategy
 (prospective/retrospective ex-ante/retrospective ex-post),
-number of harmonized cohorts,
-whether more cohorts were foreseen to be harmonized,
-number of participants with harmonized data,
-maximum number of harmonized variables
-(including those where harmonization was not possible for all the cohorts),
-setting of the harmonized cohorts (local-regional/national/international),
+number of harmonised cohorts,
+whether more cohorts were foreseen to be harmonised,
+number of participants with harmonised data,
+maximum number of harmonised variables
+(including those where harmonisation was not possible for all the cohorts),
+setting of the harmonised cohorts (local-regional/national/international),
 The following variables were deemed relevant for the integration effort and
 thus were also collected for each initiative:
 total number of cohorts, total number of participants, age range of the sample,
@@ -402,9 +402,9 @@ For all the variables, descriptive statistics were computed when appropriate:
 absolute frequencies and proportions (over number of non-missing values)
 for the categorical variables;
 median, minimum and maximum for the quantitative ones.
-In the case of the number of participants with harmonized data and
-the maximum number of harmonized variables, the statistics were computed
-using only the initiatives with harmonized cohorts.
+In the case of the number of participants with harmonised data and
+the maximum number of harmonised variables, the statistics were computed
+using only the initiatives with harmonised cohorts.
 
 # Results
 
@@ -417,7 +417,7 @@ From the full-text review, 155 articles were excluded due to one or more of
 the following reasons: one-time efforts (articles where the merging of data
 was done only for carrying out the research presented in the paper),
 initiatives already submitted by partners, articles with
-cross-sectional harmonization only, multisite cohorts/harmonization of waves,
+cross-sectional harmonisation only, multisite cohorts/harmonisation of waves,
 meta-analyses, reviews, case-control studies, patients' cohorts,
 clinical trial cohorts, and others.
 From the systematic review, 11 articles were included.
@@ -454,17 +454,17 @@ both private and public institutions.
 
 The total number of cohorts ranged between `r total_cohorts_range_out`
 (median = `r total_cohorts_median_out`).
-Some initiatives had up to `r harm_cohorts_max_out` harmonized cohorts,
+Some initiatives had up to `r harm_cohorts_max_out` harmonised cohorts,
 while others only had collected the participating cohorts
-(but had not started harmonizing them yet).
+(but had not started harmonising them yet).
 At least `r more_cohorts_expected_n_out` initiatives planned
-to obtain and harmonize more cohorts in the future.
-The harmonized cohorts had a large variability in the maximum number of
-harmonized variables, ranging from `r harm_vars_range_out`
+to obtain and harmonise more cohorts in the future.
+The harmonised cohorts had a large variability in the maximum number of
+harmonised variables, ranging from `r harm_vars_range_out`
 (median = `r harm_vars_median_out`).
 They would comprise up to `r harm_participants_max_out` participants,
 although the median value was around `r harm_participants_median_out`.
-`r harmo_strategy_max_out` (retrospective) harmonization was
+`r harmo_strategy_max_out` (retrospective) harmonisation was
 by far the most prevalent strategy,
 used by `r harmo_max_prop_out` of the initiatives.
 The majority of initiatives (`r analysis_pooled_out`) used pooled analysis
@@ -532,11 +532,11 @@ so private interest in funding cohort research might be overlooked.
 
 Focus on environmental exposures was more prevalent than
 genetic and biological factors.
-Very few of the initiatives were actually found to harmonize and integrate
+Very few of the initiatives were actually found to harmonise and integrate
 biological samples
 (although there was a high rate of missingness in this variable).
 Including them may help discover possible causal pathways among biological,
-behavioral, social, demographic, economic, and health outcomes
+behavioural, social, demographic, economic, and health outcomes
 [@hobcraft_reflections_2009].
 Unfortunately, incorporating bio-measures in cohort research is not always
 feasible.
@@ -558,7 +558,7 @@ To our knowledge, this is the first effort to map and describe in detail all
 the initiatives integrating population cohorts.
 Given the difficulties reported by authors when integrating cohorts
 [@gatz_data_2015],
-we expect positive outcomes of our endeavor in three main aspects.
+we expect positive outcomes of our endeavour in three main aspects.
 First, the SYNCHROS repository is a resource where interested researchers can
 find integrated population cohort data or contribute their population cohorts.
 Second, several PIs and project managers have provided first-hand information
@@ -586,7 +586,7 @@ Knowledge about restricted populations and phenomena
 require massive sample sizes to achieve the necessary
 statistical power.
 Moreover, global representativeness can only be achieved by addressing
-more diverse, non-*WEIRD* populations [@henrich_most_2010]
+more diverse populations [@henrich_most_2010]
 from different ethnic, regional or/and socioeconomic settings.
 Synergies across a wide variety of existing cohort integration projects
 would help pursuing these goals, while being more cost-effective than
