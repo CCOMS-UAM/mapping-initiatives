@@ -396,6 +396,8 @@ AND
 Humans[MeSH]
 ```
 
+<br>
+
 ## Selection of initiatives
 
 **Inclusion criteria.** Initiatives published in English from 2000 to July 2019
