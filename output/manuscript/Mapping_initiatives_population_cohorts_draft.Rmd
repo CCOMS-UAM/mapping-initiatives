@@ -283,13 +283,13 @@ Integrating these individual cohorts is the next step to getting
 the most valuable information out of them.
 Cohort integration studies may increase sample sizes drastically,
 allowing the study of important but infrequent phenomena
-[e.g. rare diseases, @thompson_thinking_2009] while avoiding publication bias.
+(e.g. rare diseases) [@thompson_thinking_2009] while avoiding publication bias.
 The pressure is rapidly building up to keep up-to-date with
 integrating and capitalizing on this information,
 and several initiatives have joint forces for integrating cohorts
 from different studies
-[e.g. ATHLOS, @sanchez-niubo_data_2017; BioSHaRE, @kaye_consent_2016;
-CHICOS, @strandberg-larsen_association_2017; HELIX, @maitre_human_2018].
+(e.g. ATHLOS @sanchez-niubo_data_2017; BioSHaRE @kaye_consent_2016;
+CHICOS @strandberg-larsen_association_2017; HELIX @maitre_human_2018).
 However, methodological and infrastructure issues [@panahiazar_empowering_2014],
 as well as concerns about legal (i.e., data protection) and ethical aspects
 impose constraints that may hinder the potential benefits of
@@ -306,7 +306,7 @@ The project
 *SYNergies for Cohorts in Health: integrating the ROle of all Stakeholders*
 (SYNCHROS) was funded by the Horizon 2020 Research and Innovation Program with
 the goal of formulating this strategy,
-through intensive stakeholder collaboration (www.synchros.eu).
+through intensive stakeholder collaboration (https://www.synchros.eu).
 <!-- # TODO: Ref. needed?. -->
 Among others, one of its first actions was the mapping of
 the cohort integration initiatives landscape
@@ -606,7 +606,7 @@ these two continents.
 Interestingly, very few of the initiatives included cohorts focused
 on African and Latin American & Caribbean countries.
 Previous studies emphasize the relative lack of health studies conducted in
-low- and middle-income countries [LMICs, @lawlor_birth_2009].
+low- and middle-income countries (LMICs @lawlor_birth_2009).
 More representativeness of LMICs would be necessary to grant
 the external validity of the cohort studies that inform
 global health policy recommendations.
