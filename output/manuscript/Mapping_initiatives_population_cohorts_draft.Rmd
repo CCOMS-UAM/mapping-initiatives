@@ -4,7 +4,7 @@ title: |
 output:
   officedown::rdocx_document:
     base_format:     bookdown::word_document2
-    reference_docx:  ../../www/APA_6th_edition_template.docx
+    reference_docx:  ../../www/IJE_template.docx
     fig_width:       6.73
     fig_asp:          .75
     number_sections: no
@@ -14,7 +14,7 @@ output:
         sep: '. '
     keep_md:         no
 bibliography:        ../../www/Mapping_initiatives.bib
-csl:                 ../../www/apa-old-doi-prefix.csl
+csl:                 ../../www/sage-vancouver-brackets.csl
 editor_options:
   chunk_output_type: console
 ---
@@ -25,7 +25,6 @@ gc()
 
 # Libraries:
 library(knitr)
-library(gtsummary)
 library(flextable)
 
 # Constants:
