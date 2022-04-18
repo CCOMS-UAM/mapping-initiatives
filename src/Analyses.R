@@ -388,7 +388,7 @@ suppressMessages( # Message when reading empty column names
       header = header                            |>
         str_detect(AUTO_VARNAME_PREFIX_REGEXP)   |>
         if_else(header |> dplyr::lag(1), header) |>
-        str_replace("harmonized", "harmonised"), # Correct errata in headers:
+        str_replace("harmoniz", "harmonis"), # Correct errata in headers:
     )                                                                        |>
     mutate( # Edit headers to correspond to the new structure:
       header    = if_else(header == "INITIATIVE", "Initiative", header),
@@ -414,7 +414,7 @@ suppressMessages( # Message when reading empty column names
           "Setting",
           "Access to metadata",
           "Access to individual data",
-          "Harmonization strategy",
+          "Harmonisation strategy",
           "With omics data",
           "Team active (at consultation)",
           "Funding",
