@@ -660,6 +660,33 @@ emerging collaborative research,
 with a spotlight in developing and enriching a "learning healthcare system"
 [@frohlich_hype_2018].
 
+# Ethics approval
+
+<!-- # TODO: Complete -->
+
+# Author contributions
+
+DM analyzed and interpreted the data,
+and wrote the subsequent versions of the article.
+All authors approved the final version of the manuscript and
+agree to be accountable for all aspects of the work.
+
+# Data availability
+
+<!-- # TODO: Complete -->
+
+# Supplementary material
+
+Supplementary material is available at IJE online
+
+# Funding
+
+This work was supported by the European Union’s Horizon 2020
+research and innovation programme [grant number 825884],
+and the Network-based Biomedical Research Consortium,
+area of Mental Health (CIBERSAM), Instituto de Salud Carlos III
+to LR and DM.
+
 # Acknowledgments
 
 We acknowledge and send our gratitude to the principal investigators and
@@ -669,14 +696,7 @@ their active contribution to the development of the Mica repository engine.
 
 # Conflicts of interest
 
-The authors hereby declare no conflicts of interest.
-
-# Funding sources
-
-This project has received funding from the European Union’s
-Horizon 2020 research and innovation programme under grant agreement No. 825884.
-LR and DM are supported by the Network-based Biomedical Research Consortium,
-area of Mental Health (CIBERSAM), Instituto de Salud Carlos III.
+None declared.
 
 # References
 
