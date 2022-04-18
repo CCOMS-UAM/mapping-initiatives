@@ -57,7 +57,7 @@ set_flextable_defaults(
 ```
 
 ```{r load-chunks, cache=FALSE}
-SRC_FILEPATH %>% read_chunk()
+SRC_FILEPATH |> read_chunk()
 ```
 
 ```{r includes, cache=FALSE}
@@ -101,7 +101,7 @@ SRC_FILEPATH %>% read_chunk()
 
 ```{r uncache-descriptive-values, cache=FALSE, include=FALSE}
 # Total nº of initiatives:
-total_N_out
+total_N
 
 # Maximum number of missing values in one descriptive variable:
 max_missing_out
@@ -431,8 +431,8 @@ one initiative with only cross-sectional cohorts,
 and one initiative that integrated patient and clinical trial cohorts.
 This resulted in the inclusion of another 48 initiatives that integrate
 population cohorts.
-A total of `r total_N_out` initiatives were included;
-they are presented in the Online Supplementary Table,
+A total of `r total_N` initiatives were included;
+they are presented in Supplementary Table S1,
 along with a subset of their most representative information.
 This information is detailed in Table \@ref(tab:summary),
 along with the data from *`r sample_initiative`* shown as an example.
