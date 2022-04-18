@@ -585,6 +585,7 @@ descriptives_part_1 <- tab1_new_describe |> tbl_summary(
     all_continuous()  ~ "{median}",
     all_categorical() ~ "{n}"
   ),
+  digits       = list(all_continuous() ~ label_number()),
   missing_text = MISSING_LABEL
 )
 
@@ -593,7 +594,7 @@ descriptives_part_2 <- tab1_new_describe |> tbl_summary(
     all_continuous()  ~ "({min} - {max})",
     all_categorical() ~ "({p}%)"
   ),
-  digits       = list(all_categorical() ~ 1),
+  digits       = list(all_categorical() ~ 1, all_continuous() ~ label_number()),
   missing      = "no",
   missing_text = MISSING_LABEL
 )
@@ -626,7 +627,7 @@ total_N <- descriptives_part_2 |> extract2("N")
 var_groups <- descriptives_total |> pull(header)
 
 descriptives_total <- descriptives_total                                 |>
-  # For formatting output purrposes:
+  # For formatting output purposes:
   group_by(var_label)                                                    |>
   mutate(
     header = (n() == 2 & label == MISSING_LABEL) |>
