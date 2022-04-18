@@ -647,7 +647,7 @@ descriptives_table_output
 \newpage
 
 ```{r flowchart, fig.cap="Flowchart diagram detailing the initiatives included and excluded.", results='asis'}
-include_graphics("../../www/Figure_1.png", dpi = NA)
+include_graphics("../../www/Figure_1.tif", dpi = NA)
 ```
 
 ```{r reset-root-dir, cache=FALSE}
