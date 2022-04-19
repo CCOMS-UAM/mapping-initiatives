@@ -174,38 +174,40 @@ prop_Latam_out
 
 <br>
 
-Laura Alejandra Rico-Uribe^1^; <!-- # TODO: Laura's current affiliation -->
-Ángel Rodríguez-Laso^2^;
-Ellen Vorstenbosch^1,3^;
-Adreas J. Weser^4^;
-Laura Fincias^3^;
-Yannick Marcon^5^;
-Leocadio Rodriguez-Mañas^2^;
-Josep María Haro^3,6^;
-José Luis Ayuso-Mateos^1,7,8,\*^;
-Daniel Morillo-Cuadrado^1,8^
+Laura Alejandra Rico-Uribe^1,2^;
+Ángel Rodríguez-Laso^3^;
+Ellen Vorstenbosch^1,4^;
+Adreas J. Weser^5^;
+Laura Fincias^4^;
+Yannick Marcon^6^;
+Leocadio Rodriguez-Mañas^3^;
+Josep María Haro^4,7^;
+José Luis Ayuso-Mateos^1,8,9,\*^;
+Daniel Morillo-Cuadrado^1,9^
 
 <br>
 
 ^1^ CIBERSAM (Network-based Biomedical Research Consortium,
 area of Mental Health), Instituto de Salud Carlos III, Spain
 
-^2^ CIBERFES (Network-based Biomedical Research Consortium,
-area of Frailty and Healthy Ageing), Instituto de Salud Carlos III, Spain
+^2^ School of Health Sciences, Universidad Internacional de La Rioja
 
-^3^ Parc Sanitari Sant Joan de Déu, Barcelona, Spain
+^3^ CIBERFES (Network-based Biomedical Research Consortium,
+    area of Frailty and Healthy Ageing), Instituto de Salud Carlos III, Spain
 
-^4^ HUNT Research Centre, Norwegian University of Science and Technology,
-Levanger, Norway
+^4^ Parc Sanitari Sant Joan de Déu, Barcelona, Spain
 
-^5^ <!-- # TODO: Complete Yannick's affiliation details -->
+^5^ HUNT Research Centre, Norwegian University of Science and Technology,
+    Levanger, Norway
 
-^6^ Universitat de Barcelona, Barcelona, Spain
+^6^ Epigeny<!-- # TODO: Complete Yannick's affiliation details -->
 
-^7^ Department of Psychiatry, Universidad Autónoma de Madrid, Madrid, Spain
+^7^ Universitat de Barcelona, Barcelona, Spain
 
-^8^ Instituto de Investigación Sanitaria La Princesa (IIS-LP),
-Hospital Universitario de La Princesa, Madrid, Spain
+^8^ Department of Psychiatry, Universidad Autónoma de Madrid, Madrid, Spain
+
+^9^ Instituto de Investigación Sanitaria La Princesa (IIS-LP),
+    Hospital Universitario de La Princesa, Madrid, Spain
 
 ^\*^ **Corresponding author**:
 José Luis Ayuso-Mateos,
