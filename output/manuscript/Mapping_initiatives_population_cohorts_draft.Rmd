@@ -223,7 +223,7 @@ Arzobispo Morcillo 4, 28029 Madrid, Spain. E-mail: joseluis.ayuso@uam.es
 **Background:** Health research increasingly requires the analysis of
 data across different cohorts;
 statistical power and representativeness are paramount to study
-infrequent conditions or specific groups of patients.
+infrequent conditions or specific groups of individuals.
 Although integrating cohorts is often difficult,
 several initiatives have done so.
 A map portraying a complete overview of these efforts is missing.
@@ -232,7 +232,7 @@ such mapping, focusing on initiatives that integrate population cohorts.
 **Methods:** Three different sources were used to search for initiatives:
 1) A systematic search in the MEDLINE database;
 2) suggestions of potential initiatives to be included,
-provided by the partners of the SYNCHROS consortium who devised the mapping
+provided by the partners of the SYNCHROS consortium who devised the mapping,
 and European Commission scientific officers; and
 3) descendent searches in the references and links of the initiatives obtained
 from the two previous sources.  
@@ -261,7 +261,7 @@ integrate cohorts and find venues for collaborative research.
   population cohorts is carried out.  
 
 * The number of initiatives found is rather low compared with
-  individual cohort studies being carried out.
+  individual cohort studies being conducted.
 
 * Integrating population cohorts may help increase
   statistical power and representativeness in epidemiological research.
@@ -495,7 +495,7 @@ population cohorts.
 A total of `r total_N` initiatives were included;
 they are presented in Supplementary Table S1,
 along with a subset of their most representative information.
-This information is detailed in Table \@ref(tab:summary),
+This information is explained in Table \@ref(tab:summary),
 along with the data from *`r sample_initiative`* shown as an example.
 
 It is worth noting that in a large number of cases the contact person was
