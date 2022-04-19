@@ -670,8 +670,15 @@ with a spotlight in developing and enriching a "learning healthcare system"
 
 # Author contributions
 
-DM analyzed and interpreted the data,
-and wrote the subsequent versions of the article.
+LR contributed to the acquisition, analysis and interpretation of data,
+and wrote the first draft of the manuscript.
+DM analysed and interpreted the data
+and wrote the subsequent versions of the manuscript.
+ARL contributed substantially to the conception and design of
+the data collection and its acquisition,
+contributed to the writing of the manuscript, and revised it critically.
+EB and AW contributed to the writing of the manuscript and
+its critical revision.
 All authors approved the final version of the manuscript and
 agree to be accountable for all aspects of the work.
 
