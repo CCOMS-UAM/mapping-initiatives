@@ -518,7 +518,10 @@ tab1_shortest <- tab1_new_out |>
 
 tab1_sample <- tab1_new_out                   |>
   semi_join(tab1_shortest, by = "initiative") |>
-  mutate(across(everything(), as.character))  |>
+  mutate(
+    across(where(is.numeric), label_number()),
+    across(everything(), as.character)
+  )                                           |>
   pivot_longer(everything(), names_to = "var_name")
 
 sample_initiative <- tab1_sample   |>
@@ -542,7 +545,6 @@ countries_footnote <- tab1_sample           |>
   pull()                                    |>
   glue_collapse(sep = SEMICOLON_SEP)
 
-## TODO; Formatting of millions?
 initiatives_summary_output <- tab1_summary              |>
   flextable()                                           |>
   set_header_df(
@@ -585,7 +587,7 @@ descriptives_part_1 <- tab1_new_describe |> tbl_summary(
     all_continuous()  ~ "{median}",
     all_categorical() ~ "{n}"
   ),
-  digits       = list(all_continuous() ~ label_number()),
+  digits       = list(all_continuous() ~ label_number(accuracy = 1)),
   missing_text = MISSING_LABEL
 )
 
@@ -594,7 +596,10 @@ descriptives_part_2 <- tab1_new_describe |> tbl_summary(
     all_continuous()  ~ "({min} - {max})",
     all_categorical() ~ "({p}%)"
   ),
-  digits       = list(all_categorical() ~ 1, all_continuous() ~ label_number()),
+  digits       = list(
+    all_categorical() ~ 1,
+    all_continuous()  ~ label_number(accuracy = 1)
+  ),
   missing      = "no",
   missing_text = MISSING_LABEL
 )
@@ -802,7 +807,7 @@ min_n_countries_out <- descriptives_part_2                 |>
 
 tab1_n_continents <- tab1_new |>
   select(n_continents)        |>
-  tbl_summary()
+  tbl_summary(digits = list(all_categorical() ~ c(0, 1)))
 
 prop_1_continent_out  <- tab1_n_continents |>
   inline_text(variable = "n_continents", level = "1", pattern = "{p}%")
