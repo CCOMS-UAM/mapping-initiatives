@@ -121,10 +121,10 @@
     },
     "blob": {
       "Package": "blob",
-      "Version": "1.2.2",
+      "Version": "1.2.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "dc5f7a6598bb025d20d66bb758f12879",
+      "Hash": "10d231579bc9c06ab1c320618808d4ff",
       "Requirements": [
         "rlang",
         "vctrs"
@@ -132,10 +132,10 @@
     },
     "bookdown": {
       "Package": "bookdown",
-      "Version": "0.25",
+      "Version": "0.26",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "6bbce515702d8d2f9a36b385bc629eb1",
+      "Hash": "65ebdc552e88fc98c596f4797c5415ad",
       "Requirements": [
         "htmltools",
         "jquerylib",
@@ -148,10 +148,10 @@
     },
     "broom": {
       "Package": "broom",
-      "Version": "0.7.12",
+      "Version": "0.8.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "bfa8a039d77ae8d5413254e572c8abea",
+      "Hash": "fe13cb670e14da57fd7a466578db8ce5",
       "Requirements": [
         "backports",
         "dplyr",
@@ -487,29 +487,6 @@
       "Hash": "7c89603d81793f0d5486d91ab1fc6f1d",
       "Requirements": []
     },
-    "ftExtra": {
-      "Package": "ftExtra",
-      "Version": "0.3.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "bdc0155b7266dc578859db2ae021014e",
-      "Requirements": [
-        "dplyr",
-        "flextable",
-        "jsonlite",
-        "magrittr",
-        "purrr",
-        "rlang",
-        "rmarkdown",
-        "stringr",
-        "tibble",
-        "tidyr",
-        "tidyselect",
-        "vctrs",
-        "xfun",
-        "yaml"
-      ]
-    },
     "gargle": {
       "Package": "gargle",
       "Version": "1.2.0",
@@ -678,14 +655,16 @@
     },
     "haven": {
       "Package": "haven",
-      "Version": "2.4.3",
+      "Version": "2.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "10bec8a8264f3eb59531e8c4c0303f96",
+      "Hash": "e3058e4ac77f4fa686f68a1838d5b715",
       "Requirements": [
+        "cli",
         "cpp11",
         "forcats",
         "hms",
+        "lifecycle",
         "readr",
         "rlang",
         "tibble",
@@ -1304,10 +1283,10 @@
     },
     "scales": {
       "Package": "scales",
-      "Version": "1.1.1",
+      "Version": "1.2.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "6f76f71042411426ec8df6c54f34e6dd",
+      "Hash": "6e8750cdd13477aa440d453da93d5cac",
       "Requirements": [
         "R6",
         "RColorBrewer",
@@ -1315,6 +1294,7 @@
         "labeling",
         "lifecycle",
         "munsell",
+        "rlang",
         "viridisLite"
       ]
     },
@@ -1542,10 +1522,10 @@
     },
     "vctrs": {
       "Package": "vctrs",
-      "Version": "0.4.0",
+      "Version": "0.4.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "95c2573b232eac82df562f9e300f9790",
+      "Hash": "8b54f22e2a58c4f275479c92ce041a57",
       "Requirements": [
         "cli",
         "glue",
