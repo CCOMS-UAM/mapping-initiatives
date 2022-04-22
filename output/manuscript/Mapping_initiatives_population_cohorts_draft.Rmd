@@ -12,6 +12,12 @@ output:
       layout:        autofit
       caption:
         sep: '. '
+    page_margins:
+      bottom: 1
+      top:    1
+      right:  1
+      left:   1
+      gutter: 0
     keep_md:         no
 bibliography:        ../../www/Mapping_initiatives.bib
 csl:                 ../../www/sage-vancouver-brackets.csl
