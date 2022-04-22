@@ -183,7 +183,7 @@ prop_Latam_out
 Laura Alejandra Rico-Uribe^1,2^;
 Ángel Rodríguez-Laso^3^;
 Ellen Vorstenbosch^1,4^;
-Adreas J. Weser^5^;
+Andreas J. Weser^5^;
 Laura Fincias^4^;
 Yannick Marcon^6^;
 Leocadio Rodriguez-Mañas^3^;
