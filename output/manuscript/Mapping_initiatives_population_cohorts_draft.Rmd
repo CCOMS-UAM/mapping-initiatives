@@ -336,7 +336,7 @@ as well as the results and conclusions of this mapping exercise.
 ## Identification of initiatives
 
 Three different methods were used
-to find initiatives that integrate population cohorts.
+to find initiatives that integrated population cohorts.
 The first one was a systematic search in the MEDLINE database.
 The second one consisted of asking the SYNCHROS consortium and
 scientific officers of the European Commission for suggestions on initiatives.
@@ -443,8 +443,8 @@ the principal investigator and/or the contact person of the project
 was consulted, by email first and, if no reply was received,
 by telephone or postal mail.
 
-Some variables were collected in order to describe the harmonisation process,
-namely: harmonisation strategy
+The following information about the harmonisation process was collected:
+harmonisation strategy
 (prospective/retrospective ex-ante/retrospective ex-post),
 number of harmonised cohorts,
 whether more cohorts were foreseen to be harmonised,
@@ -452,8 +452,8 @@ number of participants with harmonised data,
 maximum number of harmonised variables
 (including those where harmonisation was not possible for all the cohorts),
 setting of the harmonised cohorts (local-regional/national/international),
-The following variables were deemed relevant for the integration effort and
-thus were also collected for each initiative:
+The following information was deemed relevant for the integration effort and
+thus was also collected for each initiative:
 total number of cohorts, total number of participants, age range of the sample,
 country/ies included, whether metadata and individual data were accessible to
 other researchers,
@@ -465,13 +465,15 @@ and type(s) of aggregated analyses performed on the integrated cohorts
 The country where the leading institution was based and the countries
 included in the integrated cohorts were recoded into continents
 (`r VECTOR_CONTINENTS_AMERICAS_SEP_PRINT`).
-For all the variables, descriptive statistics were computed when appropriate:
+Descriptive statistics were computed for all the outcomes when appropriate:
 absolute frequencies and proportions (over number of non-missing values)
-for the categorical variables;
+for the categorical ones;
 median, minimum and maximum for the quantitative ones.
 In the case of the number of participants with harmonised data and
 the maximum number of harmonised variables, the statistics were computed
 using only the initiatives with harmonised cohorts.
+In the case of the age range of the sample, some initiatives did not have
+concrete numerical values and were not taken into account.
 
 # Results
 
@@ -481,8 +483,8 @@ The MEDLINE search identified 843 articles that described initiatives
 to be potentially included. After screening the titles and abstracts,
 166 articles met the inclusion criteria.
 From the full-text review, 155 articles were excluded due to one or more of
-the following reasons: one-time efforts (articles where the merging of data
-was done only for carrying out the research presented in the paper),
+the following reasons: one-time efforts (i.e., data merged ad-hoc
+for the specific analysis supporting the paper),
 initiatives already submitted by partners, articles with
 cross-sectional harmonisation only, multisite cohorts/harmonisation of waves,
 meta-analyses, reviews, case-control studies, patients' cohorts,
@@ -540,9 +542,9 @@ analysis were less common, being used only by `r analysis_meta_out` and
 `r analysis_federated_out` of the initiatives
 (note that some initiatives used more than one type of integrated analysis).
 
-The targeted populations ranged in age from childbirth to
-`r max_age_max_out` years old
-(although this probably refers to an unbounded upper limit).
+The targeted populations ranged in age from childbirth to death
+(the `r max_age_max_out`-year-old upper limit probably refers to
+a cohort with unbounded maximum age, rather than participants of that age).
 Ageing and air pollution were the most prevalent topic and
 socio-environmental context, respectively,
 each one addressed by `r prop_ageing_out` of the initiatives, and
@@ -571,8 +573,8 @@ the state of the art of the initiatives that integrate population cohorts.
 The landscape of these initiatives has been revealed to be quite disparate,
 with a high variability of populations and variables,
 as well as topics and regions addressed by the integrated cohorts.
-As foreseeable, the number of participants and variables integrated is larger
-in general than in initiatives integrating patient cohorts
+As foreseeable, the number of participants and variables integrated is
+generally larger than in initiatives integrating patient cohorts
 [@rodriguez-laso_map_2021].
 Taking the high volumes of data in some of the initiatives,
 their potential for future researchers is undeniable.
@@ -600,7 +602,7 @@ so private interest in funding cohort research might be overlooked.
 Focus on environmental exposures was more prevalent than
 genetic and biological factors.
 Very few of the initiatives were actually found to harmonise and integrate
-biological samples
+biological sample data
 (although there was a high rate of missingness in this variable).
 Including them may help discover possible causal pathways among biological,
 behavioural, social, demographic, economic, and health outcomes
@@ -643,7 +645,8 @@ any initiatives that have published results.
 Also, as the response rate of the principal investigators was rather low,
 relevant information on some initiatives is still missing
 at the time of submission of this manuscript.
-However, the SYNCHROS repository is an evolving project,
+However, the SYNCHROS repository (https://repository.synchros.eu) is
+an evolving project,
 where the most recent information available is continuously updated.
 
 ## Conclusions
