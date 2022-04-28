@@ -1,11 +1,16 @@
 ---
-title: |
-  Supplementary table:
-  Descriptive information of the initiatives included in the mapping
+title: Supplementary Table 1
 output: bookdown::html_document2
 editor_options:
   chunk_output_type: console
 ---
+
+<style type="text/css">
+.main-container {
+  max-width:  3000px;
+  margin-left:  auto;
+}
+</style>
 
 ```{r setup, include=FALSE}
 # Environment setup:
@@ -27,7 +32,7 @@ opts_chunk$set(
   results        = 'hide',
   message        = FALSE,
   warning        = FALSE,
-  cache          = FALSE,
+  cache          = TRUE,
   autodep        = TRUE,
   tab.topcaption = TRUE
 )
@@ -49,31 +54,18 @@ SRC_FILEPATH |> read_chunk()
 ```{r health-topic-derivate-vars}
 ```
 
-```{r socioenvcontext-derivate-vars}
-```
-
-```{r socioenvcontext-other-values}
-```
-
 ```{r analyses-derivate-vars}
 ```
 
 ```{r create-output-dataset}
 ```
 
-```{r preprocess-descriptives}
-```
-
 ```{r create-headers-labels}
 ```
 
-```{r initiatives-table-output-supplementary, results='asis'}
-library(DT)
+```{r initiatives-table-supplementary}
+```
 
-tab1_new_out |> datatable(
-  filter = "top",
-  rownames = FALSE,
-  width = 400,
-  height = 1200
-)
+```{r initiatives-table-supplementary-output, results='asis'}
+supplementary_table_output
 ```
