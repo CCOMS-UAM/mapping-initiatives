@@ -311,7 +311,6 @@ The project
 (SYNCHROS) was funded by the Horizon 2020 Research and Innovation Program with
 the goal of formulating this strategy,
 through intensive stakeholder collaboration (https://www.synchros.eu).
-<!-- # TODO: Ref. needed?. -->
 Among others, one of its first actions was the mapping of
 the cohort integration initiatives landscape
 across the world and in Europe especially.
@@ -574,7 +573,7 @@ Taking the high volumes of data in some of the initiatives,
 their potential for future researchers is undeniable.
 Still, the number of integration initiatives seems rather low,
 compared to the overall and increasing number of very large cohort datasets
-worldwide.<!-- # TODO: Reference needed? -->
+worldwide.
 It is also worth stressing that a large proportion of the initiatives found are
 inactive nowadays, limiting the possibilities of data access and sharing.
 
