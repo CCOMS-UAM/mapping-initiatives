@@ -285,41 +285,6 @@ tab1_topics_wide <- tab1_topics                               |>
 tab1_new <- tab1_new |> left_join(tab1_topics_wide, by = "id")
 
 
-## ----socioenvcontext-derivate-vars-----------------------------------------------------------------------
-tab1_context <- tab1_new                            |>
-  separate_rows(socioenvcontext, sep = PIPE_REGEXP) |>
-  select(id, socioenvcontext)
-
-tab1_context_headers <- tab1_context |>
-  drop_na()                          |>
-  distinct(socioenvcontext)          |>
-  transmute(
-    var_name  = paste0("context_", socioenvcontext),
-    header    = SOCENV_HEADER,
-    subheader = socioenvcontext                                  |>
-      str_replace(
-        pattern     = "work_",
-        replacement = "work-"
-      )                                                          |>
-      str_replace(
-        pattern     = "short_half_",
-        replacement = "short-half-"
-      )                                                          |>
-      str_replace_all(pattern = UNDERSCORE, replacement = SPACE) |>
-      str_to_sentence()
-  )
-
-tab1_context_wide <- tab1_context                                |>
-  mutate(value = TRUE)                                           |>
-  complete(id, socioenvcontext, fill = list(value = FALSE))      |>
-  drop_na()                                                      |>
-  pivot_wider(names_from = socioenvcontext, values_from = value) |>
-  select(id, everything(), -other, other)                        |>
-  rename_with(~paste0("context_", .), .cols = -id)
-
-tab1_new <- tab1_new |> left_join(tab1_context_wide, by = "id")
-
-
 ## ----socioenvcontext-other-values------------------------------------------------------------------------
 tab1_socioenvcontext_other <- tab1_new |>
   separate_rows(
@@ -448,7 +413,6 @@ suppressMessages( # Message when reading empty column names
 tab1_headers <- tab1_headers |> bind_rows(
   tab1_continent_headers,
   tab1_topic_headers,
-  tab1_context_headers,
   tab1_analysis_headers
 )
 
