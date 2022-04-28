@@ -245,9 +245,10 @@ tab1_new <- tab1_new |> left_join(tab1_continents_wide, by = "id")
 
 
 ## ----health-topic-derivate-vars-----------------------------------------------
-tab1_topics <- tab1_new                             |>
-  separate_rows(healthtopic, sep = PIPE_REGEXP)     |>
-  select(id, healthtopic)
+tab1_topics <- tab1_new                         |>
+  separate_rows(healthtopic, sep = PIPE_REGEXP) |>
+  select(id, healthtopic)                       |>
+  filter(healthtopic != "non_communicable_diseases" | is.na(healthtopic))
 
 tab1_topic_headers <- tab1_topics |>
   drop_na()                       |>
