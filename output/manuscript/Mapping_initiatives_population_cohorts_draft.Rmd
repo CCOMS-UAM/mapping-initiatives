@@ -78,12 +78,6 @@ SRC_FILEPATH |> read_chunk()
 ```{r health-topic-derivate-vars}
 ```
 
-```{r socioenvcontext-derivate-vars}
-```
-
-```{r socioenvcontext-other-values}
-```
-
 ```{r analyses-derivate-vars}
 ```
 
@@ -245,7 +239,7 @@ from the two previous sources.
 **Results:** We found `r total_N` initiatives that
 integrate population cohorts, although a significant proportion of
 their leading teams were inactive or unresponsive.
-Topics, socio-environmental contexts, and populations were
+Topics and populations were
 rather disparate, with high volumes of integrated data.
 Most of the initiatives were led by European and North American institutions,
 and most of the integrated cohorts came from these two areas as well.  
@@ -458,9 +452,8 @@ total number of cohorts, total number of participants, age range of the sample,
 country/ies included, whether metadata and individual data were accessible to
 other researchers,
 whether any of the cohorts included biological (omics) samples,
-research topic(s) and socio-environmental context(s) addressed,
-and type(s) of aggregated analyses performed on the integrated cohorts
-(pooled, federated, or meta-analysis).
+research topic(s) addressed, and type(s) of aggregated analyses performed on
+the integrated cohorts (pooled, federated, or meta-analysis).
 
 The country where the leading institution was based and the countries
 included in the integrated cohorts were recoded into continents
@@ -545,9 +538,8 @@ analysis were less common, being used only by `r analysis_meta_out` and
 The targeted populations ranged in age from childbirth to death
 (the `r max_age_max_out`-year-old upper limit probably refers to
 a cohort with unbounded maximum age, rather than participants of that age).
-Ageing and air pollution were the most prevalent topic and
-socio-environmental context, respectively,
-each one addressed by `r prop_ageing_out` of the initiatives, and
+Ageing was the most prevalent topic,
+addressed by `r prop_ageing_out` of the initiatives, and
 `r omics_out` of the initiatives included omics data (i.e. biological samples).
 The cohorts were collected in as many as `r max_n_countries_out` countries,
 although there were also initiatives with cohorts from
