@@ -455,7 +455,7 @@ tab1_summary <- tab1_headers |>
       "Number of participants across the cohorts with harmonised data.",
       paste(
         "Age range (minimum and maximum, or description) of",
-        "the total sample across cohorts.",
+        "the total sample across cohorts."
       ),
       "Maximum number of harmonised variables in any harmonised cohort.",
       "Criteria for selecting and integrating cohorts in the initiative."
@@ -578,7 +578,7 @@ descriptives_total <- descriptives_part_1                                |>
       if_else(true = header, false = var_label)
   )                                                                      |>
   # Discard repeated "missings" in analyses:
-  slice(-c(111, 113))                                                    |>
+  slice(-c(90, 92))                                                      |>
   # Discards "variable" rows (unnecessary vertical space):
   filter(!is.na(stat_0))
 
@@ -791,19 +791,3 @@ n_Latam_out    <- descriptives_part_2                                       |>
   as.character()
 prop_Latam_out <- descriptives_part_2 |>
   inline_text(variable = "bool_Latin America & Caribbean", pattern = "{p}%")
-
-
-## ----initiatives-table-output-manuscript--------------------------------------
-initiatives_table_output <- tab1_new_out |>
-  flextable()                            |>
-  set_header_df(
-    mapping = tab1_headers |> select(-label),
-    key     = "var_name"
-  )                                      |>
-  merge_h(part = "header")               |>
-  merge_v(part = "header")               |>
-  colformat_num(na_str  = MISSING_STR)   |>
-  colformat_char(na_str = MISSING_STR)   |>
-  theme_booktabs(bold_header = TRUE)     |>
-  fontsize(size = 12)                    |>
-  set_table_properties(layout = "autofit")
