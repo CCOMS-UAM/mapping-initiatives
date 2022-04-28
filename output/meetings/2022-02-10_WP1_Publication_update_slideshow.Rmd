@@ -33,8 +33,6 @@ library(tidyverse)
 library(lubridate)
 
 
-# TODO: Revisar configuración
-
 # Configuration:
 opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, results = 'asis')
 ```

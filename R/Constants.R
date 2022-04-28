@@ -24,7 +24,7 @@ library(countrycode)
 ### File names:
 INITIATIVES_FILENAME <- "synchros-initiatives.xlsx"
 INIT_FILENAME_MANUAL <- "synchros-initiatives-short-free-text.xlsx"
-INIT_FILENAME_EDITED <- "synchros-initiatives-short-free-text_edited.xlsx"
+INIT_FILENAME_EDITED <- "initiatives-dataset.xlsx"
 VAR_CORRESP_FILENAME <- "variable_correspondence.xlsx"
 MICA_DATA_FILENAME   <- "mica-export.csv"
 EXTRAS_FILENAME      <- "PORCENTAJES_template_3_population_.03.07.20.xls"

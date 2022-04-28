@@ -245,9 +245,10 @@ tab1_new <- tab1_new |> left_join(tab1_continents_wide, by = "id")
 
 
 ## ----health-topic-derivate-vars-----------------------------------------------
-tab1_topics <- tab1_new                             |>
-  separate_rows(healthtopic, sep = PIPE_REGEXP)     |>
-  select(id, healthtopic)
+tab1_topics <- tab1_new                         |>
+  separate_rows(healthtopic, sep = PIPE_REGEXP) |>
+  select(id, healthtopic)                       |>
+  filter(healthtopic != "non_communicable_diseases" | is.na(healthtopic))
 
 tab1_topic_headers <- tab1_topics |>
   drop_na()                       |>
@@ -269,69 +270,24 @@ tab1_topics_wide <- tab1_topics                               |>
   complete(id, healthtopic, fill = list(value = FALSE))       |>
   drop_na()                                                   |>
   pivot_wider(names_from  = healthtopic, values_from = value) |>
-  # Reorder according to Angel's suggestion (email from 21/03/2022)
+  # Reorder according to order agreed in 28/04/2022 meeting
   select(
-    chronic_diseases, non_communicable_diseases,
+    id,
+    chronic_diseases,
     cancer,
-    ends_with("_diseases"), # All diseases
+    ends_with("_diseases") & !communicable_diseases, # All diseases
+    communicable_diseases,
     biomedicine, general_epidemiology, public_health,
-    ageing, ends_with("_health"),
-    social_environment,
+    ageing, birth_infancy_childhood_health,
+    mental_health,
+    environmental_health, social_environment,
+    ends_with("_health"),
     medical_imaging,
     everything()
   )                                                           |>
   rename_with(~paste0("topic_", .), .cols = -id)
 
 tab1_new <- tab1_new |> left_join(tab1_topics_wide, by = "id")
-
-
-## ----socioenvcontext-derivate-vars-----------------------------------------------------------------------
-tab1_context <- tab1_new                            |>
-  separate_rows(socioenvcontext, sep = PIPE_REGEXP) |>
-  select(id, socioenvcontext)
-
-tab1_context_headers <- tab1_context |>
-  drop_na()                          |>
-  distinct(socioenvcontext)          |>
-  transmute(
-    var_name  = paste0("context_", socioenvcontext),
-    header    = SOCENV_HEADER,
-    subheader = socioenvcontext                                  |>
-      str_replace(
-        pattern     = "work_",
-        replacement = "work-"
-      )                                                          |>
-      str_replace(
-        pattern     = "short_half_",
-        replacement = "short-half-"
-      )                                                          |>
-      str_replace_all(pattern = UNDERSCORE, replacement = SPACE) |>
-      str_to_sentence()
-  )
-
-tab1_context_wide <- tab1_context                                |>
-  mutate(value = TRUE)                                           |>
-  complete(id, socioenvcontext, fill = list(value = FALSE))      |>
-  drop_na()                                                      |>
-  pivot_wider(names_from = socioenvcontext, values_from = value) |>
-  select(id, everything(), -other, other)                        |>
-  rename_with(~paste0("context_", .), .cols = -id)
-
-tab1_new <- tab1_new |> left_join(tab1_context_wide, by = "id")
-
-
-## ----socioenvcontext-other-values------------------------------------------------------------------------
-tab1_socioenvcontext_other <- tab1_new |>
-  separate_rows(
-    socioenvcontextother,
-    sep = glue("({COMMA_SEP}|{SEMICOLON_SEP})")
-  )                                    |>
-  distinct(id, socioenvcontextother)   |>
-  drop_na()                            |>
-  count(socioenvcontextother)          |>
-  arrange(desc(n))                     |>
-  mutate(socioenvcontextother = socioenvcontextother |> str_to_sentence())
-
 
 ## ----analyses-derivate-vars------------------------------------------------------------------------------
 tab1_analysis <- tab1_new                    |>
@@ -388,7 +344,7 @@ suppressMessages( # Message when reading empty column names
       header = header                            |>
         str_detect(AUTO_VARNAME_PREFIX_REGEXP)   |>
         if_else(header |> dplyr::lag(1), header) |>
-        str_replace("harmonized", "harmonised"), # Correct errata in headers:
+        str_replace("harmoniz", "harmonis"), # Correct errata in headers:
     )                                                                        |>
     mutate( # Edit headers to correspond to the new structure:
       header    = if_else(header == "INITIATIVE", "Initiative", header),
@@ -414,7 +370,7 @@ suppressMessages( # Message when reading empty column names
           "Setting",
           "Access to metadata",
           "Access to individual data",
-          "Harmonization strategy",
+          "Harmonisation strategy",
           "With omics data",
           "Team active (at consultation)",
           "Funding",
@@ -448,13 +404,12 @@ suppressMessages( # Message when reading empty column names
 tab1_headers <- tab1_headers |> bind_rows(
   tab1_continent_headers,
   tab1_topic_headers,
-  tab1_context_headers,
   tab1_analysis_headers
 )
 
 # Create labels and format subheaders:
 tab1_headers <- tab1_headers |>
-  unite(# TODO; Use subheaders as labels (when adding headers to the desc. tab.)
+  unite(
     header, subheader,
     col    = "label",
     sep    = COLON,
@@ -474,14 +429,95 @@ tab1_new <- tab1_new |> imap_dfc(# Labels to assign to the columns
     properties <- tab1_headers |> filter(var_name == variable)
     
     column %@% "header"     <- properties |> pull(header)
-    # column %@% "label"      <- properties |> pull(label)
-    # column %@% "subheader"  <- properties |> pull(subheader)
-    # TODO: Substitute two previous lines by the follwing:
     column %@% "label"  <- properties |> pull(subheader)
     
     column
   }
 )
+
+
+## ----summary-table----
+tab1_summary <- tab1_headers |>
+  semi_join(
+    colnames(tab1_new_out) |> enframe(value = "var_name"),
+    by = "var_name"
+  )                          |>
+  select(-label)             |>
+  add_column(
+    description = c(
+      "Initiative acronym (when available) and name.",
+      "Region or countries where the integrated cohorts have been collected.",
+      "Free-text description of the initiative purpose and objectives.",
+      "Total number of cohorts integrated",
+      "Number of cohorts where at least some of the data have been harmonised.",
+      "Whether more cohorts are expected to be harmonised.",
+      "Total number of participants across cohorts.",
+      "Number of participants across the cohorts with harmonised data.",
+      paste(
+        "Age range (minimum and maximum, or description) of",
+        "the total sample across cohorts."
+      ),
+      "Maximum number of harmonised variables in any harmonised cohort.",
+      "Criteria for selecting and integrating cohorts in the initiative."
+    )
+  )
+
+# In order to provide an example, we select the initiative with the shortest
+#   combined description and cohort criteria texts, without any of the output
+#   values missing.
+tab1_shortest <- tab1_new_out |>
+  drop_na()                   |>
+  transmute(
+    initiative,
+    across(c(description_short, cohortcriteria_short), nchar),
+    total = description_short + cohortcriteria_short
+  )                           |>
+  filter(total == min(total))
+
+tab1_sample <- tab1_new_out                   |>
+  semi_join(tab1_shortest, by = "initiative") |>
+  mutate(
+    across(where(is.numeric), label_number()),
+    across(everything(), as.character)
+  )                                           |>
+  pivot_longer(everything(), names_to = "var_name")
+
+sample_initiative <- tab1_sample   |>
+  filter(var_name == "initiative") |>
+  pull()
+
+tab1_summary <- tab1_summary              |>
+  full_join(tab1_sample, by = "var_name") |>
+  select(-var_name)
+
+countries_footnote <- tab1_sample           |>
+  filter(var_name == "region_countries")    |>
+  select(-var_name)                         |>
+  separate_rows(value)                      |>
+  mutate(
+    country = value                         |>
+      countrycode(origin = "iso3c", destination = "country.name")
+  )                                         |>
+  arrange(value)                            |>
+  unite("key", value, country, sep = ' = ') |>
+  pull()                                    |>
+  glue_collapse(sep = SEMICOLON_SEP)
+
+initiatives_summary_output <- tab1_summary              |>
+  flextable()                                           |>
+  set_header_df(
+    mapping = tibble(
+      label    = c("Column" |> rep(2), "Description", "Example"),
+      col_keys = tab1_summary |> colnames()
+    )
+  )                                                     |>
+  add_footer_lines(glue("Note. {countries_footnote}.")) |>
+  merge_h(part = "header")                              |>
+  merge_h()                                             |>
+  merge_v(j = "header")                                 |>
+  theme_booktabs(bold_header = TRUE)                    |>
+  fontsize(size = 12)                                   |>
+  set_table_properties(layout = "autofit")
 
 
 ## ----descriptives-table-------------------------------------------------------
@@ -490,7 +526,6 @@ tab1_new_describe <- tab1_new |> select(
   team_activity, continent_institution, funding,
   starts_with("access"),
   starts_with("topic_"),
-  starts_with("context_"),
   omics,
   starts_with("cohorts."),
   morecohortstobeharmonized,
@@ -509,6 +544,7 @@ descriptives_part_1 <- tab1_new_describe |> tbl_summary(
     all_continuous()  ~ "{median}",
     all_categorical() ~ "{n}"
   ),
+  digits       = list(all_continuous() ~ label_number(accuracy = 1)),
   missing_text = MISSING_LABEL
 )
 
@@ -517,7 +553,10 @@ descriptives_part_2 <- tab1_new_describe |> tbl_summary(
     all_continuous()  ~ "({min} - {max})",
     all_categorical() ~ "({p}%)"
   ),
-  digits       = list(all_categorical() ~ 1),
+  digits       = list(
+    all_categorical() ~ 1,
+    all_continuous()  ~ label_number(accuracy = 1)
+  ),
   missing      = "no",
   missing_text = MISSING_LABEL
 )
@@ -539,14 +578,18 @@ descriptives_total <- descriptives_part_1                                |>
       if_else(true = header, false = var_label)
   )                                                                      |>
   # Discard repeated "missings" in analyses:
-  slice(-c(101, 103))                                                    |>
+  slice(-c(90, 92))                                                      |>
   # Discards "variable" rows (unnecessary vertical space):
   filter(!is.na(stat_0))
+
+row_types <- descriptives_total |> pull(row_type)
+
+total_N <- descriptives_part_2 |> extract2("N")
 
 var_groups <- descriptives_total |> pull(header)
 
 descriptives_total <- descriptives_total                                 |>
-  # For formatting output purrposes:
+  # For formatting output purposes:
   group_by(var_label)                                                    |>
   mutate(
     header = (n() == 2 & label == MISSING_LABEL) |>
@@ -557,29 +600,29 @@ descriptives_total <- descriptives_total                                 |>
 
 descriptives_header <- tibble(
   col_keys  = descriptives_total |> colnames(),
-  names     = c("Variable", "Level", "Median / n", "(Range / %)")
+  names     = c(
+    "Variable",
+    "Level",
+    glue("Median / n (N = {total_N})"),
+    "(Range / %)"
+  )
 )
 
-descriptives_table_output <- descriptives_total |>
-  flextable()                                   |>
-  set_header_df(descriptives_header)            |>
-  merge_h()                                     |>
-  merge_v("header")                             |>
-  theme_booktabs(bold_header = TRUE)            |>
-  hline(i = var_groups != lead(var_groups))     |>
-  align(j = "stat_0", align = "right", part = "all") |>
-  valign(valign = "top")                        |>
+descriptives_table_output <- descriptives_total               |>
+  flextable()                                                 |>
+  set_header_df(descriptives_header)                          |>
+  merge_h()                                                   |>
+  merge_v("header")                                           |>
+  theme_booktabs(bold_header = TRUE)                          |>
+  fontsize(size = 8)                                          |>
+  hline(i = var_groups != lead(var_groups))                   |>
+  align(j = "stat_0", align = "right", part = "all")          |>
+  padding(row_types == "missing", "label", padding.left = 20) |>
+  valign(valign = "top")                                      |>
   autofit()
 
 
 ## ----compute-descriptive-values-----------------------------------------------
-# Total nº of initiatives:
-total_N_out <- descriptives_part_2 |>
-  extract2("N")                    |>
-  as.english()                     |>
-  as.character()
-total_N_out_sentence_case <- total_N_out |> str_to_sentence()
-
 # Maximum number of missing values in one descriptive variable:
 max_missing_out <- tab1_new_describe           |>
   summarize(across(.fns = ~sum(is.na(.))/n())) |>
@@ -666,8 +709,14 @@ omics_out <- descriptives_part_2 |>
   inline_text(variable = "omics", pattern = "{p}% (n = {n})")
 
 # Total nº of cohorts:
-total_cohorts_range_out  <- descriptives_part_2 |>
-  inline_text(variable = "cohorts.total", pattern = "{min} and {max}")
+total_cohorts_min  <- descriptives_part_2                    |>
+  inline_text(variable = "cohorts.total", pattern = "{min}") |>
+  as.integer()                                               |>
+  as.english()                                               |>
+  as.character()
+total_cohorts_max  <- descriptives_part_2 |>
+  inline_text(variable = "cohorts.total", pattern = "{max}")
+total_cohorts_range_out  <- glue("{total_cohorts_min} and {total_cohorts_max}")
 total_cohorts_median_out <- descriptives_part_1 |>
   inline_text(variable = "cohorts.total", pattern = "{median}")
 
@@ -715,7 +764,7 @@ min_n_countries_out <- descriptives_part_2                 |>
 
 tab1_n_continents <- tab1_new |>
   select(n_continents)        |>
-  tbl_summary()
+  tbl_summary(digits = list(all_categorical() ~ c(0, 1)))
 
 prop_1_continent_out  <- tab1_n_continents |>
   inline_text(variable = "n_continents", level = "1", pattern = "{p}%")
@@ -742,18 +791,3 @@ n_Latam_out    <- descriptives_part_2                                       |>
   as.character()
 prop_Latam_out <- descriptives_part_2 |>
   inline_text(variable = "bool_Latin America & Caribbean", pattern = "{p}%")
-
-
-## ----initiatives-table-output-manuscript--------------------------------------
-initiatives_table_output <- tab1_new_out |>
-  flextable()                            |>
-  set_header_df(
-    mapping = tab1_headers |> select(-label),
-    key     = "var_name"
-  )                                      |>
-  merge_h(part = "header")               |>
-  merge_v(part = "header")               |>
-  colformat_num( na_str = MISSING_STR)   |>
-  colformat_char(na_str = MISSING_STR)   |>
-  theme_booktabs(bold_header = TRUE)     |>
-  set_table_properties(layout = "autofit")
