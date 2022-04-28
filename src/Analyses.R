@@ -805,20 +805,18 @@ tab1_subheaders <- tab1_headers                      |>
 
 # container <- 
 
-supplementary_table_output <- tab1_new_out |>
-  arrange(initiative)                      |> # Previously arranged by `id`
+supplementary_table_output <- tab1_new_out      |>
+  mutate(across(where(is.numeric), as.integer)) |> # For integer filters in DT
+  arrange(initiative)                           |> # Previously arranged by `id`
   datatable(
     options = list(
       searchHighlight = TRUE,
-      scrollY         = 700,
+      scrollY         = 550,
       scrollX         = "100%"
     ),
     # container = ,
-    caption = "Main information of the initiatives included in the mapping",
     rownames = FALSE,
     colnames = tab1_subheaders,
     filter = "top",
-    width = 2000,
-    # height = 1800,
     fillContainer = TRUE
   )
