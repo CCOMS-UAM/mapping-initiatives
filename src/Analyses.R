@@ -27,6 +27,7 @@ library(gtsummary)
 library(english)
 library(scales)
 library(janitor)
+library(DT)
 
 # Source files:
 source("R/Constants.R", encoding = 'UTF-8')
@@ -791,3 +792,33 @@ n_Latam_out    <- descriptives_part_2                                       |>
   as.character()
 prop_Latam_out <- descriptives_part_2 |>
   inline_text(variable = "bool_Latin America & Caribbean", pattern = "{p}%")
+
+## ----initiatives-table-supplementary------------------------------------------
+
+tab1_cols <- colnames(tab1_new_out)
+
+tab1_subheaders <- tab1_headers                      |>
+  filter(var_name %in% tab1_cols)                    |>
+  select(subheader, var_name)                        |>
+  mutate(var_name = var_name |> setNames(subheader)) |>
+  pull(var_name)
+
+# container <- 
+
+supplementary_table_output <- tab1_new_out |>
+  arrange(initiative)                      |> # Previously arranged by `id`
+  datatable(
+    options = list(
+      searchHighlight = TRUE,
+      scrollY         = 700,
+      scrollX         = "100%"
+    ),
+    # container = ,
+    caption = "Main information of the initiatives included in the mapping",
+    rownames = FALSE,
+    colnames = tab1_subheaders,
+    filter = "top",
+    width = 2000,
+    # height = 1800,
+    fillContainer = TRUE
+  )
