@@ -453,7 +453,10 @@ tab1_summary <- tab1_headers |>
       "Whether more cohorts are expected to be harmonised.",
       "Total number of participants across cohorts.",
       "Number of participants across the cohorts with harmonised data.",
-      "Age range (minimum and maximum, or description) of the total sample across cohorts.",
+      paste(
+        "Age range (minimum and maximum, or description) of",
+        "the total sample across cohorts.",
+      ),
       "Maximum number of harmonised variables in any harmonised cohort.",
       "Criteria for selecting and integrating cohorts in the initiative."
     )
@@ -523,7 +526,6 @@ tab1_new_describe <- tab1_new |> select(
   team_activity, continent_institution, funding,
   starts_with("access"),
   starts_with("topic_"),
-  starts_with("context_"),
   omics,
   starts_with("cohorts."),
   morecohortstobeharmonized,
@@ -576,7 +578,7 @@ descriptives_total <- descriptives_part_1                                |>
       if_else(true = header, false = var_label)
   )                                                                      |>
   # Discard repeated "missings" in analyses:
-  slice(-c(101, 103))                                                    |>
+  slice(-c(111, 113))                                                    |>
   # Discards "variable" rows (unnecessary vertical space):
   filter(!is.na(stat_0))
 
