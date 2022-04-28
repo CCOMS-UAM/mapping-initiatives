@@ -270,34 +270,24 @@ tab1_topics_wide <- tab1_topics                               |>
   complete(id, healthtopic, fill = list(value = FALSE))       |>
   drop_na()                                                   |>
   pivot_wider(names_from  = healthtopic, values_from = value) |>
-  # Reorder according to Angel's suggestion (email from 21/03/2022)
+  # Reorder according to order agreed in 28/04/2022 meeting
   select(
-    chronic_diseases, non_communicable_diseases,
+    id,
+    chronic_diseases,
     cancer,
-    ends_with("_diseases"), # All diseases
+    ends_with("_diseases") & !communicable_diseases, # All diseases
+    communicable_diseases,
     biomedicine, general_epidemiology, public_health,
-    ageing, ends_with("_health"),
-    social_environment,
+    ageing, birth_infancy_childhood_health,
+    mental_health,
+    environmental_health, social_environment,
+    ends_with("_health"),
     medical_imaging,
     everything()
   )                                                           |>
   rename_with(~paste0("topic_", .), .cols = -id)
 
 tab1_new <- tab1_new |> left_join(tab1_topics_wide, by = "id")
-
-
-## ----socioenvcontext-other-values------------------------------------------------------------------------
-tab1_socioenvcontext_other <- tab1_new |>
-  separate_rows(
-    socioenvcontextother,
-    sep = glue("({COMMA_SEP}|{SEMICOLON_SEP})")
-  )                                    |>
-  distinct(id, socioenvcontextother)   |>
-  drop_na()                            |>
-  count(socioenvcontextother)          |>
-  arrange(desc(n))                     |>
-  mutate(socioenvcontextother = socioenvcontextother |> str_to_sentence())
-
 
 ## ----analyses-derivate-vars------------------------------------------------------------------------------
 tab1_analysis <- tab1_new                    |>
