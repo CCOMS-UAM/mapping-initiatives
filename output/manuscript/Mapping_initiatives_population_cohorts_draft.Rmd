@@ -675,7 +675,7 @@ with a spotlight in developing and enriching a "learning healthcare system"
 
 # Ethics approval
 
-<!-- # TODO: Complete -->
+Ethics approval does not apply.
 
 # Author contributions
 
@@ -693,7 +693,9 @@ agree to be accountable for all aspects of the work.
 
 # Data availability
 
-<!-- # TODO: Complete -->
+The data underlying this article are available in GitHub at https://github.com/,
+and can be accessed with URL:
+https://github.com/CCOMS-UAM/mapping-initiatives/blob/main/dat/initiatives-dataset.xlsx
 
 # Supplementary material
 
