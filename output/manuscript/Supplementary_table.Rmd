@@ -32,13 +32,12 @@ SRC_FILEPATH <- file.path(SRC_DIR, "Analyses.R")
 # Knitr configuration:
 opts_knit$set(root.dir = ROOT_DIR) # Interferes with officedown!
 opts_chunk$set(
-  echo           = FALSE,
-  results        = 'hide',
-  message        = FALSE,
-  warning        = FALSE,
-  cache          = TRUE,
-  autodep        = TRUE,
-  tab.topcaption = TRUE
+  echo    = FALSE,
+  results = 'hide',
+  message = FALSE,
+  warning = FALSE,
+  cache   = TRUE,
+  autodep = TRUE
 )
 ```
 
@@ -74,5 +73,7 @@ SRC_FILEPATH |> read_chunk()
 supplementary_table_output
 ```
 
-Main information of the initiatives included in the mapping
-*Note.* 
+Main information of the initiatives included in the mapping.  
+*Note:*
+`r countries_footnote`.  
+Empty cells represent non-available information.

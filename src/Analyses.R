@@ -16,7 +16,7 @@
 rm(list = ls())
 gc()
 
-## ----includes, cache=FALSE----------------------------------------------------
+## ----includes-----------------------------------------------------------------
 # Libraries:
 library(rlang)
 library(tidyverse)
@@ -795,28 +795,35 @@ prop_Latam_out <- descriptives_part_2 |>
 
 ## ----initiatives-table-supplementary------------------------------------------
 
-tab1_cols <- colnames(tab1_new_out)
-
-tab1_subheaders <- tab1_headers                      |>
-  filter(var_name %in% tab1_cols)                    |>
-  select(subheader, var_name)                        |>
-  mutate(var_name = var_name |> setNames(subheader)) |>
-  pull(var_name)
-
-# container <- 
+sup_table_container <- tab1_headers            |>
+  filter(var_name %in% colnames(tab1_new_out)) |>
+  create_datatable_container()
 
 supplementary_table_output <- tab1_new_out      |>
   mutate(across(where(is.numeric), as.integer)) |> # For integer filters in DT
   arrange(initiative)                           |> # Previously arranged by `id`
   datatable(
-    options = list(
+    options       = list(
       searchHighlight = TRUE,
       scrollY         = 550,
       scrollX         = "100%"
     ),
-    # container = ,
-    rownames = FALSE,
-    colnames = tab1_subheaders,
-    filter = "top",
+    class         = "dt-responsive compact fill-container display",
+    container     = sup_table_container,
+    rownames      = FALSE,
+    filter        = "top",
     fillContainer = TRUE
   )
+
+countries_footnote <- tab1_countries          |>
+  distinct(countries)                         |>
+  arrange(countries)                          |>
+  mutate(
+    name = countrycode(
+      countries,
+      origin      = "iso3c",
+      destination = "country.name")
+  )                                           |>
+  unite(equiv, countries, name, sep = EQUALS) |>
+  pull(equiv)                                 |>
+  glue_collapse(sep = SEMICOLON_SEP)

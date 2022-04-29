@@ -82,6 +82,7 @@ ELLIPSIS            <- "..."
 AUTO_VARNAME_PREFIX <- ELLIPSIS
 MISSING_STR         <- "(NA)"
 MISSING_LABEL       <- "(Missing)"
+EQUALS              <- " = "
 
 ### Regular expressions:
 AUTO_VARNAME_PREFIX_REGEXP     <- r"(^\.\.\.)"
