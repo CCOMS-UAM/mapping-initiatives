@@ -15,6 +15,8 @@
 ## ---- INCLUDES: --------------------------------------------------------------
 
 library(glue)
+library(tidyverse)
+library(htmltools)
 
 
 ## ---- CONSTANTS: -------------------------------------------------------------
@@ -29,6 +31,44 @@ QT_CLOSING_CHARS <- c(
 
 
 ## ---- FUNCTIONS: -------------------------------------------------------------
+
+
+### Output formatting functions: ----
+
+create_datatable_container <- function(headers) {
+  
+  headers <- headers          |>
+    select(header, subheader) |>
+    group_by(header)          |>
+    add_count()               |>
+    nest(sub = subheader)
+  
+  overhead <- headers |>
+    select(-sub)      |>
+    pmap(
+      \(header, n) {
+        
+        if (n == 1) tags$th(rowspan = 2, header)
+        else        tags$th(colspan = n, header)
+      }
+    )
+  
+  underhead <- headers |>
+    filter(n == 2)     |>
+    unnest(sub)        |>
+    pull(subheader)    |>
+    map(tags$th)
+  
+  withTags(
+    table(
+      class = 'display',
+      thead(
+        tr(overhead),
+        tr(underhead)
+      )
+    )
+  )
+}
 
 ### Data variables and values outputs: ----
 
