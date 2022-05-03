@@ -82,10 +82,32 @@ coincidence_check <- initiatives_complete |> select(-id) |> imap_dfr(
 )
 
 # Notebook that generates the version of the table for manual edition:
+# This is a throughput output that requires manual processing, before
+#   the manuscript is rendered, so please note there is a non-reproducible
+#   step here:
 Rscript_call(
   render,
   list(
     input  = "notebooks/Manual_editing_table.Rmd",
+    params = list(write_file = WRITE_TABLES)
+  )
+)
+
+
+# Render article and supplementary table files:
+
+Rscript_call(
+  render,
+  list(
+    input  = "output/manuscript/Main_text.Rmd",
+    params = list(write_file = WRITE_TABLES)
+  )
+)
+
+Rscript_call(
+  render,
+  list(
+    input  = "output/manuscript/Supplementary_table.Rmd",
     params = list(write_file = WRITE_TABLES)
   )
 )
