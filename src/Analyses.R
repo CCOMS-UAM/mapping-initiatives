@@ -751,10 +751,7 @@ prop_ageing_out <- descriptives_part_2 |>
 
 # Nº of countries:
 max_n_countries_out <- descriptives_part_2                 |>
-  inline_text(variable = "n_countries", pattern = "{max}") |>
-  as.integer()                                             |>
-  as.english()                                             |>
-  as.character()
+  inline_text(variable = "n_countries", pattern = "{max}")
 min_n_countries_out <- descriptives_part_2                 |>
   inline_text(variable = "n_countries", pattern = "{min}") |>
   as.integer()                                             |>

@@ -174,8 +174,8 @@ prop_Latam_out
 
 <br>
 
-Laura Alejandra Rico-Uribe^1,2†^;
-Daniel Morillo-Cuadrado^1,3,\*†^;
+Laura Alejandra Rico-Uribe^1,2,†^;
+Daniel Morillo-Cuadrado^1,3,\*,†^;
 Ángel Rodríguez-Laso^4^;
 Ellen Vorstenbosch^1,5,6^;
 Andreas J. Weser^7^;
@@ -216,7 +216,7 @@ Arzobispo Morcillo 4, 28029 Madrid, Spain. E-mail: daniel.morillo@cibersam.es
 
 ^†^ Joint first authors
 
-**Word count:** <!-- # TODO: Fill in (CURRENT: 2708) -->
+**Word count:** 2829
 
 \newpage
 
@@ -224,7 +224,7 @@ Arzobispo Morcillo 4, 28029 Madrid, Spain. E-mail: daniel.morillo@cibersam.es
 
 **Background:** Health research increasingly requires the analysis of
 data across different cohorts;
-statistical power and representativeness are paramount to study
+statistical power and representativeness are paramount for studying
 infrequent conditions or specific groups of individuals.
 Although integrating cohorts is often difficult,
 several initiatives have done so.
@@ -234,7 +234,7 @@ such mapping, focusing on initiatives that integrate population cohorts.
 **Methods:** Three different sources were used to search for initiatives:
 1) A systematic search in the MEDLINE database;
 2) suggestions of potential initiatives to be included,
-provided by the partners of the SYNCHROS consortium who devised the mapping,
+provided by the partners of the SYNCHROS consortium who devised the mapping
 and European Commission scientific officers; and
 3) descendent searches in the references and links of the initiatives obtained
 from the two previous sources.  
@@ -287,12 +287,12 @@ Integrating these individual cohorts is the next step to getting
 the most valuable information out of them.
 Cohort integration studies may increase sample sizes drastically,
 allowing the study of important but infrequent phenomena
-(e.g. rare diseases) [@thompson_thinking_2009] while avoiding publication bias.
-The pressure is rapidly building up to keep up-to-date with
+(e.g., rare diseases) [@thompson_thinking_2009] while avoiding publication bias.
+The pressure is rapidly building up to keep up to date with
 integrating and capitalizing on this information,
 and several initiatives have joint forces for integrating cohorts
 from different studies
-(e.g. ATHLOS @sanchez-niubo_data_2017; BioSHaRE @kaye_consent_2016;
+(e.g., ATHLOS @sanchez-niubo_data_2017; BioSHaRE @kaye_consent_2016;
 CHICOS @strandberg-larsen_association_2017; HELIX @maitre_human_2018).
 However, methodological and infrastructure issues [@panahiazar_empowering_2014],
 as well as concerns about legal (i.e., data protection) and ethical aspects
@@ -306,9 +306,9 @@ as well as streamline the design and integration of future cohorts.
 In an attempt to expand and make these efforts more systematic,
 the European Commission called for a sustainable, strategic agenda for
 a better, global coordination of cohorts.
-The project
-*SYNergies for Cohorts in Health: integrating the ROle of all Stakeholders*
-(SYNCHROS) was funded by the Horizon 2020 Research and Innovation Program with
+The *SYNergies for Cohorts in Health: integrating the ROle of all Stakeholders*
+(SYNCHROS) project was funded by
+the Horizon 2020 Research and Innovation Program with
 the goal of formulating this strategy,
 through intensive stakeholder collaboration (https://www.synchros.eu).
 Among others, one of its first actions was the mapping of
@@ -342,7 +342,7 @@ The third was a descendent search using the information
 
 The search was intended to produce a representative,
 albeit non-exhaustive, list of cohort integration initiatives.
-An initial set of search terms were agreed upon by the consortium partners.
+An initial set of search terms was agreed upon by the consortium partners.
 In order to accomplish a manageable number of hits, these terms were tested and
 the ones that yielded more than 500 hits were discarded.
 (To reduce the number of hits, the term "cohort" was added
@@ -446,7 +446,7 @@ whether more cohorts were foreseen to be harmonised,
 number of participants with harmonised data,
 maximum number of harmonised variables
 (including those where harmonisation was not possible for all the cohorts),
-setting of the harmonised cohorts (local-regional/national/international),
+and setting of the harmonised cohorts (local-regional/national/international).
 The following information was deemed relevant for the integration effort and
 thus was also collected for each initiative:
 total number of cohorts, total number of participants, age range of the sample,
@@ -462,7 +462,7 @@ included in the integrated cohorts were recoded into continents
 Descriptive statistics were computed for all the outcomes when appropriate:
 absolute frequencies and proportions (over number of non-missing values)
 for the categorical ones;
-median, minimum and maximum for the quantitative ones.
+median, minimum, and maximum for the quantitative ones.
 In the case of the number of participants with harmonised data and
 the maximum number of harmonised variables, the statistics were computed
 using only the initiatives with harmonised cohorts.
@@ -511,14 +511,14 @@ we assume that those which did not respond were inactive).
 The majority of the leading institutions were based in
 `r country_institution_max_freq_out`, followed by institutions
 from `r country_institution_ranking_next_out`.
-`r funding_public_out` of the initiatives were funded by public institutions,
+Of the initiatives, `r funding_public_out` were funded by public institutions,
 while `r funding_mixed_out` received funding from
 both private and public institutions.
 
 The total number of cohorts ranged between `r total_cohorts_range_out`
 (median = `r total_cohorts_median_out`).
 Some initiatives had up to `r harm_cohorts_max_out` harmonised cohorts,
-while others only had collected the participating cohorts
+while others had only collected the participating cohorts
 (but had not started harmonising them yet).
 At least `r more_cohorts_expected_n_out` initiatives planned
 to obtain and harmonise more cohorts in the future.
@@ -532,7 +532,7 @@ by far the most prevalent strategy,
 used by `r harmo_max_prop_out` of the initiatives.
 The majority of initiatives (`r analysis_pooled_out`) used pooled analysis
 to perform integrated analysis on the cohorts. Meta-analysis and federated
-analysis were less common, being used only by `r analysis_meta_out` and
+analysis were less common, being used by only `r analysis_meta_out` and
 `r analysis_federated_out` of the initiatives
 (note that some initiatives used more than one type of integrated analysis).
 
@@ -541,13 +541,13 @@ The targeted populations ranged in age from childbirth to death
 a cohort with unbounded maximum age, rather than participants of that age).
 Ageing was the most prevalent topic,
 addressed by `r prop_ageing_out` of the initiatives, and
-`r omics_out` of the initiatives included omics data (i.e. biological samples).
+`r omics_out` of the initiatives included omics data (i.e., biological samples).
 The cohorts were collected in as many as `r max_n_countries_out` countries,
 although there were also initiatives with cohorts from
 only `r min_n_countries_out` country.
 Most of them (`r prop_1_continent_out`) were circumscribed
 to just one continent,
-being Europe the most frequent (`r prop_Europe_out`),
+with Europe being the most frequent (`r prop_Europe_out`),
 while only `r prop_6_continents_out` comprised cohorts from all
 six continents.
 Latin America and Africa were the most underrepresented continents,
@@ -556,7 +556,7 @@ and `r n_Africa_out` (`r prop_Africa_out`)
 initiatives including cohorts from them.
 The complete descriptive information of the initiatives can be found in Table
 \@ref(tab:descriptives).
-Also, the most up-to-date information on each initiative can be consulted
+Furthermore, the most up-to-date information on each initiative can be consulted
 in the repository of the SYNCHROS project (https://repository.synchros.eu).
 
 # Discussion
@@ -571,7 +571,7 @@ generally larger than in initiatives integrating patient cohorts
 [@rodriguez-laso_map_2021].
 Taking the high volumes of data in some of the initiatives,
 their potential for future researchers is undeniable.
-Still, the number of integration initiatives seems rather low,
+Nevertheless, the number of integration initiatives seems rather low,
 compared to the overall and increasing number of very large cohort datasets
 worldwide.
 It is also worth stressing that a large proportion of the initiatives found are
@@ -581,9 +581,9 @@ Most of the initiatives found were funded by public entities
 (and mainly by the European Commission).
 We found a scarcity of private funding,
 with only a few initiatives being partially funded by private institutions.
-One might think that e.g. pharmaceutical companies would be highly interested in
-integrating evidence across cohorts and thrive towards personalized medicine,
-especially in patient and clinical trial cohorts.
+One might think that, for example, pharmaceutical companies would be
+highly interested in integrating evidence across cohorts and thrive towards
+personalized medicine, especially in patient and clinical trial cohorts.
 However, the participation of private entities in funding patient cohorts was
 even lower [@rodriguez-laso_map_2021].
 Nevertheless, note that these funding sources refer only to the integration
@@ -635,7 +635,7 @@ rather than exhaustiveness.
 It should be noted though that, given the huge amount of work involved in
 integrating population cohorts, we deem it unlikely that we have missed
 any initiatives that have published results.
-Also, as the response rate of the principal investigators was rather low,
+Furthermore, as the response rate of the principal investigators was rather low,
 relevant information on some initiatives is still missing
 at the time of submission of this manuscript.
 However, the SYNCHROS repository (https://repository.synchros.eu) is
@@ -645,12 +645,12 @@ where the most recent information available is continuously updated.
 ## Conclusions
 
 Knowledge about restricted populations and phenomena
-(e.g. personalized medicine, rare diseases, epigenetics)
+(e.g., personalized medicine, rare diseases, epigenetics)
 require massive sample sizes to achieve the necessary
 statistical power.
 Moreover, global representativeness can only be achieved by addressing
 more diverse populations [@henrich_most_2010]
-from different ethnic, regional or/and socioeconomic settings.
+from different ethnic, regional, and/or socioeconomic settings.
 Synergies across a wide variety of existing cohort integration projects
 would help pursuing these goals, while being more cost-effective than
 undertaking new international mega-cohorts [@larsen_pregnancy_2013].
@@ -672,7 +672,7 @@ Ethics approval does not apply.
 
 # Author contributions
 
-LR contributed to the acquisition, analysis and interpretation of data,
+LR contributed to the acquisition, analysis, and interpretation of data,
 and wrote the first draft of the manuscript.
 DM analysed and interpreted the data
 and drafted the subsequent versions of the manuscript.
