@@ -46,7 +46,7 @@ opts_chunk$set(
   results    = 'hide',
   message    = FALSE,
   warning    = FALSE,
-  cache      = TRUE,
+  cache      = FALSE,
   autodep    = TRUE,
   dpi        = 300,
   fig.retina = 1,
