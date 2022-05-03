@@ -30,7 +30,7 @@ source("R/Constants.R", encoding = 'UTF-8')
 
 ## ---- CONSTANTS: -------------------------------------------------------------
 
-WRITE_TABLES <- TRUE # This can be changed to `FALSE` if ones doesn't want
+WRITE_TABLES <- TRUE # This can be changed to `FALSE` if one doesn't want
                      #   to write again the tables from the source Excel files.
 TEMP_FILE    <- "tmp.R"
 
