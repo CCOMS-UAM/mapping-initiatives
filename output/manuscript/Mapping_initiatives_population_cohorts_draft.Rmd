@@ -672,17 +672,23 @@ Ethics approval does not apply.
 
 # Author contributions
 
-LR contributed to the acquisition, analysis, and interpretation of data,
+LARU contributed to the acquisition, analysis, and interpretation of data,
 and wrote the first draft of the manuscript.
-DM analysed and interpreted the data
+DMC analysed and interpreted the data
 and drafted the subsequent versions of the manuscript.
 ARL contributed substantially to the conception and design of
 the data collection and its acquisition, analysis and interpretation,
 contributed to the writing of the manuscript, and revised it critically.
-EB and AW contributed to the writing of the manuscript and
-its critical revision.
+EV contributed to the conception and design of the study,
+and the acquisition, analysis and interpretation of data,
+and contributed to the writing of the manuscript and its critical revision.
+AJW contributed to the analysis and interpretation of data,
+as well as to the writing of the manuscript and its critical revision.
+LF contributed the the data acquisition, and revised the manuscript critically.
 YM contributed to the design and deployment of the SYNCHROS repository,
 collaborated with the data acquisition, and revised the manuscript critically.
+LRM, JMH and JLAM contributed to the conception and design of the study,
+and revised the manuscript critically for important intellectual content.
 All authors approved the final version of the manuscript and
 agree to be accountable for all aspects of the work.
 
