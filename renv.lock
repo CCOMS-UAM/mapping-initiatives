@@ -661,10 +661,10 @@
     },
     "gtsummary": {
       "Package": "gtsummary",
-      "Version": "1.6.0",
+      "Version": "1.5.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "61e361591586b5c218ac36d266509659",
+      "Hash": "cea30b67afeb3896c0086cf43580fb65",
       "Requirements": [
         "broom",
         "broom.helpers",
@@ -1446,10 +1446,10 @@
     },
     "tibble": {
       "Package": "tibble",
-      "Version": "3.1.7",
+      "Version": "3.1.5",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "08415af406e3dd75049afef9552e7355",
+      "Hash": "36eb05ad4cfdfeaa56f5a9b2a1311efd",
       "Requirements": [
         "ellipsis",
         "fansi",
