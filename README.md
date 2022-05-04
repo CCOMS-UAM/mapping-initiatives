@@ -8,10 +8,10 @@ international population cohorts"
 
 The two most relevant files are:
 
-- (`output/manuscript/Main_text.Rmd`)[output/manuscript/Main_text.Rmd]:
+- [`output/manuscript/Main_text.Rmd`](output/manuscript/Main_text.Rmd):
   This file renders the article main text output.
   
-- (`output/manuscript/Supplementary_table.Rmd`)[output/manuscript/Supplementary_table.Rmd]:
+- [`output/manuscript/Supplementary_table.Rmd`](output/manuscript/Supplementary_table.Rmd):
   This output renders the Supplementary Table 1 file, the interactive table
   with the most relevant informatio of the initiatives.
   
