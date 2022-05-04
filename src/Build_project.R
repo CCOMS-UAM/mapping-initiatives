@@ -16,6 +16,9 @@
 gc()
 rm(list = ls())
 
+# First re-install locally all the project environment:
+#  Must use R v4.1.3!!
+renv::restore()
 
 ## ---- INCLUDES: --------------------------------------------------------------
 
