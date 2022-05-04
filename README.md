@@ -52,10 +52,43 @@ First to this step, some pre-requisites must be met
 
 [JH]: https://docs.oracle.com/en/cloud/saas/enterprise-performance-management-common/diepm/epm_set_java_home_104x6dd63633_106x6dd6441c.html
 
+- [Git client][G]: Install the Git client in order to be able to clone locally
+  the project repository. On Windows, use the 64-bit [Windows installer][GW].
+
+[G]: https://git-scm.com/download
+
+[GW]: https://git-scm.com/download/win
+
+## Installing the project locally
+
+This project is hosted as a GitHub repository.
+It can be cloned as a local Git repository following [this instructions][CR].
+Note that this will create a local copy of the GitHub repository as an
+Rstudio project in the folder specified.
+The URL that must be entered into the `Repository URL` text box is:
+
+https://github.com/CCOMS-UAM/mapping-initiatives.git
+
+[CR]: https://book.cds101.com/using-rstudio-server-to-clone-a-github-repo-as-a-new-project.html
+
+After cloning the repository, the Rstudio project will open automatically in the
+Rstudio IDE.
+If it doesn't, or you want to return later to the project in Rstudio,
+you can do so by double clicking on the file `mapping-initiatives.Rproj`
+that has been created when cloning the repository.
+
+**NOTE:** It is common practice to avoid using and versioning `.Rprofile` files.
+This project uses [package `renv`][renv] to create a reproducible environment,
+and thus needs the `.Rprofile` file that lives in the root directory of the
+project. **Please DO NOT delete or edit this file**; it will install and
+activate the `renv` package and make it ready for restoring the environment.
+
+[renv]: https://cran.r-project.org/package=renv
+
 ## Building the project
 
 In order to build the project, simply source the script
-[`src/Build_project.R`](src/Build_project.R):
+[`src/Build_project.R`](src/Build_project.R) with the following command:
 
 ```r
 source("src/Build_project.R")
@@ -70,3 +103,7 @@ as it is the output of a manual throughput process
 "Cohort criteria" in order to make them shorter).
 To omit re-generating the throughput datasets, set the object
 `WRITE_TABLES <- FALSE` in line 33 of that script.
+
+**NOTE:** Rendering the project may take a while, especially the first time.
+This is due to the `renv` package restoring the environment, which implies
+downloading and installing several R packages. Please, be patient!
