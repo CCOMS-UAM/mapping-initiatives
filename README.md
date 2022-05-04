@@ -8,10 +8,10 @@ international population cohorts"
 
 The two most relevant files are:
 
-- (`output/manuscript/Main_text.Rmd`)[output/manuscript/Main_text.Rmd]:
+- [`output/manuscript/Main_text.Rmd`](output/manuscript/Main_text.Rmd):
   This file renders the article main text output.
   
-- (`output/manuscript/Supplementary_table.Rmd`)[output/manuscript/Supplementary_table.Rmd]:
+- [`output/manuscript/Supplementary_table.Rmd`](output/manuscript/Supplementary_table.Rmd):
   This output renders the Supplementary Table 1 file, the interactive table
   with the most relevant informatio of the initiatives.
   
@@ -43,8 +43,8 @@ First to this step, some pre-requisites must be met
 
 - [Java][J]: Install version 8, update 331 or latest of the
   Java Runtime Environment (JRE).
-  After finishing the installation, it is important to configure the
-  [`JAVA_HOME`][JH] environment variable.
+  After finishing the installation, it is important to 
+  [configure the `JAVA_HOME` environment variable][JH].
   The path to the JRE installation on Windows will tipically be similar to
   `C:/Program Files/Java/jre1.8.0_331` (depending on the version).
 
@@ -84,6 +84,17 @@ project. **Please DO NOT delete or edit this file**; it will install and
 activate the `renv` package and make it ready for restoring the environment.
 
 [renv]: https://cran.r-project.org/package=renv
+
+## Changing to the "Submission candidate" branch (optional)
+
+The repository cloning will create all the files as they are in the current
+state of development of the project.
+This is because the active Git branch will be the branch `main` by default.
+If you want to build "Submission candidate 1" instead
+(this will output the files submitted to IJE),
+[check out branch `submission/ije` instead][SB] (see Step 2 in this link).
+
+[SB]: https://twrushby.wordpress.com/2017/03/27/collaboration-with-rstudio-and-git-using-branches/
 
 ## Building the project
 
