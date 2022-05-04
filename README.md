@@ -85,6 +85,17 @@ activate the `renv` package and make it ready for restoring the environment.
 
 [renv]: https://cran.r-project.org/package=renv
 
+## Changing to the "Submission candidate" branch (optional)
+
+The repository cloning will create all the files as they are in the current
+state of development of the project.
+This is because the active Git branch will be the branch `main` by default.
+If you want to build "Submission candidate 1" instead
+(this will output the files submitted to IJE),
+[check out branch `submission/ije` instead][SB] (see Step 2 in this link).
+
+[SB]: https://twrushby.wordpress.com/2017/03/27/collaboration-with-rstudio-and-git-using-branches/
+
 ## Building the project
 
 In order to build the project, simply source the script
