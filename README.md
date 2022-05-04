@@ -43,8 +43,8 @@ First to this step, some pre-requisites must be met
 
 - [Java][J]: Install version 8, update 331 or latest of the
   Java Runtime Environment (JRE).
-  After finishing the installation, it is important to configure the
-  [`JAVA_HOME`][JH] environment variable.
+  After finishing the installation, it is important to 
+  [configure the `JAVA_HOME` environment variable][JH].
   The path to the JRE installation on Windows will tipically be similar to
   `C:/Program Files/Java/jre1.8.0_331` (depending on the version).
 
