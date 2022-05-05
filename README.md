@@ -13,7 +13,7 @@ The two most relevant files are:
   
 - [`output/manuscript/Supplementary_table.Rmd`](output/manuscript/Supplementary_table.Rmd):
   This output renders the Supplementary Table 1 file, the interactive table
-  with the most relevant informatio of the initiatives.
+  with the most relevant information of the initiatives.
   
 The output of these two files constitute the documents submitted to the
 journal, along with the cover letter and the "Authorship" and
@@ -25,6 +25,20 @@ The easiest way to render the project output is by sourcing the script
 [`src/Build_project.R`](src/Build_project.R).
 First to this step, some pre-requisites must be met
 (which imply manual installation of software components).
+
+**NOTE:** Sometimes the rendered output file `output/manuscript/Main_text.docx`
+gives an error when opening in MS Word (at least in Word 2013),
+stating that "there is a problem with the content".
+If this happens, it is enough to click on "Yes" when prompted to
+"recover the content of this document",
+and then save the recovered document in a new file.  
+Also, when opening this document, Word will prompt to
+"Update the fields" in this document.
+This is [set by design in the R package `officer`][UF],
+used to render the document, for security reasons.
+It is enough to click on "Yes" in this pop-up window.
+
+[UF]: https://ardata-fr.github.io/officeverse/faq.html#update-fields
 
 ## Manual installation of software components
 
