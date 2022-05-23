@@ -450,7 +450,7 @@ and one initiative that integrated patient and clinical trial cohorts.
 This resulted in the inclusion of another 48 initiatives that integrate
 population cohorts.
 A total of `r total_N` initiatives were included;
-they are presented in Supplementary Table S1,
+they are presented in the eTable in Supplemental Digital Content 1,
 along with a subset of their most representative information.
 This information is explained in Table \@ref(tab:summary),
 along with the data from *`r sample_initiative`* shown as an example.
@@ -645,10 +645,6 @@ and revised the manuscript critically.
 All authors approved the final version of the manuscript and
 agree to be accountable for all aspects of the work.
 
-# Supplementary material
-
-Supplementary material is available at IJE online
-
 # Acknowledgments
 
 We acknowledge and send our gratitude to the principal investigators and
@@ -688,3 +684,8 @@ include_graphics("../../www/Figure_1.tif", dpi = NA)
 # Necessary for officedown to find the template file:
 opts_knit$set(root.dir = ROOT_DIR)
 ```
+
+# Supplemental Digital Content
+
+Supplemental Digital Content 1. Interactive table of initiatives,
+with the main information of the initiatives included in the mapping. html
