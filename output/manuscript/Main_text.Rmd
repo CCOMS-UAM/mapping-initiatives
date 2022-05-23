@@ -172,54 +172,6 @@ n_Latam_out
 prop_Latam_out
 ```
 
-<br>
-
-Laura Alejandra Rico-Uribe^1,2,†^;
-Daniel Morillo-Cuadrado^1,3,\*,†^;
-Ángel Rodríguez-Laso^4^;
-Ellen Vorstenbosch^1,5,6^;
-Andreas J. Weser^7^;
-Laura Fincias^5^;
-Yannick Marcon^8^;
-Leocadio Rodriguez-Mañas^4^;
-Josep María Haro^5,6^;
-José Luis Ayuso-Mateos^1,3,9^
-
-<br>
-
-^1^ CIBERSAM (Network-based Biomedical Research Consortium,
-    area of Mental Health), Instituto de Salud Carlos III, Spain
-
-^2^ School of Health Sciences, Universidad Internacional de La Rioja
-
-^3^ Instituto de Investigación Sanitaria La Princesa (IIS-LP),
-    Hospital Universitario de La Princesa, Madrid, Spain
-
-^4^ CIBERFES (Network-based Biomedical Research Consortium,
-    area of Frailty and Healthy Ageing), Instituto de Salud Carlos III, Spain
-
-^5^ Parc Sanitari Sant Joan de Déu, Barcelona, Spain
-
-^6^ Universitat de Barcelona, Barcelona, Spain
-
-^7^ HUNT Research Centre, Norwegian University of Science and Technology,
-    Levanger, Norway
-
-^8^ Epigeny, St. Ouen, France
-
-^9^ Department of Psychiatry, Universidad Autónoma de Madrid, Madrid, Spain
-
-^\*^ **Corresponding author**:
-Daniel Morillo-Cuadrado,
-Universidad Autónoma de Madrid, Department of Psychiatry.
-Arzobispo Morcillo 4, 28029 Madrid, Spain. E-mail: daniel.morillo@cibersam.es
-
-^†^ Joint first authors
-
-**Word count:** 2906
-
-\newpage
-
 # Abstract
 
 **Background:** Health research increasingly requires the analysis of
@@ -666,10 +618,6 @@ emerging collaborative research,
 with a spotlight in developing and enriching a "learning healthcare system"
 [@frohlich_hype_2018].
 
-# Ethics approval
-
-Ethics approval does not apply.
-
 # Author contributions
 
 LARU contributed to the acquisition, analysis, and interpretation of data,
@@ -694,23 +642,9 @@ and revised the manuscript critically.
 All authors approved the final version of the manuscript and
 agree to be accountable for all aspects of the work.
 
-# Data availability
-
-The data underlying this article are available in GitHub at https://github.com/,
-and can be accessed with URL:
-https://github.com/CCOMS-UAM/mapping-initiatives/blob/main/dat/initiatives-dataset.xlsx
-
 # Supplementary material
 
 Supplementary material is available at IJE online
-
-# Funding
-
-This work was supported by the European Union’s Horizon 2020
-research and innovation programme [grant number 825884],
-and the Network-based Biomedical Research Consortium,
-area of Mental Health (CIBERSAM), Instituto de Salud Carlos III
-to LR and DM.
 
 # Acknowledgments
 
@@ -718,10 +652,6 @@ We acknowledge and send our gratitude to the principal investigators and
 contacts of the projects that answered all our communications.
 We would also like to acknowledge Maelstrom Research for
 their active contribution to the development of the Mica repository engine.
-
-# Conflicts of interest
-
-None declared.
 
 # References
 
