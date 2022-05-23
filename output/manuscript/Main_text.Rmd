@@ -190,8 +190,8 @@ provided by the partners of the SYNCHROS consortium who devised the mapping
 and European Commission scientific officers; and
 3) descendent searches in the references and links of the initiatives obtained
 from the two previous sources.  
-This yielded `r total_N` initiatives, although a significant proportion of
-their leading teams were inactive or unresponsive.
+This search yielded `r total_N` initiatives, although a significant proportion
+of their leading teams were inactive or unresponsive.
 Topics and populations were
 rather disparate, with high volumes of integrated data.
 Most of the initiatives were led by European and North American institutions,
@@ -585,7 +585,7 @@ we should stress that this manuscript aims at representativeness
 rather than exhaustiveness.
 It should be noted though that, given the huge amount of work involved in
 integrating population cohorts, we deem it unlikely that we have missed
-any initiatives that have published results.
+any initiative that has published results.
 Furthermore, as the response rate of the principal investigators was rather low,
 relevant information on some initiatives is still missing
 at the time of submission of this manuscript.
