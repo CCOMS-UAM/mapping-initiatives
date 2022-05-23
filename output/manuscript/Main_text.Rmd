@@ -391,7 +391,10 @@ When the information was not available through the website or
 published articles,
 the principal investigator and/or the contact person of the project
 was consulted, by email first and, if no reply was received,
-by telephone or postal mail.
+by telephone or postal mail
+(see eAppendix, Supplemental Digital Content 1,
+with the form used to gather the information of the initiatives from the
+contact persons).
 
 The following information about the harmonisation process was collected:
 harmonisation strategy
@@ -450,7 +453,7 @@ and one initiative that integrated patient and clinical trial cohorts.
 This resulted in the inclusion of another 48 initiatives that integrate
 population cohorts.
 A total of `r total_N` initiatives were included;
-they are presented in the eTable in Supplemental Digital Content 1,
+they are presented in the eTable in Supplemental Digital Content 2,
 along with a subset of their most representative information.
 This information is explained in Table \@ref(tab:summary),
 along with the data from *`r sample_initiative`* shown as an example.
@@ -689,5 +692,9 @@ opts_knit$set(root.dir = ROOT_DIR)
 
 # Supplemental Digital Content
 
-Supplemental Digital Content 1. Interactive table of initiatives,
+Supplemental Digital Content 1. Data collection form used to gather
+the information of the initiatives
+from each principal investigator/contact person. docx
+
+Supplemental Digital Content 2. Interactive table of initiatives,
 with the main information of the initiatives included in the mapping. html
