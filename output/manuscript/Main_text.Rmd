@@ -22,7 +22,7 @@ output:
       left:          1
       gutter:        0
 bibliography:        ../../www/Mapping_initiatives.bib
-csl:                 ../../www/sage-vancouver-brackets.csl
+csl:                 ../../www/Epidemiology.csl
 editor_options:
   chunk_output_type: console
 ---
@@ -48,7 +48,7 @@ opts_chunk$set(
   results    = 'hide',
   message    = FALSE,
   warning    = FALSE,
-  cache      = TRUE,
+  cache      = FALSE,
   autodep    = TRUE,
   dpi        = 300,
   fig.retina = 1,
@@ -684,6 +684,8 @@ include_graphics("../../www/Figure_1.tif", dpi = NA)
 # Necessary for officedown to find the template file:
 opts_knit$set(root.dir = ROOT_DIR)
 ```
+
+\newpage
 
 # Supplemental Digital Content
 
