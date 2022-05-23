@@ -205,7 +205,8 @@ improving transparency and availability of information.
 We expect this mapping exercise to help researchers
 integrate cohorts and find venues for collaborative research.
 
-**Keywords:** mapping; population cohorts; harmonisation; integration
+**Keywords:** cohort studies; population surveillance; integration;
+harmonisation; systematic review
 
 \newpage
 
