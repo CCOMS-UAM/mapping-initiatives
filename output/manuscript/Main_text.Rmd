@@ -4,7 +4,7 @@ title: |
 output:
   officedown::rdocx_document:
     base_format:     bookdown::word_document2
-    reference_docx:  ../../www/IJE_template.docx
+    reference_docx:  ../../www/Epidemilogy_template.docx
     fig_width:       6.73
     fig_asp:          .75
     number_sections: no
