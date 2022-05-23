@@ -12,13 +12,15 @@ output:
       layout:        autofit
       caption:
         sep:         '. '
+    page_size:
+      width:         8.5
+      height:       11
     page_margins:
       bottom:        1
       top:           1
       right:         1
       left:          1
       gutter:        0
-    keep_md:         no
 bibliography:        ../../www/Mapping_initiatives.bib
 csl:                 ../../www/sage-vancouver-brackets.csl
 editor_options:
@@ -46,7 +48,7 @@ opts_chunk$set(
   results    = 'hide',
   message    = FALSE,
   warning    = FALSE,
-  cache      = FALSE,
+  cache      = TRUE,
   autodep    = TRUE,
   dpi        = 300,
   fig.retina = 1,
