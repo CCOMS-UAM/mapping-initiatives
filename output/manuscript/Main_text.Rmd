@@ -212,19 +212,6 @@ harmonisation; systematic review
 
 \newpage
 
-# Key messages
-
-* A mapping of the initiatives across the globe that integrate
-  population cohorts is carried out.  
-
-* The number of initiatives found is rather low compared with
-  individual cohort studies being conducted.
-
-* Integrating population cohorts may help increase
-  statistical power and representativeness in epidemiological research.
-
-\newpage
-
 # Background
 
 There has been a recent surge in scientific data collection
