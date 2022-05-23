@@ -174,7 +174,7 @@ prop_Latam_out
 
 # Abstract
 
-Health research increasingly requires the analysis of
+**Background:** Health research increasingly requires the analysis of
 data across different cohorts;
 statistical power and representativeness are paramount for studying
 infrequent conditions or specific groups of individuals.
@@ -182,21 +182,22 @@ Although integrating cohorts is often difficult,
 several initiatives have done so.
 A map portraying a complete overview of these efforts is missing.
 This paper aims to lay out the methodology and results of
-such mapping, focusing on initiatives that integrate population cohorts.
-We used three different sources to search for initiatives:
+such mapping, focusing on initiatives that integrate population cohorts.  
+**Methods:** Three different sources were used to search for initiatives:
 1) A systematic search in the MEDLINE database;
 2) suggestions of potential initiatives to be included,
 provided by the partners of the SYNCHROS consortium who devised the mapping
 and European Commission scientific officers; and
 3) descendent searches in the references and links of the initiatives obtained
 from the two previous sources.  
-This search yielded `r total_N` initiatives, although a significant proportion
-of their leading teams were inactive or unresponsive.
+**Results:** We found `r total_N` initiatives that
+integrate population cohorts, although a significant proportion of
+their leading teams were inactive or unresponsive.
 Topics and populations were
 rather disparate, with high volumes of integrated data.
 Most of the initiatives were led by European and North American institutions,
 and most of the integrated cohorts came from these two areas as well.  
-We conclude that the number of cohort integration initiatives is still low,
+**Conclusions:** The number of cohort integration initiatives is still low,
 especially compared with the large amount of cohort studies
 being carried out worldwide.
 The existing and new initiatives and cohort studies should strive toward
