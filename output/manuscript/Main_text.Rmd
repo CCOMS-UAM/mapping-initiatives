@@ -679,9 +679,9 @@ opts_knit$set(root.dir = ROOT_DIR)
 
 # Supplemental Digital Content
 
-Supplemental Digital Content 1. Data collection form used to gather
-the information of the initiatives
-from each principal investigator/contact person. docx
+* Supplemental Digital Content 1. Data collection form used to gather
+  the information of the initiatives
+  from each principal investigator/contact person. docx
 
-Supplemental Digital Content 2. Interactive table of initiatives,
-with the main information of the initiatives included in the mapping. html
+* Supplemental Digital Content 2. Interactive table of initiatives,
+  with the main information of the initiatives included in the mapping. html
