@@ -36,7 +36,7 @@ José Luis Ayuso-Mateos^1,3,9^
 
 ^1^ CIBERSAM (Network-based Biomedical Research Consortium,
     area of Mental Health), Instituto de Salud Carlos III,
-    Spanish Ministry of Science and Innovation.
+    Spanish Ministry of Science and Innovation
 
 ^2^ School of Health Sciences, Universidad Internacional de La Rioja
 
@@ -45,7 +45,7 @@ José Luis Ayuso-Mateos^1,3,9^
 
 ^4^ CIBERFES (Network-based Biomedical Research Consortium,
     area of Frailty and Healthy Ageing), Instituto de Salud Carlos III,
-    Spanish Ministry of Science and Innovation.
+    Spanish Ministry of Science and Innovation
 
 ^5^ Parc Sanitari Sant Joan de Déu, Barcelona, Spain
 
