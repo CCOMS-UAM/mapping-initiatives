@@ -4,7 +4,7 @@ title: |
 output:
   officedown::rdocx_document:
     base_format:     bookdown::word_document2
-    reference_docx:  ../../www/Epidemiology_template.docx
+    reference_docx:  ../../www/Frontiers_template.docx
     fig_width:       6.73
     fig_asp:          .75
     number_sections: no
@@ -16,13 +16,13 @@ output:
       width:         8.5
       height:       11
     page_margins:
-      bottom:        1
-      top:           1
-      right:         1
-      left:          1
+      bottom:        0.7913386
+      top:           0.7913386
+      right:         0.8188976
+      left:          0.8897638
       gutter:        0
 bibliography:        ../../www/Mapping_initiatives.bib
-csl:                 ../../www/Epidemiology.csl
+csl:                 ../../www/vancouver.csl
 editor_options:
   chunk_output_type: console
 ---
