@@ -217,7 +217,7 @@ Daniel Morillo-Cuadrado
 daniel.morillo@cibersam.es
 
 **Keywords: cohort studies, harmonization, integration,
-mapping, population cohorts, systematic review**
+mapping, population cohorts**
 
 **Abstract**
 
@@ -225,7 +225,7 @@ mapping, population cohorts, systematic review**
 data across different cohorts;
 statistical power and representativeness are paramount for studying
 infrequent conditions or specific groups of individuals.
-Although integrating cohorts is often difficult,
+Although integrating and harmonizing cohorts is often difficult,
 several initiatives have done so.
 A map portraying a complete overview of these efforts is missing.
 This paper aims to lay out the methodology and results of
