@@ -222,7 +222,7 @@ mapping, population cohorts**
 
 **Abstract**
 
-**Background:** Health research increasingly requires the analysis of
+Health research increasingly requires the analysis of
 data across different cohorts;
 statistical power and representativeness are paramount for studying
 infrequent conditions or specific groups of individuals.
@@ -231,21 +231,21 @@ several initiatives have done so.
 A map portraying a complete overview of these efforts is missing.
 This paper aims to lay out the methodology and results of
 such mapping, focusing on initiatives that integrate population cohorts.  
-**Methods:** Three different sources were used to search for initiatives:
+Three different sources were used to search for initiatives:
 1) A systematic search in the MEDLINE database;
 2) suggestions of potential initiatives to be included,
 provided by the partners of the SYNCHROS consortium who devised the mapping
 and European Commission scientific officers; and
 3) descendent searches in the references and links of the initiatives obtained
 from the two previous sources.  
-**Results:** We found `r total_N` initiatives that
+We found `r total_N` initiatives that
 integrate population cohorts, although a significant proportion of
 their leading teams were inactive or unresponsive.
 Topics and populations were
 rather disparate, with high volumes of integrated data.
 Most of the initiatives were led by European and North American institutions,
 and most of the integrated cohorts came from these two areas as well.  
-**Conclusions:** The number of cohort integration initiatives is still low,
+The number of cohort integration initiatives is still low,
 especially compared with the large amount of cohort studies
 being carried out worldwide.
 The existing and new initiatives and cohort studies should strive toward
@@ -309,7 +309,7 @@ We present the methodology for gathering a collection of initiatives
 that have integrated such cohorts in the last twenty years,
 as well as the results and conclusions of this mapping exercise.
 
-# Methods
+# Materials and methods
 
 ## Identification of initiatives
 
@@ -543,7 +543,7 @@ The complete descriptive information of the initiatives can be found in Table
 Furthermore, the most up-to-date information on each initiative can be consulted
 in the repository of the SYNCHROS project (https://repository.synchros.eu).
 
-# Conclusions
+# Conclusion
 
 The purpose of this mapping was to gather knowledge about
 the state of the art of the initiatives that integrate population cohorts.
@@ -626,7 +626,7 @@ However, the SYNCHROS repository (https://repository.synchros.eu) is
 an evolving project,
 where the most recent information available is continuously updated.
 
-## Capstone remarks
+## Final remarks
 
 Knowledge about restricted populations and phenomena
 (e.g., personalized medicine, rare diseases, epigenetics)
