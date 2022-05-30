@@ -345,7 +345,7 @@ suppressMessages( # Message when reading empty column names
       header = header                            |>
         str_detect(AUTO_VARNAME_PREFIX_REGEXP)   |>
         if_else(header |> dplyr::lag(1), header) |>
-        str_replace("harmoniz", "harmonis"), # Correct errata in headers:
+        str_replace("harmonis", "harmoniz"), # Correct errata in headers:
     )                                                                        |>
     mutate( # Edit headers to correspond to the new structure:
       header    = if_else(header == "INITIATIVE", "Initiative", header),
@@ -371,7 +371,7 @@ suppressMessages( # Message when reading empty column names
           "Setting",
           "Access to metadata",
           "Access to individual data",
-          "Harmonisation strategy",
+          "Harmonization strategy",
           "With omics data",
           "Team active (at consultation)",
           "Funding",
@@ -450,15 +450,15 @@ tab1_summary <- tab1_headers |>
       "Region or countries where the integrated cohorts have been collected.",
       "Free-text description of the initiative purpose and objectives.",
       "Total number of cohorts integrated",
-      "Number of cohorts where at least some of the data have been harmonised.",
-      "Whether more cohorts are expected to be harmonised.",
+      "Number of cohorts where at least some of the data have been harmonized.",
+      "Whether more cohorts are expected to be harmonized.",
       "Total number of participants across cohorts.",
-      "Number of participants across the cohorts with harmonised data.",
+      "Number of participants across the cohorts with harmonized data.",
       paste(
         "Age range (minimum and maximum, or description) of",
         "the total sample across cohorts."
       ),
-      "Maximum number of harmonised variables in any harmonised cohort.",
+      "Maximum number of harmonized variables in any harmonized cohort.",
       "Criteria for selecting and integrating cohorts in the initiative."
     )
   )
