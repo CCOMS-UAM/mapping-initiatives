@@ -210,7 +210,8 @@ prop_Latam_out
 
 ^9^ Department of Psychiatry, Universidad Autónoma de Madrid, Madrid, Spain
 
-^†^ Joint first authors
+^†^ These authors have contributed equally to this work and
+share first authorship
 
 **\* Correspondence:**  
 Daniel Morillo-Cuadrado  
