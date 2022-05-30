@@ -455,7 +455,7 @@ using only the initiatives with harmonized cohorts.
 In the case of the age range of the sample, some initiatives did not have
 concrete numerical values and were not taken into account.
 
-The flowchart diagram in Figure \@ref(fig:flowchart) summarizes the initiatives
+The flowchart diagram in Figure 1 summarizes the initiatives
 included and excluded using the three methods.
 The MEDLINE search identified 843 articles that described initiatives
 to be potentially included. After screening the titles and abstracts,
@@ -704,26 +704,32 @@ their active contribution to the development of the Mica repository engine.
 
 \newpage
 
+Figure 1. Flowchart diagram detailing the initiatives included and excluded.
+
+\newpage
+
 ```{r set-flextable-wd, cache=FALSE}
 # Necessary for flextable to find the csl file:
 opts_knit$set(root.dir = DOC_DIR)
 ```
 
+<br>
+
 ```{r summary, cache=FALSE, tab.id="summary", tab.cap="Summary of the main information shown in the table of initiatives.", results='asis'}
 initiatives_summary_output
 ```
 
+<br>
+
 \newpage
+
+<br>
 
 ```{r descriptives, cache=FALSE, tab.id="descriptives", tab.cap="Descriptive statistics of the initiatives mapped.", results='asis'}
 descriptives_table_output
 ```
 
-\newpage
-
-```{r flowchart, cache=FALSE, fig.cap="Flowchart diagram detailing the initiatives included and excluded.", results='asis'}
-include_graphics("../../www/Figure_1.tif", dpi = NA)
-```
+<br>
 
 ```{r reset-root-dir, cache=FALSE}
 # Necessary for officedown to find the template file:
