@@ -1,0 +1,27 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+
+This article presents the results of a mapping effort of
+the initiatives across the world that have integrated or
+are integrating several cohort studies.
+The importance of such initiatives is paramount
+to increase power and representativeness,
+enabling the study of infrequent conditions and exposures or
+specific minority conditions.
+The results of our mapping can provide
+very valuable information for epidemiological researchers who may want
+to contact other teams that are carrying out cohort research or
+integrating cohort studies, in order to improve collaboration and joint efforts.
+We also provide guidance about the weak points in cohort integration research
+that may help improve these efforts in the near future.
+The complete list of initiatives included in the mapping are presented as
+a Supplementary Table, in order to avoid an excessive length of the manuscript.
+We leverage on the interactivity of the HTML format for allowing the interested
+reader to search, filter, and arrange the initiatives;
+although this is not a standard format for submitting supplementary files,
+we have considered it a more useful format than a text file.
+Additionally, we introduce the Synchros repository, where the most up-to-date
+information of these initiatives is continuously updated and curated.
