@@ -404,8 +404,33 @@ For all the initiatives found, a double-check was performed by
 two different researchers in order to carry out an objective evaluation and
 reduce the risk of bias.
 In case of discrepancy between the two reviewers, a third person was consulted.
+The flowchart diagram in Figure 1 summarizes the initiatives
+included and excluded using the three methods.
 
-# Data extraction and analysis
+The MEDLINE search identified 843 articles that described initiatives
+to be potentially included. After screening the titles and abstracts,
+166 articles met the inclusion criteria.
+From the full-text review, 155 articles were excluded due to one or more of
+the following reasons: one-time efforts (i.e., data merged ad-hoc
+for the specific analysis supporting the paper),
+initiatives already submitted by partners, articles with
+cross-sectional harmonization only, multisite cohorts/harmonization of waves,
+meta-analyses, reviews, case-control studies, patients' cohorts,
+clinical trial cohorts, and others.
+From the systematic review, 11 articles were included.
+Additionally, from the partners’ and officers' suggestions and
+the descendent searches,
+189 potential initiatives were obtained. After screening for eligibility,
+141 projects were excluded for one or more of the following reasons:
+initiatives published before the year 2000,
+projects that did not integrate cohorts,
+one initiative with only cross-sectional cohorts,
+and one initiative that integrated patient and clinical trial cohorts.
+This resulted in the inclusion of another 47 initiatives that integrate
+population cohorts.
+Thus, the total of initiatives included amounted to `r total_N`.
+
+## Data extraction
 
 The following technical information was extracted from the initiatives:
 name, principal investigator (PI), initiative partners,
@@ -441,6 +466,12 @@ other researchers,
 whether any of the cohorts included biological (omics) samples,
 research topic(s) addressed, and type(s) of aggregated analyses performed on
 the integrated cohorts (pooled, federated, or meta-analysis).
+The initiatives are presented in the Supplementary Table 1,
+including a subset of their most representative information.
+This information is explained in Table \@ref(tab:summary),
+along with the data from *`r sample_initiative`* shown as an example.
+
+# Dataset descriptive statistics
 
 The country where the leading institution was based and the countries
 included in the integrated cohorts were recoded into continents
@@ -454,35 +485,6 @@ the maximum number of harmonized variables, the statistics were computed
 using only the initiatives with harmonized cohorts.
 In the case of the age range of the sample, some initiatives did not have
 concrete numerical values and were not taken into account.
-
-The flowchart diagram in Figure 1 summarizes the initiatives
-included and excluded using the three methods.
-The MEDLINE search identified 843 articles that described initiatives
-to be potentially included. After screening the titles and abstracts,
-166 articles met the inclusion criteria.
-From the full-text review, 155 articles were excluded due to one or more of
-the following reasons: one-time efforts (i.e., data merged ad-hoc
-for the specific analysis supporting the paper),
-initiatives already submitted by partners, articles with
-cross-sectional harmonization only, multisite cohorts/harmonization of waves,
-meta-analyses, reviews, case-control studies, patients' cohorts,
-clinical trial cohorts, and others.
-From the systematic review, 11 articles were included.
-Additionally, from the partners’ and officers' suggestions and
-the descendent searches,
-189 potential initiatives were obtained. After screening for eligibility,
-141 projects were excluded for one or more of the following reasons:
-initiatives published before the year 2000,
-projects that did not integrate cohorts,
-one initiative with only cross-sectional cohorts,
-and one initiative that integrated patient and clinical trial cohorts.
-This resulted in the inclusion of another 48 initiatives that integrate
-population cohorts.
-A total of `r total_N` initiatives were included;
-they are presented in the eTable in Supplemental Digital Content 2,
-along with a subset of their most representative information.
-This information is explained in Table \@ref(tab:summary),
-along with the data from *`r sample_initiative`* shown as an example.
 
 It is worth noting that in a large number of cases the contact person was
 unreachable throughout the whole mapping process,
