@@ -344,8 +344,13 @@ suppressMessages( # Message when reading empty column names
     mutate(
       header = header                            |>
         str_detect(AUTO_VARNAME_PREFIX_REGEXP)   |>
-        if_else(header |> dplyr::lag(1), header) |>
-        str_replace("harmonis", "harmoniz"), # Correct errata in headers:
+        if_else(header |> dplyr::lag(1), header),
+      across( # Correct errata in headers:
+        everything(),
+        str_replace,
+        pattern     = "harmonis",
+        replacement = "harmoniz"
+      )
     )                                                                        |>
     mutate( # Edit headers to correspond to the new structure:
       header    = if_else(header == "INITIATIVE", "Initiative", header),
