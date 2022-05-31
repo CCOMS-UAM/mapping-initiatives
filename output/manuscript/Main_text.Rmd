@@ -444,10 +444,7 @@ When the information was not available through the website or
 published articles,
 the principal investigator and/or the contact person of the project
 was consulted, by email first and, if no reply was received,
-by telephone or postal mail
-(see eAppendix, Supplemental Digital Content 1,
-with the form used to gather the information of the initiatives from the
-contact persons).
+by telephone or postal mail.
 
 The following information about the harmonization process was collected:
 harmonization strategy
@@ -708,6 +705,9 @@ their active contribution to the development of the Mica repository engine.
 
 Figure 1. Flowchart diagram detailing the initiatives included and excluded.
 
+Supplementary Table 1.
+Main information of the initiatives included in the mapping.
+
 \newpage
 
 ```{r set-flextable-wd, cache=FALSE}
@@ -740,11 +740,7 @@ opts_knit$set(root.dir = ROOT_DIR)
 
 \newpage
 
-# Supplementary material
-
-<!-- # TODO: Complete -->
-
 # Data availability statement
 
-The datasets for this study can be found in
+The dataset for this study can be found in
 https://github.com/CCOMS-UAM/mapping-initiatives/blob/main/dat/initiatives-dataset.xlsx

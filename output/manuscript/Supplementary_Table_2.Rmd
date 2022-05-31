@@ -1,5 +1,5 @@
 ---
-title: Supplemental Digital Content 2. eTable
+title: Supplementary Table 1
 output: bookdown::html_document2
 editor_options:
   chunk_output_type: console
