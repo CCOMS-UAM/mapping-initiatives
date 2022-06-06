@@ -466,8 +466,6 @@ the integrated cohorts (pooled, federated, or meta-analysis).
 The initiatives are presented in the Supplementary Table 1,
 including a subset of their most representative information.
 
-# Dataset descriptive statistics
-
 The country where the leading institution was based and the countries
 included in the integrated cohorts were recoded into continents
 (`r VECTOR_CONTINENTS_AMERICAS_SEP_PRINT`).
@@ -481,7 +479,9 @@ using only the initiatives with harmonized cohorts.
 In the case of the age range of the sample, some initiatives did not have
 concrete numerical values and were not taken into account.
 
-It is worth noting that in a large number of cases the contact person was
+# Dataset descriptive statistics
+
+In a large number of initiatives the contact person was
 unreachable throughout the whole mapping process,
 so the proportion of missing data was as large as
 `r max_missing_out` for some variables.
