@@ -266,8 +266,9 @@ the Collaborative Research on Ageing in Europe
 [@leonardi_collaborative_2013],
 or the English Longitudinal Study of Ageing [@steptoe_cohort_2013]
 are popular examples.
-Integrating these individual cohorts is the next step to getting
-the most valuable information out of them.
+The _integration_ of these individual cohorts
+--i.e. combining similar data from different studies into a unified whole--
+is the next step to getting the most valuable information out of them.
 Cohort integration studies may increase sample sizes drastically,
 allowing the study of important but infrequent phenomena
 (e.g., rare diseases) [@thompson_thinking_2009] while avoiding publication bias.
@@ -277,15 +278,34 @@ and several initiatives have joint forces for integrating cohorts
 from different studies
 (e.g., ATHLOS @sanchez-niubo_data_2017; BioSHaRE @kaye_consent_2016;
 CHICOS @strandberg-larsen_association_2017; HELIX @maitre_human_2018).
-However, methodological and infrastructure issues [@panahiazar_empowering_2014],
-as well as concerns about legal (i.e., data protection) and ethical aspects
-impose constraints that may hinder the potential benefits of
-these integration studies.
-An overview of what is being done to overcome these challenges is still missing
-in the scientific landscape.
+
+Despite this, there are concerns about legal (i.e., data protection) and ethical
+aspects, as well as methodological and infrastructure challenges
+[@panahiazar_empowering_2014] that may hinder the potential benefits of
+these integration studies. The most prominent of these challenges are
+the harmonization process and the aggregated analyses performed on
+the integrated cohorts.
+_Harmonization_ is a necessary step for cohort integration, and refers to
+practices aimed at improving the comparability of
+variables reducing heterogeneity across studies [@lesko_collaborative_2018].
+Harmonization can be _prospective_ (studies share the same study design and
+measurement instruments from their inception), _ex-ante retrospective_ (studies
+were not originally designed to be comparable but use standard collection tools
+and operating procedures) or _ex-post retrospective_ (when no common standard
+formats or protocols are used across studies) [@granda_data_2016].
+Regarding the analyses, three options are available:
+_pooled analysis_ combines all the data from individual participants into a
+single analysis by aggregating them into a common data infrastructure;
+_meta-analysis_ is a two-stage analysis that combines the
+results of inferences on each separate cohort dataset [@kourou_cohort_2019];
+_federated analysis_ performs the analysis of individual level data in a central
+infrastructure while participant-level data remain
+on their local infrastructure.
+
+An overview of how researchers are applying those methods to overcome the
+challenges is still missing in the scientific landscape.
 Systematizing this knowledge may help further integrate existing cohorts,
 as well as streamline the design and integration of future cohorts.
-
 In an attempt to expand and make these efforts more systematic,
 the European Commission called for a sustainable, strategic agenda for
 a better, global coordination of cohorts.
@@ -307,11 +327,23 @@ This paper focuses on the state of the art in
 the integration of population cohorts.
 We present the methodology for gathering a collection of initiatives
 that have integrated such cohorts in the last twenty years,
-as well as the results and conclusions of this mapping exercise.
+hereby defining _initiative_ as any project that has analysed and/or plans
+to analyse data from different cohorts in an integrated manner, in order to
+draw conclusions from these data altogether
+(in contrast to accumulating evidence by analyzing the data from
+each cohort individually).
+Additionally, we show the results and conclusions of this mapping exercise.
 
 # Materials and methods
 
 ## Identification of initiatives
+
+We define _initiative_ as any project that has analysed and/or plans
+to analyse data from different cohorts in an integrated manner, in order to
+draw conclusions from these data altogether, instead of accumulating evidence
+by analyzing the data each cohort individually.
+This integration may be achieved with different methodological and
+infrastructure resources.
 
 Three different methods were used
 to find initiatives that integrated population cohorts.
