@@ -92,9 +92,6 @@ SRC_FILEPATH |> read_chunk()
 ```{r create-headers-labels}
 ```
 
-```{r summary-table}
-```
-
 ```{r descriptives-table}
 ```
 
@@ -119,6 +116,15 @@ country_institution_ranking_next_out
 # Funding sources:
 funding_public_out
 funding_mixed_out
+
+# Funcing sources by topic:
+
+n_mixed_funding_cancer
+label_topic_cancer
+
+n_public_funding_birth
+label_topic_birth
+
 
 # Harmonization strategy:
 harmo_strategy_max_out
@@ -220,6 +226,8 @@ daniel.morillo@cibersam.es
 **Keywords: cohort studies, harmonization, integration,
 mapping, population cohorts**
 
+**Word count:** 2958
+
 **Abstract**
 
 Health research increasingly requires the analysis of
@@ -264,8 +272,9 @@ the Environmental Health Risks in European Birth Cohorts
 [@nieuwenhuijsen_environmental_2011],
 the Collaborative Research on Ageing in Europe
 [@leonardi_collaborative_2013],
-or the English Longitudinal Study of Ageing [@steptoe_cohort_2013]
-are popular examples.
+the English Longitudinal Study of Ageing [@steptoe_cohort_2013],
+and the Survey of Health, Ageing and Retirement in Europe
+[@borsch-supan_new_2005] are popular examples.
 The _integration_ of these individual cohorts
 --i.e. combining similar data from different studies into a unified whole--
 is the next step to getting the most valuable information out of them.
@@ -279,15 +288,17 @@ from different studies
 (e.g., ATHLOS @sanchez-niubo_data_2017; BioSHaRE @kaye_consent_2016;
 CHICOS @strandberg-larsen_association_2017; HELIX @maitre_human_2018).
 
-Despite this, there are concerns about legal (i.e., data protection) and ethical
-aspects, as well as methodological and infrastructure challenges
-[@panahiazar_empowering_2014] that may hinder the potential benefits of
-these integration studies. The most prominent of these challenges are
-the harmonization process and the aggregated analyses performed on
-the integrated cohorts.
-_Harmonization_ is a necessary step for cohort integration, and refers to
-practices aimed at improving the comparability of
-variables reducing heterogeneity across studies [@lesko_collaborative_2018].
+Despite this, there are concerns about legal (i.e., data protection) and
+ethical aspects, as well as methodological and infrastructure challenges
+[@panahiazar_empowering_2014], being lack of interoperability
+the most prominent one.
+All of these may hinder the potential benefits of cohort integration studies.
+Overcoming these difficulties implies the harmonization
+of the different cohort data, and performing aggregated analyses on the
+integrated cohorts.
+_Harmonization_ refers to practices aimed at improving the comparability of
+variables by reducing heterogeneity across studies [@lesko_collaborative_2018],
+and is a necessary step for cohort integration.
 Harmonization can be _prospective_ (studies share the same study design and
 measurement instruments from their inception), _ex-ante retrospective_ (studies
 were not originally designed to be comparable but use standard collection tools
@@ -327,8 +338,9 @@ This paper focuses on the state of the art in
 the integration of population cohorts.
 We present the methodology for gathering a collection of initiatives
 that have integrated such cohorts in the last twenty years,
-hereby defining _initiative_ as any project that has analysed and/or plans
-to analyse data from different cohorts in an integrated manner, in order to
+hereby defining _initiative_ as any project (regardless of the number of
+byproduct publications) that has analyzed and/or plans
+to analyze data from different cohorts in an integrated manner, in order to
 draw conclusions from these data altogether
 (in contrast to accumulating evidence by analyzing the data from
 each cohort individually).
@@ -337,13 +349,6 @@ Additionally, we show the results and conclusions of this mapping exercise.
 # Materials and methods
 
 ## Identification of initiatives
-
-We define _initiative_ as any project that has analysed and/or plans
-to analyse data from different cohorts in an integrated manner, in order to
-draw conclusions from these data altogether, instead of accumulating evidence
-by analyzing the data each cohort individually.
-This integration may be achieved with different methodological and
-infrastructure resources.
 
 Three different methods were used
 to find initiatives that integrated population cohorts.
@@ -423,8 +428,10 @@ were included if they integrated health population cohorts of any age
 (birth, adolescents, adults, elderly, oldest old),
 and included sociodemographic, lifestyle, biological, genetic, omics
 (genomics, proteomics, metabolomics), imaging, or environment factors data.
-Additionally, at least one of the integrated cohorts had to
-have information about the sample at two or more time points.  
+The SYNCHROS project has a focus on the coordination of longitudinal cohort
+studies due to their validity for determining causal relationships.
+Therefore, at least one of the integrated cohorts was required to
+have information about the sample at two time points at least.  
 **Exclusion criteria.** Initiatives without available data about (or access to)
 their descriptive information
 (webpage, a main report describing the main aim(s) in detail) were excluded.
@@ -474,7 +481,9 @@ funding resources (`r FUNDING_LABELS_PRINT`),
 and a brief description of the population addressed.
 When the information was not available through the website or
 published articles,
-the principal investigator and/or the contact person of the project
+the principal investigator and/or the contact person
+(i.e. any person that could respond to the form requesting information
+about the initiative) of the project
 was consulted, by email first and, if no reply was received,
 by telephone or postal mail.
 
@@ -527,6 +536,13 @@ from `r country_institution_ranking_next_out`.
 Of the initiatives, `r funding_public_out` were funded by public institutions,
 while `r funding_mixed_out` received funding from
 both private and public institutions.
+Interestingly, none of the `r n_public_funding_birth` initiatives
+addressing the "`r label_topic_birth`" received funding
+from private institutions, while the `r n_mixed_funding_cancer` initiatives that
+reported studying `r label_topic_cancer` did receive funding from them.
+Although these numbers are too low to draw safe conclusions,
+it might seem that the research interests of the private sector are biased
+toward certain health topics while neglecting others.
 
 The total number of cohorts ranged between `r total_cohorts_range_out`
 (median = `r total_cohorts_median_out`).
@@ -546,7 +562,7 @@ used by `r harmo_max_prop_out` of the initiatives.
 The majority of initiatives (`r analysis_pooled_out`) used pooled analysis
 to perform integrated analysis on the cohorts. Meta-analysis and federated
 analysis were less common, being used by only `r analysis_meta_out` and
-`r analysis_federated_out` of the initiatives
+`r analysis_federated_out` of the initiatives respectively
 (note that some initiatives used more than one type of integrated analysis).
 
 The targeted populations ranged in age from childbirth to death
@@ -667,14 +683,22 @@ from different ethnic, regional, and/or socioeconomic settings.
 Synergies across a wide variety of existing cohort integration projects
 would help pursuing these goals, while being more cost-effective than
 undertaking new international mega-cohorts [@larsen_pregnancy_2013].
+However, dedicating efforts to designing cohort studies with the challenges of
+cohort integration in mind would be highly recommendable.
+Otherwise, these integration initiatives may ultimately lead to a greater
+resource expenditure than new cohort studies themselves.
 
 However, there is still a shortfall of initiatives that integrate 
 worldwide population cohorts.
 Most of the currently available cohorts probably lack the necessary
 transparency and availability of information
-(variables, study designs, data access, etc.)
-to afford multi-study research.
-We expect the SYNCHROS repository to be a valuable resource for
+(variables, study designs, data access, etc.) to afford multi-study research.
+There are excellent examples of best-practice principles of integration of
+both patient and population cohorts,
+such as Dementias Platform UK (https://www.dementiasplatform.uk),
+and the Integrative Analysis of Longitudinal Studies of Aging (IALSA) network
+(https://www.ialsa.org).
+We expect the SYNCHROS repository to be an additional valuable resource for
 emerging collaborative research,
 with a spotlight in developing and enriching a "learning healthcare system"
 [@frohlich_hype_2018].

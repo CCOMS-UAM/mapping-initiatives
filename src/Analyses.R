@@ -98,6 +98,7 @@ tab1_new <- tab1_new |> select(
   initiative,
   region_countries,
   description_short,
+  team_activity,
   cohorts.total:participants.harmonized,
   age_range,
   harmonizedvariables,
@@ -368,6 +369,8 @@ suppressMessages( # Message when reading empty column names
     )                                                                        |>
     # Delete unnecessary headers
     slice(-10)                                                               |>
+    # Include additional headers
+    add_row(header = "Team active (at consultation)", .after = 3)            |>
     bind_rows( # Add additional labels for descriptives table
       tibble(
         header    = c(
@@ -378,7 +381,6 @@ suppressMessages( # Message when reading empty column names
           "Access to individual data",
           "Harmonization strategy",
           "With omics data",
-          "Team active (at consultation)",
           "Funding",
           "Continent of leading institution",
           "Nº of continents" # n_continents
@@ -387,7 +389,7 @@ suppressMessages( # Message when reading empty column names
           "Minimum", "Maximum",          # Age
           NA_character_ |> rep(2),       # Nº of countries and seting
           "Metadata", "Individual data", # Access to data
-          NA_character_ |> rep(6) # Harmonization strategy to continent of ...
+          NA_character_ |> rep(5) # Harmonization strategy to continent of ...
         )                         #   leading institution.
       )
     )                                                                        |>
@@ -440,90 +442,6 @@ tab1_new <- tab1_new |> imap_dfc(# Labels to assign to the columns
     column
   }
 )
-
-
-## ----summary-table----
-tab1_summary <- tab1_headers |>
-  semi_join(
-    colnames(tab1_new_out) |> enframe(value = "var_name"),
-    by = "var_name"
-  )                          |>
-  select(-label)             |>
-  add_column(
-    description = c(
-      "Initiative acronym (when available) and name.",
-      "Region or countries where the integrated cohorts have been collected.",
-      "Free-text description of the initiative purpose and objectives.",
-      "Total number of cohorts integrated",
-      "Number of cohorts where at least some of the data have been harmonized.",
-      "Whether more cohorts are expected to be harmonized.",
-      "Total number of participants across cohorts.",
-      "Number of participants across the cohorts with harmonized data.",
-      paste(
-        "Age range (minimum and maximum, or description) of",
-        "the total sample across cohorts."
-      ),
-      "Maximum number of harmonized variables in any harmonized cohort.",
-      "Criteria for selecting and integrating cohorts in the initiative."
-    )
-  )
-
-# In order to provide an example, we select the initiative with the shortest
-#   combined description and cohort criteria texts, without any of the output
-#   values missing.
-tab1_shortest <- tab1_new_out |>
-  drop_na()                   |>
-  transmute(
-    initiative,
-    across(c(description_short, cohortcriteria_short), nchar),
-    total = description_short + cohortcriteria_short
-  )                           |>
-  filter(total == min(total))
-
-tab1_sample <- tab1_new_out                   |>
-  semi_join(tab1_shortest, by = "initiative") |>
-  mutate(
-    across(where(is.numeric), label_number()),
-    across(everything(), as.character)
-  )                                           |>
-  pivot_longer(everything(), names_to = "var_name")
-
-sample_initiative <- tab1_sample   |>
-  filter(var_name == "initiative") |>
-  pull()
-
-tab1_summary <- tab1_summary              |>
-  full_join(tab1_sample, by = "var_name") |>
-  select(-var_name)
-
-countries_footnote <- tab1_sample           |>
-  filter(var_name == "region_countries")    |>
-  select(-var_name)                         |>
-  separate_rows(value)                      |>
-  mutate(
-    country = value                         |>
-      countrycode(origin = "iso3c", destination = "country.name")
-  )                                         |>
-  arrange(value)                            |>
-  unite("key", value, country, sep = ' = ') |>
-  pull()                                    |>
-  glue_collapse(sep = SEMICOLON_SEP)
-
-initiatives_summary_output <- tab1_summary              |>
-  flextable()                                           |>
-  set_header_df(
-    mapping = tibble(
-      label    = c("Column" |> rep(2), "Description", "Example"),
-      col_keys = tab1_summary |> colnames()
-    )
-  )                                                     |>
-  add_footer_lines(glue("Note. {countries_footnote}.")) |>
-  merge_h(part = "header")                              |>
-  merge_h()                                             |>
-  merge_v(j = "header")                                 |>
-  theme_booktabs(bold_header = TRUE)                    |>
-  fontsize(size = 12)                                   |>
-  set_table_properties(layout = "autofit")
 
 
 ## ----descriptives-table-------------------------------------------------------
@@ -686,6 +604,52 @@ funding_mixed_out  <- descriptives_part_2 |> inline_text(
   level    = sym(MIXED_FUNDING),
   pattern  = "{p}%"
 )
+
+funding_by_topic <- tab1_new |>
+  select(funding, starts_with("topic"))   |>
+  filter(!is.na(funding))                 |>
+  mutate(funding = funding |> fct_drop()) |>
+  tbl_summary(by = funding)
+
+# Topics with relevant differences in funding sources:
+
+## Cancer:
+
+topic_mixed_funding <- "topic_cancer"
+
+n_mixed_funding_cancer <- funding_by_topic |>
+  inline_text(
+    variable = all_of(topic_mixed_funding),
+    column   = sym(MIXED_FUNDING),
+    pattern  = "{n}"
+  )                                        |>
+  as.integer()                             |>
+  as.english()                             |>
+  as.character()
+
+label_topic_cancer <- tab1_topic_headers  |>
+  filter(var_name == topic_mixed_funding) |>
+  pull(subheader)                         |>
+  str_to_lower()
+
+
+## Birth, infancy... :
+topic_public_funding <- "topic_birth_infancy_childhood_health"
+
+n_public_funding_birth <- funding_by_topic |>
+  inline_text(
+    variable = all_of(topic_public_funding),
+    column   = sym(PUBLIC_FUNDING),
+    pattern  = "{n}"
+  )                                        |>
+  as.integer()                             |>
+  as.english()                             |>
+  as.character()
+
+label_topic_birth <- tab1_topic_headers    |>
+  filter(var_name == topic_public_funding) |>
+  pull(subheader)
+
 
 # Harmonization strategy:
 harmo_strategies_count <- tab1_new |>
