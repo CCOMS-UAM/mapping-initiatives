@@ -265,8 +265,8 @@ integrate cohorts and find venues for collaborative research.
 
 There has been a recent surge in scientific data collection
 in the healthcare domain [@roski_creating_2014].
-Several large-scale cohort studies have recently been or are being
-conducted nowadays around the globe:
+Several large-scale cohort studies have recently been or are currently being
+conducted around the globe:
 the Millennium Cohort Study [@connelly_cohort_2014],
 the Environmental Health Risks in European Birth Cohorts
 [@nieuwenhuijsen_environmental_2011],
@@ -290,8 +290,8 @@ CHICOS @strandberg-larsen_association_2017; HELIX @maitre_human_2018).
 
 Despite this, there are concerns about legal (i.e., data protection) and
 ethical aspects, as well as methodological and infrastructure challenges
-[@panahiazar_empowering_2014], being lack of interoperability
-the most prominent one.
+[@panahiazar_empowering_2014],
+with lack of interoperability being the most prominent one.
 All of these may hinder the potential benefits of cohort integration studies.
 Overcoming these difficulties implies the harmonization
 of the different cohort data, and performing aggregated analyses on the
@@ -482,7 +482,7 @@ and a brief description of the population addressed.
 When the information was not available through the website or
 published articles,
 the principal investigator and/or the contact person
-(i.e. any person that could respond to the form requesting information
+(i.e., any person that could respond to the form requesting information
 about the initiative) of the project
 was consulted, by email first and, if no reply was received,
 by telephone or postal mail.
@@ -504,7 +504,7 @@ other researchers,
 whether any of the cohorts included biological (omics) samples,
 research topic(s) addressed, and type(s) of aggregated analyses performed on
 the integrated cohorts (pooled, federated, or meta-analysis).
-The initiatives are presented in the Supplementary Table 1,
+The initiatives are presented in Supplementary Table 1,
 including a subset of their most representative information.
 
 The country where the leading institution was based and the countries
@@ -615,8 +615,8 @@ highly interested in integrating evidence across cohorts and thrive towards
 personalized medicine, especially in patient and clinical trial cohorts.
 However, the participation of private entities in funding patient cohorts was
 even lower [@rodriguez-laso_map_2021].
-Nevertheless, note that these funding sources refer only to the integration
-initiatives;
+Nevertheless, it should be noted that these funding sources refer only to
+the integration initiatives;
 this information does not take into account other possible funding sources for
 the individual cohort studies integrated into an initiative,
 so private interest in funding cohort research might be overlooked.
@@ -681,9 +681,9 @@ Moreover, global representativeness can only be achieved by addressing
 more diverse populations [@henrich_most_2010]
 from different ethnic, regional, and/or socioeconomic settings.
 Synergies across a wide variety of existing cohort integration projects
-would help pursuing these goals, while being more cost-effective than
+would help pursue these goals, while being more cost-effective than
 undertaking new international mega-cohorts [@larsen_pregnancy_2013].
-However, dedicating efforts to designing cohort studies with the challenges of
+Dedicating efforts to designing cohort studies with the challenges of
 cohort integration in mind would be highly recommendable.
 Otherwise, these integration initiatives may ultimately lead to a greater
 resource expenditure than new cohort studies themselves.
@@ -722,9 +722,9 @@ and in the writing of the manuscript, and revised it critically.
 EV contributed to the conception and design of the study,
 the acquisition, analysis and interpretation of data,
 and the writing of the manuscript and its critical revision.
-AJW contributed to the acquisition, analysis and interpretation of data,
+AJW contributed to the acquisition, analysis, and interpretation of data,
 as well as to the writing of the manuscript and its critical revision.
-LF contributed the the data acquisition, and revised the manuscript critically.
+LF contributed to the data acquisition, and revised the manuscript critically.
 YM contributed to the design of the data collection
 and deployment of the SYNCHROS repository,
 collaborated with the data acquisition, and revised the manuscript critically.
@@ -736,7 +736,7 @@ agree to be accountable for all aspects of the work.
 # Funding
 
 The results reported herein correspond to specific aims of grant
-825884 to the Syncrhros Consortium from the European Union’s Horizon 2020
+825884 to the Synchros Consortium from the European Union’s Horizon 2020
 research and innovation programme.
 LARU's and DM's work was supported by the
 Network-based Biomedical Research Consortium,
