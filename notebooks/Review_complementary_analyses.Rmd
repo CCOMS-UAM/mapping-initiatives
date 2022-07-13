@@ -1,14 +1,15 @@
 ---
 title: "Additional analyses addressing reviewer 2 comments"
 output:
-  html_document:
-    toc:          yes
-    toc_float:    yes
+  word_document:
+    toc: no
+    df_print: kable
+  docx_document:
+    toc: yes
+    toc_float: yes
     code_folding: hide
-    df_print:     paged
+    df_print: paged
 ---
-
-
 
 ```{r, include=FALSE}
 source("src/Analyses.R")
@@ -23,7 +24,7 @@ Comment by reviewer 2:
 vs public ones? Were they different?
 
 
-```{r, results='asis'}
+```{r, results='asis', message=FALSE}
 tab1_new                                  |>
   select(funding, starts_with("topic"))   |>
   filter(!is.na(funding))                 |>
@@ -31,6 +32,7 @@ tab1_new                                  |>
   tbl_summary(by = funding)
 ```
 
+\newpage
 
 # Nº of cohorts (total & harmonized), participants (total & harmonized), and harmonized variables for initiatives with/without omics data
 
@@ -39,7 +41,7 @@ Comment by reviewer 2:
 > I suspect that the cohorts with a large number of variables (ex 37k)
 and large N must be cohorts related to cohorts with biological data (omics).
 
-```{r}
+```{r, message=FALSE}
 tab1_new                |>
   filter(!is.na(omics)) |>
   select(
@@ -52,14 +54,14 @@ tab1_new                |>
   )
 ```
 
-<br>
+\newpage
 
 We suspect the teams carrying out the initiatives _with omics data_ may still
 be active.
 To investigate this, we look at the frequency of this variable for intiatives
 with/without omics data.
 
-```{r}
+```{r, message=FALSE}
 tab1_new                |>
   filter(!is.na(omics)) |>
   tbl_summary(by = omics, include = team_activity)
